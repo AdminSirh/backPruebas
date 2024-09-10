@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_FechaCaptura" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8a13a144-6d15-43ef-a3ec-dc2f8557dd0b">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SIRH_BD"/>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FAF5F5"/>
+			<topPen lineWidth="0.5" lineColor="#FAF5F5"/>
+			<leftPen lineWidth="0.5" lineColor="#FAF5F5"/>
+			<bottomPen lineWidth="0.5" lineColor="#FAF5F5"/>
+			<rightPen lineWidth="0.5" lineColor="#FAF5F5"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#0F304F">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FAF5F5"/>
+			<topPen lineWidth="0.5" lineColor="#FAF5F5"/>
+			<leftPen lineWidth="0.5" lineColor="#FAF5F5"/>
+			<bottomPen lineWidth="0.5" lineColor="#FAF5F5"/>
+			<rightPen lineWidth="0.5" lineColor="#FAF5F5"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FAF5F5"/>
+			<topPen lineWidth="0.5" lineColor="#FAF5F5"/>
+			<leftPen lineWidth="0.5" lineColor="#FAF5F5"/>
+			<bottomPen lineWidth="0.5" lineColor="#FAF5F5"/>
+			<rightPen lineWidth="0.5" lineColor="#FAF5F5"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#F2F8FF"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="datos_Persona" uuid="34ff32b0-ed45-4436-93db-bf05f8ab0a4e">
+		<property name="com.jaspersoft.studio.data.sql.tables" value="cGVyc29uYSAsMTUsMTUsMDA4OWUwZTctYWM2Zi00MDkwLTlmNDYtOGIzODYwMDU2MGVhOw=="/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SIRH_BD"/>
+		<parameter name="fecha_captura" class="java.sql.Timestamp"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT *
+FROM persona
+WHERE 
+	 persona.fecha_captura = $P{fecha_captura}]]>
+		</queryString>
+		<field name="id_persona" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.name" value="id_persona"/>
+			<property name="com.jaspersoft.studio.field.label" value="id_persona"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+		</field>
+		<field name="nombre" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+		</field>
+		<field name="apellido_paterno" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="apellido_paterno"/>
+			<property name="com.jaspersoft.studio.field.label" value="apellido_paterno"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+		</field>
+		<field name="apellido_materno" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="apellido_materno"/>
+			<property name="com.jaspersoft.studio.field.label" value="apellido_materno"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+		</field>
+		<field name="genero_id" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.name" value="genero_id"/>
+			<property name="com.jaspersoft.studio.field.label" value="genero_id"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+		</field>
+		<field name="rfc" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="rfc"/>
+			<property name="com.jaspersoft.studio.field.label" value="rfc"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+		</field>
+		<field name="fecha_captura" class="java.sql.Timestamp">
+			<property name="com.jaspersoft.studio.field.name" value="fecha_captura"/>
+			<property name="com.jaspersoft.studio.field.label" value="fecha_captura"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+		</field>
+		<field name="matricula_smn" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="matricula_smn"/>
+			<property name="com.jaspersoft.studio.field.label" value="matricula_smn"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+		</field>
+		<field name="num_imss" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="num_imss"/>
+			<property name="com.jaspersoft.studio.field.label" value="num_imss"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+		</field>
+		<field name="curp" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="curp"/>
+			<property name="com.jaspersoft.studio.field.label" value="curp"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+		</field>
+		<field name="fecha_matrimonio" class="java.sql.Date">
+			<property name="com.jaspersoft.studio.field.name" value="fecha_matrimonio"/>
+			<property name="com.jaspersoft.studio.field.label" value="fecha_matrimonio"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+		</field>
+		<field name="fecha_nacimiento" class="java.sql.Date">
+			<property name="com.jaspersoft.studio.field.name" value="fecha_nacimiento"/>
+			<property name="com.jaspersoft.studio.field.label" value="fecha_nacimiento"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+		</field>
+		<sortField name="apellido_paterno"/>
+		<group name="apellido_paterno">
+			<groupExpression><![CDATA[$F{apellido_paterno}]]></groupExpression>
+		</group>
+	</subDataset>
+	<parameter name="fecha_captura" class="java.sql.Timestamp"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT * FROM persona WHERE persona.fecha_captura=$P{fecha_captura}]]>
+	</queryString>
+	<field name="id_persona" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="id_persona"/>
+		<property name="com.jaspersoft.studio.field.label" value="id_persona"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="apellido_paterno" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="apellido_paterno"/>
+		<property name="com.jaspersoft.studio.field.label" value="apellido_paterno"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="apellido_materno" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="apellido_materno"/>
+		<property name="com.jaspersoft.studio.field.label" value="apellido_materno"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="rfc" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="rfc"/>
+		<property name="com.jaspersoft.studio.field.label" value="rfc"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="fecha_captura" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_captura"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_captura"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="matricula_smn" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="matricula_smn"/>
+		<property name="com.jaspersoft.studio.field.label" value="matricula_smn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="num_imss" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="num_imss"/>
+		<property name="com.jaspersoft.studio.field.label" value="num_imss"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="curp" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="curp"/>
+		<property name="com.jaspersoft.studio.field.label" value="curp"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="fecha_nacimiento" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_nacimiento"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_nacimiento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<sortField name="apellido_paterno"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="120" splitType="Stretch">
+			<rectangle>
+				<reportElement x="1" y="80" width="800" height="29" backcolor="#0E4178" uuid="6ccdd677-ddec-432b-907d-d3fafdcc50fe"/>
+			</rectangle>
+			<image>
+				<reportElement x="1" y="0" width="369" height="100" uuid="6f88e99f-d7b6-498a-babc-97c852d317b6"/>
+				<imageExpression><![CDATA["C:/Users/nreyes22/Downloads/Logo_Dependencia.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="480" y="40" width="100" height="21" forecolor="#FF130F" uuid="dbdffb9e-3309-4d22-9db2-8e48afc6e7d7"/>
+				<box>
+					<pen lineColor="#000000"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Captura: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="580" y="40" width="221" height="21" uuid="a2f25165-6b4c-41a9-b1c9-6ed3fb4d27fe"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fecha_captura}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="130" y="80" width="540" height="29" forecolor="#FFFFFF" uuid="6fa20e56-1813-47a0-8659-19e447cf100d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE FECHA DE CAPTURA ]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="216" splitType="Stretch">
+			<componentElement>
+				<reportElement x="1" y="0" width="800" height="110" uuid="197e69bb-5c2c-4c71-a77c-81778d7cdbd7">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="datos_Persona" uuid="fc6c4392-d739-41c8-ba28-51464f9b5199">
+						<datasetParameter name="fecha_captura">
+							<datasetParameterExpression><![CDATA[$P{fecha_captura}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="dc5c12e3-4420-4f92-9166-7c5357b156da">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" forecolor="#FFFFFF" uuid="c3d97327-470a-45de-8450-e96e9759d924"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Dialog" isBold="true"/>
+								</textElement>
+								<text><![CDATA[APELLIDO PATERNO]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="30" uuid="cf95b3a2-f8ce-4d92-81da-8913425a7484"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Dialog"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{apellido_paterno}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="100" uuid="c14ac1c7-247a-4358-8d75-7f097f6193b9">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="100" height="30" forecolor="#FFFFFF" uuid="27cb2530-4c69-4f30-b865-6354390682d2"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Dialog" isBold="true"/>
+								</textElement>
+								<text><![CDATA[APELLIDO MATERNO]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="100" height="30" uuid="d9715911-cec5-4955-acf0-62a1a5e917a5"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Dialog"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{apellido_materno}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="d01732f7-8de5-4e66-8fc7-a062cf7127ec">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" forecolor="#FFFFFF" uuid="5906862c-5532-437f-8e18-96bf3966902a"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Dialog" isBold="true"/>
+								</textElement>
+								<text><![CDATA[NOMBRE]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="30" uuid="4cb18293-54dc-484b-9f00-3b9eca1a5a7d"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Dialog"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="130" uuid="d32f25d7-9f8a-4cef-9188-fbe0d24cd017">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="130" height="30" forecolor="#FFFFFF" uuid="a0cc4705-f980-4ee5-a92c-f7227e5db8b5"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Dialog" isBold="true"/>
+								</textElement>
+								<text><![CDATA[CURP]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="130" height="30" uuid="6ac089e8-93fd-4557-b931-e33e8cfa044b"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Dialog"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{curp}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="200fcff6-72ba-4629-8331-802d1eac534f">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" forecolor="#FFFFFF" uuid="a3568a93-ef4f-4770-99a9-242f5b90cfae"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Dialog" isBold="true"/>
+								</textElement>
+								<text><![CDATA[RFC]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="30" uuid="26207782-2b45-4b46-85cb-6a18ebcd9fb6"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Dialog"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{rfc}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="110" uuid="7b5e0191-ef62-47a0-be1d-34f238935718">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="110" height="30" forecolor="#FFFFFF" uuid="50e13a15-8182-41f9-bf02-eef0ad8d3dc1"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Dialog" isBold="true"/>
+								</textElement>
+								<text><![CDATA[FECHA NACIMIENTO]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="110" height="30" uuid="ea512a18-e2bd-4fbf-8825-5152b12ee36c"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Dialog"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{fecha_nacimiento}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="32a2a030-0d02-4a21-b9c1-d38d0ce1417f">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" forecolor="#FFFFFF" uuid="dc4722c2-1782-4fe4-be7b-71bbb34db313"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Dialog" isBold="true"/>
+								</textElement>
+								<text><![CDATA[MATRÍCULA SMN]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="30" uuid="57ad4ebd-b8e2-4944-9c69-249494a84647"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Dialog"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{matricula_smn}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="100" uuid="c504be3b-991e-43ad-86c4-3252592b9a19">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="100" height="30" forecolor="#FFFFFF" uuid="47428080-7178-4e66-aab6-b8e285e5c65c"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Dialog" isBold="true"/>
+								</textElement>
+								<text><![CDATA[NUM. IMSS]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="100" height="30" uuid="513a0469-7225-4a0e-a28e-a850af05f343"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Dialog"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{num_imss}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>

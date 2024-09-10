@@ -1,0 +1,878 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AutorizacionVacacionesjrxml" printOrder="Horizontal" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fe99399d-d2e7-477c-98b3-553d4c5491af">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SIRH_DB"/>
+	<subDataset name="Dataset1" uuid="db270244-d6b4-47a1-b9e5-45c77eebd8df">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DBJunio"/>
+		<parameter name="incidencias_id" class="java.lang.Integer">
+			<parameterDescription><![CDATA['157' ejemplo]]></parameterDescription>
+		</parameter>
+		<queryString language="SQL">
+			<![CDATA[--Se obtienen la serie de dias entre los dos lapsos de fecha inicial a fecha final
+WITH series AS (
+    SELECT generate_series(asVacaciones.fecha_inicio::date, asVacaciones.fecha_fin::date, '1 day') AS dia
+    FROM vacaciones asVacaciones
+    WHERE asVacaciones.incidencias_id = $P{incidencias_id}
+)
+SELECT
+    asVacaciones.expediente,
+    asVacaciones.periodo_vacacional,
+    asPersona.apellido_paterno,
+    asPersona.apellido_materno,
+    asPersona.nombre,
+    asTrabajador.fecha_ingreso,
+    asCatalogoAreaSuperior.desc_area_superior,
+    asCatalogoAreas.desc_area,
+    asCatalogoPuesto.puesto,
+    (asVacaciones.dias_totales - asVacaciones.dias_paseos) AS dias_vacaciones_semana,
+    asVacaciones.dias_paseos,
+    asVacaciones.dias_totales,
+    asVacaciones.fecha_inicio_anio_periodo_vacacional,
+    asVacaciones.fecha_fin_anio_periodo_vacacional,
+    asVacaciones.fecha_inicio,
+    asVacaciones.fecha_fin,
+    asVacaciones.observaciones,
+    asCatalogoDias.id_dia,
+    asCatalogoDias.dia,
+    asLibroDias.dia_descanso,
+    series.dia AS dia_en_serie,
+CASE EXTRACT(DOW FROM series.dia)
+-- IGUALACION DE DIAS EN BASE DE DATOS CATALOGO DIAS
+    WHEN 0 THEN 1
+    WHEN 1 THEN 2
+    WHEN 2 THEN 3
+    WHEN 3 THEN 4
+    WHEN 4 THEN 5
+    WHEN 5 THEN 6
+    WHEN 6 THEN 7
+END AS numero_dia
+
+FROM 
+    vacaciones asVacaciones
+JOIN 
+    trabajador asTrabajador ON asVacaciones.trabajador_id = asTrabajador.id_trabajador
+JOIN 
+    persona asPersona ON asTrabajador.persona_id = asPersona.id_persona
+JOIN 
+    trabajador_plaza asTrabajadorPlaza ON asTrabajadorPlaza.trabajador_id = asTrabajador.id_trabajador
+JOIN 
+    catalogo_areas asCatalogoAreas ON asTrabajadorPlaza.areas_id = asCatalogoAreas.id_area
+JOIN 
+    catalogo_area_superior asCatalogoAreaSuperior ON asCatalogoAreas.id_area_superior = asCatalogoAreaSuperior.id_area_superior
+JOIN 
+    catalogo_plaza asCatalogoPlaza ON asTrabajadorPlaza.plaza_id = asCatalogoPlaza.id_plaza
+JOIN 
+    catalogo_puesto asCatalogoPuesto ON asCatalogoPlaza.puesto_id = asCatalogoPuesto.id_puesto
+JOIN 
+    libro_dias asLibroDias ON asTrabajador.id_trabajador = asLibroDias.trabajador_id
+JOIN 
+    catalogo_dias asCatalogoDias ON asLibroDias.dia_id = asCatalogoDias.id_dia
+JOIN
+    series ON series.dia BETWEEN asVacaciones.fecha_inicio::date AND asVacaciones.fecha_fin::date
+--Condicional donde concuerden el expediente, id de incidencia y el id_dia donde se encuentre el descanso
+WHERE 
+    asVacaciones.incidencias_id = $P{incidencias_id}
+    AND asLibroDias.dia_descanso = 1 
+    AND asCatalogoDias.id_dia = CASE EXTRACT(DOW FROM series.dia)
+                                        WHEN 0 THEN 1
+                                        WHEN 1 THEN 2
+                                        WHEN 2 THEN 3
+                                        WHEN 3 THEN 4
+                                        WHEN 4 THEN 5
+                                        WHEN 5 THEN 6
+                                        WHEN 6 THEN 7
+                                        ELSE EXTRACT(DOW FROM series.dia)
+                                        END                               
+  ORDER BY dia_en_serie]]>
+		</queryString>
+		<field name="expediente" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.name" value="expediente"/>
+			<property name="com.jaspersoft.studio.field.label" value="expediente"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+		</field>
+		<field name="periodo_vacacional" class="java.lang.Double">
+			<property name="com.jaspersoft.studio.field.name" value="periodo_vacacional"/>
+			<property name="com.jaspersoft.studio.field.label" value="periodo_vacacional"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+		</field>
+		<field name="apellido_paterno" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="apellido_paterno"/>
+			<property name="com.jaspersoft.studio.field.label" value="apellido_paterno"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+		</field>
+		<field name="apellido_materno" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="apellido_materno"/>
+			<property name="com.jaspersoft.studio.field.label" value="apellido_materno"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+		</field>
+		<field name="nombre" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+		</field>
+		<field name="fecha_ingreso" class="java.sql.Timestamp">
+			<property name="com.jaspersoft.studio.field.name" value="fecha_ingreso"/>
+			<property name="com.jaspersoft.studio.field.label" value="fecha_ingreso"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="trabajador"/>
+		</field>
+		<field name="desc_area_superior" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="desc_area_superior"/>
+			<property name="com.jaspersoft.studio.field.label" value="desc_area_superior"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_area_superior"/>
+		</field>
+		<field name="desc_area" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="desc_area"/>
+			<property name="com.jaspersoft.studio.field.label" value="desc_area"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_areas"/>
+		</field>
+		<field name="puesto" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="puesto"/>
+			<property name="com.jaspersoft.studio.field.label" value="puesto"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_puesto"/>
+		</field>
+		<field name="dias_vacaciones_semana" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.name" value="dias_vacaciones_semana"/>
+			<property name="com.jaspersoft.studio.field.label" value="dias_vacaciones_semana"/>
+		</field>
+		<field name="dias_paseos" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.name" value="dias_paseos"/>
+			<property name="com.jaspersoft.studio.field.label" value="dias_paseos"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+		</field>
+		<field name="dias_totales" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.name" value="dias_totales"/>
+			<property name="com.jaspersoft.studio.field.label" value="dias_totales"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+		</field>
+		<field name="fecha_inicio_anio_periodo_vacacional" class="java.sql.Timestamp">
+			<property name="com.jaspersoft.studio.field.name" value="fecha_inicio_anio_periodo_vacacional"/>
+			<property name="com.jaspersoft.studio.field.label" value="fecha_inicio_anio_periodo_vacacional"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+		</field>
+		<field name="fecha_fin_anio_periodo_vacacional" class="java.sql.Timestamp">
+			<property name="com.jaspersoft.studio.field.name" value="fecha_fin_anio_periodo_vacacional"/>
+			<property name="com.jaspersoft.studio.field.label" value="fecha_fin_anio_periodo_vacacional"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+		</field>
+		<field name="fecha_inicio" class="java.sql.Timestamp">
+			<property name="com.jaspersoft.studio.field.name" value="fecha_inicio"/>
+			<property name="com.jaspersoft.studio.field.label" value="fecha_inicio"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+		</field>
+		<field name="fecha_fin" class="java.sql.Timestamp">
+			<property name="com.jaspersoft.studio.field.name" value="fecha_fin"/>
+			<property name="com.jaspersoft.studio.field.label" value="fecha_fin"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+		</field>
+		<field name="observaciones" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="observaciones"/>
+			<property name="com.jaspersoft.studio.field.label" value="observaciones"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+		</field>
+		<field name="id_dia" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.name" value="id_dia"/>
+			<property name="com.jaspersoft.studio.field.label" value="id_dia"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_dias"/>
+		</field>
+		<field name="dia" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="dia"/>
+			<property name="com.jaspersoft.studio.field.label" value="dia"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_dias"/>
+		</field>
+		<field name="dia_descanso" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.name" value="dia_descanso"/>
+			<property name="com.jaspersoft.studio.field.label" value="dia_descanso"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="libro_dias"/>
+		</field>
+		<field name="dia_en_serie" class="java.sql.Timestamp">
+			<property name="com.jaspersoft.studio.field.name" value="dia_en_serie"/>
+			<property name="com.jaspersoft.studio.field.label" value="dia_en_serie"/>
+		</field>
+		<field name="numero_dia" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.name" value="numero_dia"/>
+			<property name="com.jaspersoft.studio.field.label" value="numero_dia"/>
+		</field>
+		<group name="dia">
+			<groupExpression><![CDATA[$F{dia}]]></groupExpression>
+		</group>
+	</subDataset>
+	<subDataset name="Dataset2" uuid="2b72d062-ef79-4715-bb2d-f005155e627c">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DBJunio"/>
+		<parameter name="incidencias_id" class="java.lang.Integer">
+			<parameterDescription><![CDATA['157' ejemplo]]></parameterDescription>
+		</parameter>
+		<queryString language="SQL">
+			<![CDATA[SELECT
+    asCatalogoDias.id_dia,
+    asCatalogoDias.dia,
+    asLibroDias.dia_descanso
+FROM 
+    vacaciones asVacaciones
+JOIN 
+    trabajador asTrabajador ON asVacaciones.trabajador_id = asTrabajador.id_trabajador
+JOIN 
+    libro_dias asLibroDias ON asTrabajador.id_trabajador = asLibroDias.trabajador_id
+JOIN 
+    catalogo_dias asCatalogoDias ON asLibroDias.dia_id = asCatalogoDias.id_dia
+WHERE 
+    asVacaciones.incidencias_id = $P{incidencias_id}
+    AND asLibroDias.dia_descanso = 1]]>
+		</queryString>
+		<field name="id_dia" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.name" value="id_dia"/>
+			<property name="com.jaspersoft.studio.field.label" value="id_dia"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_dias"/>
+		</field>
+		<field name="dia" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="dia"/>
+			<property name="com.jaspersoft.studio.field.label" value="dia"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_dias"/>
+		</field>
+		<field name="dia_descanso" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.name" value="dia_descanso"/>
+			<property name="com.jaspersoft.studio.field.label" value="dia_descanso"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="libro_dias"/>
+		</field>
+		<group name="dia">
+			<groupExpression><![CDATA[$F{dia}]]></groupExpression>
+		</group>
+	</subDataset>
+	<parameter name="incidencias_id" class="java.lang.Integer">
+		<parameterDescription><![CDATA['157' ejemplo]]></parameterDescription>
+	</parameter>
+	<parameter name="urlImgLogoGob" class="java.lang.String"/>
+	<parameter name="urlImgDependencia" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[WITH series AS (
+    SELECT generate_series(asVacaciones.fecha_inicio::date, asVacaciones.fecha_fin::date, '1 day') AS dia
+    FROM vacaciones asVacaciones
+    WHERE asVacaciones.incidencias_id =   $P{incidencias_id} 
+)
+SELECT
+    asVacaciones.incidencias_id,
+    asVacaciones.expediente,
+    asVacaciones.periodo_vacacional,
+    asPersona.apellido_paterno,
+    asPersona.apellido_materno,
+    asPersona.nombre,
+    asTrabajador.fecha_ingreso,
+    asCatalogoAreaSuperior.desc_area_superior,
+    asCatalogoAreas.desc_area,
+    asCatalogoPuesto.puesto,
+    (asVacaciones.dias_totales - asVacaciones.dias_paseos) AS dias_vacaciones_semana,
+    asVacaciones.dias_paseos,
+    asVacaciones.dias_totales,
+    asVacaciones.fecha_inicio_anio_periodo_vacacional,
+    asVacaciones.fecha_fin_anio_periodo_vacacional,
+    asVacaciones.fecha_inicio,
+    asVacaciones.fecha_fin,
+    asVacaciones.observaciones,
+    inc.corrida_vacaciones,
+    asCatalogoDias.id_dia,
+    asCatalogoDias.dia,
+    asLibroDias.dia_descanso,
+    series.dia AS dia_en_serie,
+CASE EXTRACT(DOW FROM series.dia)
+-- IGUALACION DE DIAS EN BASE DE DATOS CATALOGO DIAS
+    WHEN 0 THEN 1
+    WHEN 1 THEN 2
+    WHEN 2 THEN 3
+    WHEN 3 THEN 4
+    WHEN 4 THEN 5
+    WHEN 5 THEN 6
+    WHEN 6 THEN 7
+END AS numero_dia
+
+FROM 
+    vacaciones asVacaciones
+JOIN 
+    trabajador asTrabajador ON asVacaciones.trabajador_id = asTrabajador.id_trabajador
+JOIN 
+    persona asPersona ON asTrabajador.persona_id = asPersona.id_persona
+JOIN 
+    trabajador_plaza asTrabajadorPlaza ON asTrabajadorPlaza.trabajador_id = asTrabajador.id_trabajador
+JOIN 
+    catalogo_areas asCatalogoAreas ON asTrabajadorPlaza.areas_id = asCatalogoAreas.id_area
+JOIN 
+    catalogo_area_superior asCatalogoAreaSuperior ON asCatalogoAreas.id_area_superior = asCatalogoAreaSuperior.id_area_superior
+JOIN 
+    catalogo_plaza asCatalogoPlaza ON asTrabajadorPlaza.plaza_id = asCatalogoPlaza.id_plaza
+JOIN 
+    catalogo_puesto asCatalogoPuesto ON asCatalogoPlaza.puesto_id = asCatalogoPuesto.id_puesto
+JOIN 
+    libro_dias asLibroDias ON asTrabajador.id_trabajador = asLibroDias.trabajador_id
+JOIN
+    incidencias inc ON inc.id_incidencia = asVacaciones.incidencias_id
+JOIN 
+    catalogo_dias asCatalogoDias ON asLibroDias.dia_id = asCatalogoDias.id_dia
+JOIN
+    series ON series.dia BETWEEN asVacaciones.fecha_inicio::date AND asVacaciones.fecha_fin::date
+WHERE 
+    asVacaciones.incidencias_id =   $P{incidencias_id}
+  LIMIT 1]]>
+	</queryString>
+	<field name="incidencias_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="incidencias_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="incidencias_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+	</field>
+	<field name="expediente" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="expediente"/>
+		<property name="com.jaspersoft.studio.field.label" value="expediente"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+	</field>
+	<field name="periodo_vacacional" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="periodo_vacacional"/>
+		<property name="com.jaspersoft.studio.field.label" value="periodo_vacacional"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+	</field>
+	<field name="apellido_paterno" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="apellido_paterno"/>
+		<property name="com.jaspersoft.studio.field.label" value="apellido_paterno"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="apellido_materno" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="apellido_materno"/>
+		<property name="com.jaspersoft.studio.field.label" value="apellido_materno"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="fecha_ingreso" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_ingreso"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_ingreso"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="trabajador"/>
+	</field>
+	<field name="desc_area_superior" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="desc_area_superior"/>
+		<property name="com.jaspersoft.studio.field.label" value="desc_area_superior"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_area_superior"/>
+	</field>
+	<field name="desc_area" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="desc_area"/>
+		<property name="com.jaspersoft.studio.field.label" value="desc_area"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_areas"/>
+	</field>
+	<field name="puesto" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="puesto"/>
+		<property name="com.jaspersoft.studio.field.label" value="puesto"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_puesto"/>
+	</field>
+	<field name="dias_vacaciones_semana" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="dias_vacaciones_semana"/>
+		<property name="com.jaspersoft.studio.field.label" value="dias_vacaciones_semana"/>
+	</field>
+	<field name="dias_paseos" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="dias_paseos"/>
+		<property name="com.jaspersoft.studio.field.label" value="dias_paseos"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+	</field>
+	<field name="dias_totales" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="dias_totales"/>
+		<property name="com.jaspersoft.studio.field.label" value="dias_totales"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+	</field>
+	<field name="fecha_inicio_anio_periodo_vacacional" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_inicio_anio_periodo_vacacional"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_inicio_anio_periodo_vacacional"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+	</field>
+	<field name="fecha_fin_anio_periodo_vacacional" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_fin_anio_periodo_vacacional"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_fin_anio_periodo_vacacional"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+	</field>
+	<field name="fecha_inicio" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_inicio"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_inicio"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+	</field>
+	<field name="fecha_fin" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_fin"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_fin"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+	</field>
+	<field name="observaciones" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="observaciones"/>
+		<property name="com.jaspersoft.studio.field.label" value="observaciones"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vacaciones"/>
+	</field>
+	<field name="corrida_vacaciones" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="corrida_vacaciones"/>
+		<property name="com.jaspersoft.studio.field.label" value="corrida_vacaciones"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="incidencias"/>
+	</field>
+	<field name="id_dia" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="id_dia"/>
+		<property name="com.jaspersoft.studio.field.label" value="id_dia"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_dias"/>
+	</field>
+	<field name="dia" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="dia"/>
+		<property name="com.jaspersoft.studio.field.label" value="dia"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_dias"/>
+	</field>
+	<field name="dia_descanso" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="dia_descanso"/>
+		<property name="com.jaspersoft.studio.field.label" value="dia_descanso"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="libro_dias"/>
+	</field>
+	<field name="dia_en_serie" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="dia_en_serie"/>
+		<property name="com.jaspersoft.studio.field.label" value="dia_en_serie"/>
+	</field>
+	<field name="numero_dia" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="numero_dia"/>
+		<property name="com.jaspersoft.studio.field.label" value="numero_dia"/>
+	</field>
+	<variable name="variable_name" class="java.lang.String">
+		<variableExpression><![CDATA[$V{variable_name} + " " + $F{dia}]]></variableExpression>
+		<initialValueExpression><![CDATA[$F{dia}]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="40" splitType="Stretch">
+			<image>
+				<reportElement x="120" y="0" width="154" height="40" uuid="8b5f7246-e538-4bb6-8890-6ceac0a67486"/>
+				<imageExpression><![CDATA[$P{urlImgLogoGob}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="278" y="0" width="264" height="40" uuid="74e2351f-77d9-4ee1-93ac-50f42a94da3f"/>
+				<imageExpression><![CDATA[$P{urlImgDependencia}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="58" splitType="Stretch">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+			<staticText>
+				<reportElement x="210" y="0" width="140" height="20" uuid="366c1ac4-39f4-4128-8bd0-225f2487bbf6"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Autorización de Vacaciones]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="320" y="39" width="60" height="19" uuid="99303bd7-4285-4864-9fc2-05e1feac7c3e"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Periodo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="320" y="20" width="40" height="19" uuid="87d61caf-f97b-4f80-848c-77a11f830382"/>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="380" y="39" width="180" height="19" uuid="e4dc4c8b-73ba-48e6-b626-b48835c4ee70">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f31d9592-dcd7-4c49-b3f3-a3f415efc9d2"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{periodo_vacacional}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement isPrintRepeatedValues="false" x="380" y="20" width="180" height="19" uuid="b37537c9-8c50-4656-92e3-48e814d14984"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("EEEE, d 'de' MMMM 'de' yyyy", new Locale("es")).format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="664" splitType="Stretch">
+			<printWhenExpression><![CDATA[$V{REPORT_COUNT} == $V{PAGE_COUNT}]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="60" height="19" uuid="fb753c40-3e2f-4a30-a373-1497100462cc"/>
+				<text><![CDATA[Expediente:]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="80" y="0" width="90" height="19" uuid="7bce7c78-769b-49e4-8fd7-8debc0b40563">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f31d9592-dcd7-4c49-b3f3-a3f415efc9d2"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{expediente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="19" width="60" height="19" uuid="f68eb01d-3a34-4990-a2e1-5035f33771ab"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Nombre:]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="80" y="19" width="90" height="19" uuid="c64bbb14-225b-4589-816e-c8f79c3c9804">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f31d9592-dcd7-4c49-b3f3-a3f415efc9d2"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{apellido_paterno}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="240" y="19" width="90" height="19" uuid="0fd221d4-9623-466c-9bb2-62866eecf06c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f31d9592-dcd7-4c49-b3f3-a3f415efc9d2"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{apellido_materno}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="380" y="20" width="90" height="19" uuid="8db8d3be-a2b7-4784-872a-0056ab5c6374">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f31d9592-dcd7-4c49-b3f3-a3f415efc9d2"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="38" width="90" height="19" uuid="5fe362e1-d51f-46c7-99f8-409d44bc9dc5"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Fecha de Ingreso:]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="90" y="38" width="150" height="19" uuid="4950143d-0c93-480f-b322-e4d3621f9013">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f31d9592-dcd7-4c49-b3f3-a3f415efc9d2"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("EEEE, d 'de' MMMM 'de' yyyy", new Locale("es")).format($F{fecha_ingreso})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="57" width="90" height="19" uuid="d082aa0c-6a74-4b42-96c1-5b732ab8066b"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Adscripción: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="90" y="57" width="290" height="19" uuid="a7f2b2b5-fdba-4a81-9906-c175d22e1f92">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f31d9592-dcd7-4c49-b3f3-a3f415efc9d2"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{desc_area}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="420" y="57" width="50" height="19" uuid="f2f92704-efce-46c6-8b4f-15e645088d0b"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Puesto: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="470" y="57" width="90" height="19" uuid="3085b496-687c-4991-ae60-3af6d5b13f49">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f31d9592-dcd7-4c49-b3f3-a3f415efc9d2"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{puesto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="76" width="90" height="19" uuid="204fe08f-1663-4c5d-a85d-f621f9f0c419"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Disfruta de: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="140" y="76" width="40" height="19" uuid="8254594d-755c-4357-9c5a-b236cdb81f10">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f31d9592-dcd7-4c49-b3f3-a3f415efc9d2"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{dias_vacaciones_semana}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="190" y="76" width="100" height="19" uuid="f33149ab-e225-4e53-a843-58e70147b0a4"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[días de vacaciones y ]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="340" y="76" width="40" height="19" uuid="ca3f681b-aadd-4225-9cab-0b877d175a23">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f31d9592-dcd7-4c49-b3f3-a3f415efc9d2"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{dias_paseos}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="420" y="76" width="60" height="19" uuid="7fa02aa4-9866-4443-91c1-1abd0e7d520a"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[descansos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="95" width="90" height="19" uuid="219cf5be-a496-4332-91d4-10ce8fc992bb"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Días Totales: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="140" y="95" width="40" height="19" uuid="383fce8e-b6b0-4c6a-bb6f-2c43c39c16c4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f31d9592-dcd7-4c49-b3f3-a3f415efc9d2"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{dias_vacaciones_semana}+ $F{dias_paseos}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="190" y="95" width="50" height="19" uuid="9f4d47b5-38b2-4033-8f25-d2ea9e5b7319"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[por el año]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="260" y="95" width="40" height="19" uuid="dcb6f93d-afae-492e-b44a-91c9ebad9682">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f31d9592-dcd7-4c49-b3f3-a3f415efc9d2"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{fecha_inicio_anio_periodo_vacacional}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="340" y="95" width="10" height="19" uuid="f2466b04-1273-4dce-9824-b0a006c8e866"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[al]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="420" y="95" width="40" height="19" uuid="656ade92-6341-4c11-aa77-1c00418e9797">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f31d9592-dcd7-4c49-b3f3-a3f415efc9d2"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{fecha_fin_anio_periodo_vacacional}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="114" width="90" height="19" uuid="957aa715-095d-48fa-a26e-802d64c5d170"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[desde el ]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="140" y="114" width="160" height="19" uuid="f086807d-fc16-4230-9de4-cdf16b0a3b3a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f31d9592-dcd7-4c49-b3f3-a3f415efc9d2"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("EEEE, d 'de' MMMM 'de' yyyy", new Locale("es")).format($F{fecha_inicio})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="420" y="114" width="140" height="19" uuid="a8c9532c-b619-4b20-88dd-5308158aa876">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f31d9592-dcd7-4c49-b3f3-a3f415efc9d2"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("EEEE, d 'de' MMMM 'de' yyyy", new Locale("es")).format($F{fecha_fin})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="340" y="114" width="10" height="19" uuid="7b29be3a-5a3b-4f47-bc8c-7ef842881da3"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[al]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="133" width="90" height="19" uuid="9ba71c35-364c-4b9d-ac07-3d36dbd570f4"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Descansos: ]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement x="140" y="170" width="298" height="11" uuid="6030c690-d1a2-4b01-9030-6e624ab8c9b6">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="Dataset1" uuid="96a890f3-dfd1-4f6c-9e9b-ba929981cb1a">
+						<datasetParameter name="incidencias_id">
+							<datasetParameterExpression><![CDATA[$F{incidencias_id}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:listContents height="11" width="298">
+						<textField>
+							<reportElement x="0" y="0" width="110" height="11" uuid="b58df447-cbd3-4dce-bbbd-79d7cddcb093">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							</reportElement>
+							<textElement>
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA["Paseo " + $V{REPORT_COUNT}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="110" y="0" width="188" height="11" uuid="3d444720-250e-4dd5-8fb3-4fda0375ebd9"/>
+							<textElement>
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[new SimpleDateFormat("EEEE, d 'de' MMMM 'de' yyyy", new Locale("es")).format($F{dia_en_serie})]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<componentElement>
+				<reportElement x="140" y="136" width="110" height="13" uuid="eadffd26-c827-4337-885e-7d21727ece93">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.CONTENTS.height" value="px"/>
+				</reportElement>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Horizontal">
+					<datasetRun subDataset="Dataset2" uuid="bd47d3c5-6694-4cad-a3e8-8aad00246ccf">
+						<datasetParameter name="incidencias_id">
+							<datasetParameterExpression><![CDATA[$F{incidencias_id}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:listContents height="13" width="110">
+						<textField>
+							<reportElement x="0" y="0" width="110" height="13" uuid="06659476-7f70-4548-af03-e5acd7a4bc12">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							</reportElement>
+							<textFieldExpression><![CDATA[$F{dia}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<staticText>
+				<reportElement x="0" y="330" width="80" height="19" uuid="2e1f101b-29c8-4633-bb8b-ee7eb8c9b1db"/>
+				<text><![CDATA[Vacaciones:$]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="349" width="100" height="19" uuid="a64a1496-4024-4060-a261-c073b59458b4"/>
+				<text><![CDATA[Prima Vacacional: $]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="368" width="100" height="19" uuid="1c6f2bd8-836f-4295-84a7-b1a62a9823b2"/>
+				<text><![CDATA[Observaciones : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="387" width="554" height="32" uuid="afaa6fe9-bec3-4c6e-be78-1e6aeeeaca7e"/>
+				<textFieldExpression><![CDATA[$F{observaciones}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="419" width="80" height="19" uuid="c281dc7f-e092-4a16-8b33-2986ded2cbdc"/>
+				<text><![CDATA[Incidencias: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="438" width="159" height="19" uuid="c5a3ae08-f94a-4dbd-8e54-8cb40458aa8d"/>
+				<text><![CDATA[Total de Días Pago Proporcional: $]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="457" width="100" height="19" uuid="6dbccbfa-842c-4be3-9873-ca8b84fd8229"/>
+				<text><![CDATA[Observaciones : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="159" y="438" width="40" height="19" uuid="091d5feb-8514-4c44-ae05-b9ef3cd7d93b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f31d9592-dcd7-4c49-b3f3-a3f415efc9d2"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{dias_vacaciones_semana}+ $F{dias_paseos}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="370" y="419" width="80" height="19" uuid="c2e8f795-59c2-415f-b320-f138fd6c745b"/>
+				<text><![CDATA[Cuota Diaria: $]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="457" width="80" height="19" uuid="aff28bb9-e000-49ff-aa2e-a12af8477f2e"/>
+				<text><![CDATA[Corrida: $]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="475" width="80" height="19" uuid="0728d621-8dc0-45b8-9bf7-808e79459328"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Conformidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="476" width="80" height="19" uuid="341cc54e-f08d-48f8-aaa5-f4015d64e2f2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Vo.Bo.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="520" width="80" height="19" uuid="6998cb3e-8978-4cf5-b1f7-27e7b0df8910"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Empleado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="520" width="80" height="19" uuid="ab589c7f-da33-4514-8484-46a0cd01b531"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Responsable]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="54" y="550" width="50" height="19" uuid="fd88469e-bd74-4d81-9aef-d88707a77ae4"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Elabora]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="258" y="550" width="44" height="19" uuid="66dfdb69-9ea5-46f6-bab7-d9ab43ee6596"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Procesa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="460" y="550" width="50" height="19" uuid="f2668639-a119-4c2b-ab09-bebc7162fb12"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Autoriza]]></text>
+			</staticText>
+			<line>
+				<reportElement x="5" y="620" width="137" height="1" uuid="c77802d6-4856-4c82-9fef-a79fdbddc6b4">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement x="208" y="620" width="137" height="1" uuid="fb186ebc-61c8-4520-b1a3-58296db2edf1">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement x="414" y="620" width="137" height="1" uuid="19fb5a12-c559-4c7b-920e-8a1e356bac08">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="-6" y="621" width="170" height="13" uuid="6f0685c4-4326-43f3-8b02-1db28eac13c7">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Subgerente de Control de Personal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="195" y="621" width="170" height="13" uuid="5165419b-d30f-4ae5-8f28-822d7ad4f16b">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Lic. Ernesto Sánchez Kutcsher]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="398" y="621" width="174" height="26" uuid="73e31382-ec98-4f06-83be-1ced67b8d427">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Gerente de Administración de Capital Humano]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="195" y="634" width="170" height="13" uuid="60fa10e6-3602-435e-bdf3-1a04324ee56c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Subgerente de Nómina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-6" y="634" width="170" height="13" uuid="fd3e6348-a957-4e00-a593-c3130d0cbed8">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Reclutamiento y Capacitación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-6" y="647" width="170" height="13" uuid="89a51b93-9171-497e-b085-e0ca56f26a9c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Lic. Adan Erik Castro Lara]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="392" y="647" width="180" height="13" uuid="e164af3b-9fb8-430c-9922-aecf883cb827">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Mtro. Eduardo Ugo Archundia Morales]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="418" y="457" width="45" height="18" uuid="46316831-586e-4a87-8805-92982ca9afad"/>
+				<textFieldExpression><![CDATA[$F{corrida_vacaciones}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="15">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="210" height="15" uuid="7e929ec8-4bb6-4853-9a4c-606ccca7dc21"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[S. de Control de Personal, Reclutamiento y Capacitación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="520" y="0" width="34" height="15" uuid="eef6c230-a8a5-48a0-8700-3fae4b41e82d"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[F.AD.129]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

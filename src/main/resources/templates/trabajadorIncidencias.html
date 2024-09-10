@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4" style="width: 1400px">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Incidencias</h6>
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">Administración de Incidencias</h4>
+                                </div>
+                                <br>
+                                <div class="col">  
+                                    <button onclick="adminVacaciones()" type="button" class="btn btn-secondary" style="width: 216px">Ver Trabajadores</button>   
+                                </div>
+                                <div class="card-body">
+                                    <div class="alert alert-info alert-white rounded mx-left" style="width: 1200px">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="campo_expediente" class="m-0 font-weight-bold text-dark">Expediente:</label>
+                                                <input type="text" id="campo_expediente" class="form-control" readonly>
+                                            </div>
+                                            <div class="col">
+                                                <label for="campo_nombre" class="m-0 font-weight-bold text-dark">Trabajador</label>
+                                                <input type="text" id="campo_nombre" class="form-control" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="m-lg-3 ">
+                                                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#agregarIncidenciaModal"><i class="fa-solid fa-calendar-days"></i> Agregar Incidencia</button>
+                                                <br>
+                                                <input type='hidden' id='genero' name='genero' class='form-control'>
+                                                <input type='hidden' id='tipo_contrato_incidencias' name='tipo_contrato_incidencias' class='form-control' > 
+                                                <input type='hidden' id='trabajador_prestaciones_incidencias' name='trabajador_prestaciones_incidencias' class='form-control' >
+                                                <input type="hidden" id="tipo_nomina" name="tipo_nomina" class='form-control'>
+                                                <input type="hidden" id="arreglo_dias_festivos" name="arreglo_dias_festivos" class='form-control'>
+                                                <input type="hidden" id="arreglo_dias_habiles" name="arreglo_dias_habiles" class='form-control'>
+                                                <input type="hidden" id="arreglo_dias_paseos" name="arreglo_dias_paseos" class='form-control'>
+                                                <input type="hidden" id="fecha_ultima_vacacion" name="fecha_ultima_vacacion" class='form-control'>
+                                            </div>
+                                        </div>
+
+                                        <div class="m-lg-3 ">
+                                            <button type="button" class="btn btn-primary btn-info"><span class="fa fa-search"></span> Incidencias</button>
+                                            <button type="button" class="btn btn-primary" onclick="redireccionTabIncapacidades()"><span class="fa fa-search"></span> Incapacidades</button>
+                                            <button type="button" class="btn btn-primary" onclick="verKardexTrabajador()"><span class="fa fa-calendar"></span> Kárdex</button>
+                                        </div>
+
+                                        <div class="input-group">
+                                            <div class="panel-container collapse show m-lg-3"> <!--  m-auto se centra la tabla-->
+                                                <div class="table-responsive">
+                                                    <!-- PRUEBA BÚSQUEDA -->
+                                                    <div class="alert alert-info alert-white rounded mx-left" style="width: 1200px">
+                                                        <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                                        <div class="icon " >
+                                                            <strong ><h5>Incidencias Registradas</h5></strong> <i class="fa fa-search mx-auto"></i><strong> Criterios de Búsqueda: </strong> Incidencias, Folio
+                                                        </div>
+                                                    </div>  
+                                                    <div class="m-lg">
+                                                        <button type="button" class="btn btn-primary" onclick="abrirModalParametros()"><span class="fas fa-user-leaf"></span> Formato Suspensión</button>
+                                                    </div>
+                                                    <br>
+                                                    <table class="table table-bordered" id="tabla_Incidencias" cellspacing="0" >
+                                                        <thead class="bg-success-900 thead-dark">
+                                                            <tr>
+                                                                <th style="width: 10px;">INCIDENCIA</th>
+                                                                <th style="width: 10px;">FECHA INICIO</th>
+                                                                <th style="width: 10px;">FECHA FIN</th>
+                                                                <th style="width: 10px;">FOLIO</th>
+                                                                <th style="width: 10px;">CORRIDA</th>
+                                                                <th style="width: 10px;">ESTADO</th>
+                                                                <th style="width: 10px;">EDITAR</th>
+                                                                <th style="width: 10px;">ELIMINAR</th>
+                                                                <th style="width: 10px;">VIZUALIZACIÓN FORMATOS</th>
+                                                                <th style="width: 10px;">DESCARGA FORMATOS</th>
+                                                            </tr>    
+                                                        </thead>    
+                                                    </table>
+                                                </div>  
+                                            </div>
+                                        </div>
+                                    </div>    
+                                    <!------------------------------------------------------- MODAL AGREGAR INCIDENCIA------------------------------------------------------------------------------->
+                                    <div class="modal fade mx-auto" id="agregarIncidenciaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                         aria-hidden="true" th:fragment="perfil" >
+                                        <div class="modal-dialog  modal-xl" role="document" >
+                                            <div  class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel"> Agregar Incidencia</h5>
+                                                    <button class="close" id="btn_Close" type="button" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form id="FormGuardarIncidencia" class="needs-validation" novalidate>
+                                                        <div class="form-group">
+                                                            <div class="text-right"> <label class="text-danger"><small>* Campos Obligatorios</small></label><br></div>
+                                                        </div>
+                                                        <div class="form-group">
+
+                                                            <div class="row m-lg-4">
+                                                                <div class="col">  
+                                                                    <!--div class="input-group flex-nowrap"-->
+                                                                    <label  for="addon-wrapping-left">*Incidencia</label>
+                                                                    <select id="cmbInc" name="cmbInc" style="width:300px;" class="form-control" oninput ="detalleVacaciones(),detalleAyudas()" required>
+                                                                        <option value>Seleccione</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col">     
+                                                                    <label class="form-label" for="addon-wrapping-left">*Fecha inicio</label>
+                                                                    <br><input type="date" id="fecha_inicio" style="width:300px;" class="form-control" name="fecha_inicio" oninput="calculaVacaciones(),obtenPeriodoPago(),obtenPeriodoPagoAyudas()" required>
+                                                                </div>
+                                                                <div class="col">                                                                     
+                                                                    <label class="form-label" for="addon-wrapping-left">*Fecha fin</label>
+                                                                    <br><input type="date" id="fecha_fin" style="width:300px;" class="form-control" name="fecha_fin" oninput="calculaVacaciones(),buscaDiasIncidencia()" required> 
+                                                                </div> 
+                                                            </div>
+                                                            <div class="row m-lg-4">
+                                                                <div class="col">
+                                                                    <label class="form-label" for="addon-wrapping-left">*Folio</label>
+                                                                    <input   id="folio" name="folio" type="text" class="form-control" maxlength="15" aria-label="folio" aria-describedby="addon-wrapping-left"required>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <label class="form-label" for="addon-wrapping-left">*Bis</label>
+                                                                    <input id="bis" name="bis" type="text" class="form-control" maxlength="15" aria-label="bis" aria-describedby="addon-wrapping-left">
+                                                                </div>
+                                                                <div class="col">
+                                                                    <label class="form-label" for="addon-wrapping-left">*Número de días</label>
+                                                                    <input   id="num_dias" name="num_dias" type="number" class="form-control"  readonly required>
+
+                                                                </div>
+                                                                <div class="col">  
+                                                                    <label class="form-label" for="addon-wrapping-left">*Observaciones</label>                                                              
+                                                                    <input style="width:250px; height:100px;" id="observaciones" name="observaciones" class="form-control" min="0" maxlength="50" placeholder="Máx. 50 caracteres" required>
+                                                                </div>
+                                                            </div>
+                                                            <div id="detalleVacaciones">
+
+                                                            </div>
+                                                            <div id="detalleAyudas">
+
+                                                            </div>
+                                                            <div class="row m-lg-4">
+                                                                <div class="col"> 
+                                                                    <div id="alerta" class="invalid-feedback"> Por favor ingresa el número de expediente, el campo no puede estar vacío.</div>
+                                                                </div>
+                                                            </div>
+                                                            <input type="hidden" id="trabajador_id" name="trabajador_id">
+                                                            <div class="row m-lg-4">    
+                                                                <div class="col">
+                                                                    <button class="btn btn-secondary" id="btn_Cancelar" type="button" data-dismiss="modal" style="width:150px;">Cancelar</button>
+                                                                    <button type="submit" name="botonenviar"  class="btn btn-primary" id="botonenviar" value="Enviar" style="width:160px;"> Guardar Incidencia </button>
+                                                                </div>
+                                                            </div> 
+                                                        </div>
+                                                    </form>
+                                                </div>        
+                                            </div>
+                                        </div>    
+                                    </div>
+
+                                    <!------------------------------------------------------- MODAL EDITAR INCIDENCIA------------------------------------------------------------------------------->
+                                    <div class="modal fade" id="editarIncidenciaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                         aria-hidden="true" th:fragment="perfil">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel"> Editar Incidencia</h5>
+                                                    <button class="close" type="button"  data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form id="FormEditarIncidencia" class="needs-validation" novalidate>
+                                                        <div class="form-group">
+                                                            <div class="text-right"> <label class="text-danger"><small>* Campos Obligatorios</small></label><br>      </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <div class="row">    
+                                                                    <br><b style="margin-left:50px; margin-right:10px">Incidencia</b>
+                                                                    <select id="cmbInc_edita" name="cmbInc_edita"  style="width:250px;margin-left:10px;" class="form-control" required disabled>
+                                                                        <option value="value1" selected>Seleccione</option>
+                                                                    </select>
+                                                                    <hr style="width:400px; margin-left:50px">
+                                                                </div>  
+                                                                <div class="row">    
+                                                                    <br><b style="margin-left:50px; margin-right:10px">Observación</b>
+                                                                    <textarea id="txtAreaObservaciones" cols="26" rows="2"></textarea>
+                                                                    <hr style="width:400px; margin-left:50px">
+                                                                </div> 
+                                                                <div class="row">
+                                                                    <b style="margin-left: 50px;">Fecha Inicio</b>
+                                                                    <br><input type="date" id="fecha_inicio_edita" style="margin-left:30px;width:160px;" oninput = "recalculaFechas(document.getElementById('fecha_inicio_edita').value, document.getElementById('fecha_fin_edita').value)" class="form-control" name="fecha_inicio_edita" required>
+                                                                    <hr style="width:400px; margin-left:50px">
+                                                                </div>    
+                                                                <div class="row">
+                                                                    <b style="margin-left: 50px;">Fecha Fin</b>
+                                                                    <br><input type="date" id="fecha_fin_edita" style="margin-left:45px;width:160px;" oninput = "recalculaFechas(document.getElementById('fecha_inicio_edita').value, document.getElementById('fecha_fin_edita').value)" class="form-control" name="fecha_fin_edita" required>
+                                                                    <hr style="width:400px; margin-left:50px">
+                                                                </div>
+                                                                <div class="row">
+                                                                    <b style="margin-left: 50px;">Folio</b>
+                                                                    <input type="text" id="folio_edita" style="margin-left:80px; width:120px;" class="form-control" name="folio_edita" required>
+                                                                    <hr style="width:400px; margin-left:50px">
+                                                                </div>    
+                                                                <div class="row">
+                                                                    <b style="margin-left: 50px;">Número de Días</b>
+                                                                    <input  style="width:100px;margin-left:22px;" id="num_dias_edita" name="num_dias_edita" type="number" class="form-control" min="0" max="20" aria-label="horas_trabajadas" aria-describedby="addon-wrapping-left" readonly>
+                                                                    <hr style="width:400px; margin-left: 50px;">
+                                                                </div>
+
+                                                                <div id="detalleAyudasEdita">
+
+                                                                </div>
+                                                                <input type="hidden" id="id_incidencia" name="id_incidencia">
+                                                                <input type="hidden" id="trabajador_id_edita" name="trabajador_id_edita">
+                                                                <div class="row">
+                                                                    <button class="btn btn-secondary" id="btn_Cancela" type="button" data-dismiss="modal" style="width: 120px;margin-left:110px">Cerrar</button>
+                                                                    <button type="submit"  class="btn btn-primary" id="guardarIncidencia" value="Enviar" style="width: 180px;margin-left:10px;"> Actualizar Incidencia </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--*****************************************************************MODAL PARA CAMBIAR ESTATUS DE INCIDENCIA********************************************************* -->
+                                <div class="modal fade" id="modalEstado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                     aria-hidden="true" th:fragment="perfil">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Cambiar Estado de Incidencia</h5>
+                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body mx-auto">
+                                                <button class="btn btn-secondary mx-3" type="button" data-dismiss="modal">Cancelar</button>
+                                                <button id="botonCancel" type="submit" class="btn btn-danger">Cancelar Incidencia</button>
+                                            </div>
+                                            <div class="modal-footer">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="modalEstadoAutorizar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                     aria-hidden="true" th:fragment="perfil">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Cambiar Estado de Incidencia</h5>
+                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body mx-auto">
+                                                <button class="btn btn-secondary mx-3" type="button" data-dismiss="modal">Cancelar</button>
+                                                <button id="botonCambiar" type="submit" class="btn btn-success" >Autorizar Incidencia</button>
+                                            </div>
+                                            <div class="modal-footer">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--*****************************************************************MODAL PARA CANCELAR VACACIONES********************************************************* -->
+                                <div class="modal fade" id="cancelarVacacionesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                     aria-hidden="true" th:fragment="perfil">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Cancelar Vacaciones</h5>
+                                                <button class="close" type="button"  data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="cancelarVacaciones" class="needs-validation" novalidate>
+                                                    <div class="form-group">
+                                                        <div class="text-right"> <label class="text-danger"><small>* Campos Obligatorios</small></label><br>      </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="row">
+                                                            <div class="row">
+                                                                <b style="margin-left: 50px;">Motivo de Cancelación</b>
+                                                                <select style="margin-left:45px;width:220px;" id="motivo_cancelacion" name="motivo_cancelacion" class="form-control" required> </select>
+                                                                <hr style="width:400px; margin-left:50px">
+                                                            </div>    
+                                                            <div class="row">
+                                                                <b style="margin-left: 50px;">Referencia de Cancelación</b>
+                                                                <br><input type="text" id="referencia_cancelacion" style="margin-left:45px;width:160px;" class="form-control" name="referencia_cancelacion" required>
+                                                                <hr style="width:400px; margin-left:50px">
+                                                                <input type="hidden" id="incidencia_cancelada" name="incidencia_cancelada">
+                                                            </div> 
+                                                            <div class="row">
+                                                                <button class="btn btn-secondary" id="cerrar_cancelacion" type="button" data-dismiss="modal" style="width: 120px;margin-left:110px">Cerrar</button>
+                                                                <button type="submit"  class="btn btn-primary" id="guardarCancelacion" value="Enviar" style="width: 180px;margin-left:10px;"> Cancelar Vacaciones </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--***********************************************************************MODAL VER PARA FORMATOS************************************************************************************** -->
+                                <div class="modal fade" id="formatosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                                    <div class="modal-dialog " role="document" style="max-width: 1300px!important;">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-center" id="exampleModalLabel" style="text-align: center">Reporte</h5>
+                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <iframe id="formatos_frame" style='width:1200px; height:600px;'></iframe>
+                                                <div  style="display:flex; justify-content:flex-end; width:100%; padding:0;">
+                                                    <button class="btn btn-secondary " type="button" data-dismiss="modal" style="width: 216px">Cerrar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--***********************************************************************MODAL ASIGNAR HORARIO************************************************************************************** -->
+                                <div class="modal fade" id="modalRedirecciona" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" th:fragment="perfil">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <center><h5 class="modal-title" id="exampleModalLabel">Aún no tienes Horario Asignado</h5></center>
+                                            </div>
+                                            <div class="modal-body mx-auto">
+                                                <button id="botonRedirigir" type="button" onclick="asignaHorarios()" class="btn btn-success" >Asignar Horario</button>
+                                            </div>
+                                            <div class="modal-footer">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--***********************************************************************MODAL PARAMETROS SUSPENSION ************************************************************************************** -->
+                                <div class="modal fade" id="parametrosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" th:fragment="perfil">
+                                    <div class="modal-dialog modal-l" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Suspensiones y Amonestaciones</h5>
+                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="text-left" id="alertaAgrega"></div>
+                                                <form id="formParametrosReporte" class="needs-validation"  novalidate>
+                                                    <div class="row m-lg-4">
+                                                        <div class="col">
+                                                            <label class="form-label" for="expediente">*Expediente</label>
+                                                            <input name="expediente" id="expediente" class="form-control" minlength="1" maxlength="10" autocomplete="off" type="text" required>
+                                                        </div>
+                                                        <div class="col">
+                                                            <label class="form-label" for="asunto">* Asunto </label>
+                                                            <input name="asunto" id="asunto" class="form-control" minlength="1" maxlength="10" autocomplete="off" type="text" required>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row m-lg-4">
+                                                        <div class="col">
+                                                            <label class="form-label" for="falta">* Motivo </label>
+                                                            <textarea name="motivo" id="motivo" class="form-control" autocomplete="off" style="height:100px;" required></textarea>
+                                                        </div>
+                                                        <div class="col">
+                                                            <label class="form-label" for="motivo">* Falta </label>
+                                                            <textarea name="falta" id="falta" class="form-control" autocomplete="off" style="height:100px;" required></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="form-group col-12 mt-3">
+                                                        <button type="button" class="btn btn-primary" onclick="verReporte()" style="width:200px;">Ver</button>
+                                                        <button type="button" class="btn btn-primary" onclick="descargarReporte()" style="width:200px;">Descargar</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--***************** MODAL CONFIRMACIÓN ELIMINAR INCIDENCIAS--*****************-->
+                                <div class="modal fade" id="eliminarIncidenciasModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                     aria-hidden="true" th:fragment="perfil">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel"> Eliminar Incidencia</h5>
+                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="text-left" id="alertaAgrega"> </div>
+                                                <form id="formEliminaIncidencia" class="needs-validation" onsubmit="return false;" novalidate>
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="addon-wrapping-left"> ¿Desea eliminar la incidencia seleccionada?</label>
+                                                    </div> 
+                                                    <div id="detalleCancelacionAyudas">
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group col-12">
+                                                        <button class="btn btn-secondary" id="btn_Cancel" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                        <button type="submit"  class="btn btn-primary" style="width: 216px"> Confirmar </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--***************** MODAL ASGNAR CORRIDA *****************-->
+                                <div class="modal fade" id="corridaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                     aria-hidden="true" th:fragment="perfil">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel"> Asignar Corrida</h5>
+                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="text-left" id="alertaAgrega"> </div>
+                                                <form id="formCorridaModal" class="needs-validation" onsubmit="return false;" novalidate>
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="addon-wrapping-left"> Asignar Corrida del Trabajador</label>
+                                                    </div> 
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <input name="corrida" id="corrida" class="form-control" minlength="1" maxlength="10" autocomplete="off" type="number" required>
+                                                        <input name="incidencia_corrida_id" id="incidencia_corrida_id" class="form-control"  type="hidden">
+                                                    </div> 
+                                                    <div class="form-group col-12">
+                                                        <button class="btn btn-secondary" id="bton_Cancel" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                        <button type="button"  class="btn btn-primary" onclick="guardarCorrida()" style="width: 216px"> Guardar </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <footer th:replace="layout/todos :: pie"></footer>
+                    </div>
+                </div>
+                <a th:replace="layout/todos :: scroll"></a>
+                <div th:replace="layout/todos :: sesion"></div>
+                <div th:replace="layout/todos :: perfil"></div>
+                <script src="js/incidencias/adminIncidencias.js"></script>
+                <script src="js/incidencias/reporteAmonestacionSuspension.js"></script>
+                <script src="js/vacaciones/vacacionesGeneradas.js"></script>
+                <script src="js/incapacidades/adminIncapacidades.js"></script>
+                <script src="js/reportes/formatosIncidencias.js"></script>
+                <script src="js/ayudas/generaAyuda.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+                <script src="js/usuarios/usuarioModificarPassword.js"></script>
+                <script src="js/validate.js"></script>
+                </body>
+                </html>

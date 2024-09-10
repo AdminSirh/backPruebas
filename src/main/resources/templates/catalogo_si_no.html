@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+        <!-- Custom scripts for all pages-->
+        <script src="js/page_areas.js"></script>
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h3 class="m-0 font-weight-bold text-primary" id="home">Administracion de catálogos</h3>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+
+                                    <!--Primera hilera de tabs--> 
+                                    <div class="form-group">
+                                        <div class="row" >
+                                            <div id="tabs" >
+                                                <ul id="myTab" >
+                                                </ul>
+                                            </div>  
+                                        </div>
+                                    </div>
+
+                                    <!--Segunda hilera de tabs-->   
+                                    <div class="form-group">
+                                        <div class="row" >
+                                            <div id="tabs2" >
+                                                <ul id="myTab2">
+                                                </ul>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                    <!--Tercera hilera de tabs-->   
+                                    <div class="form-group">
+                                        <div class="row" >
+                                            <div id="tabs3" >
+                                                <ul id="myTab3">
+                                                </ul>
+                                            </div>  
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" >
+                                        <div class="row">
+
+                                            <div class="input-group">
+                                                <div class="panel-container collapse show m-lg-3"> <!<!--  m-auto se centra la tabla-->
+                                                    <div class="table-responsive">
+                                                        <!-- PRUEBA BÚSQUEDA -->
+                                                        <div class="alert alert-info alert-white rounded mx-auto">
+                                                            <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                                            <div class="icon ">
+                                                                <strong><h5>Registros <i class="fa fa-thumbs-up" aria-hidden="true"></i> <i class="fa fa-thumbs-down" aria-hidden="true"></i></h5></strong> <i class="fa fa-search mx-auto"></i><strong> Criterios de Búsqueda: </strong> Id, Descripción
+                                                            </div>
+                                                        </div> 
+                                                        <div class="m-lg-3 ">
+                                                            <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#agregarSiNoModal"><span class="fa fa-user-plus"></span> Agregar</button>                                              
+                                                        </div>
+                                                        <table class="table table-bordered" id="tabla_Si_No" width="100%" cellspacing="0">
+                                                            <thead class="bg-success-900 thead-dark">
+                                                                <tr>
+                                                                    <th>Descripción</th>
+                                                                    <th>Editar</th>
+                                                                    <th>Cambiar Activo/Inactivo</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody> </tbody>
+                                                        </table>
+                                                    </div>   
+                                                </div> 
+                                            </div> 
+                                        </div>  
+                                    </div><!-- FIN CARD BODY--*****************-->   
+                                </div>
+                            </div>
+                            <!-- FIN TODO-->
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+
+        <!--**************************************************************MODAL PARA AGREGAR****************************************************************************** -->
+        <div class="modal fade" id="agregarSiNoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true" th:fragment="perfil">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"> Agregar</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formGuardarSiNo" class="needs-validation" novalidate>
+                            <div class="text-right"> <label class="text-danger"><small>* Campos Obligatorios</small></label><br>      </div>
+                            <div class="form-group">
+                                <label class="form-label" for="addon-wrapping-left">*Dato</label>
+                                <input name="descripcion" id="descripcion_agregar" class="form-control" minlength="1" maxlength="25" autocomplete="off" type="text" required>
+                                <div id="alerta" class="invalid-feedback"> Por favor ingresa el Dato</div>
+                                <div class="valid-feedback">
+                                    ¡Correcto!
+                                </div>
+                            </div> <!-- form-group// -->
+                            <hr>
+                            <div class="form-group col-12">
+                                <button class="btn btn-secondary" id="btn_Cancelar" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                <button type="submit" name="botonenviar" class="btn btn-primary" id="botonenviar" value="Enviar" style="width: 216px"> Guardar Dato </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div> 
+
+        <!--*****************************************************************MODAL PARA CAMBIAR ESTATUS DE SI/NO********************************************************* -->
+
+        <div class="modal fade" id="modalStatus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true" th:fragment="perfil">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Cambiar Status</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body mx-auto">
+                        <button class="btn btn-secondary mx-3" type="button" data-dismiss="modal">Cancelar</button>
+                        <button id="botonDeshabilitar" type="submit" class="btn btn-danger" >Deshabilitar</button>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="modalStatusActivar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true" th:fragment="perfil">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Cambiar Status</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body mx-auto">
+                        <button class="btn btn-secondary mx-3" type="button" data-dismiss="modal">Cancelar</button>
+                        <button id="botonCambiar" type="submit" class="btn btn-success" >Activar</button>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--**************************************************************MODAL PARA EDITAR****************************************************************************** -->
+        <div class="modal fade" id="editarSiNoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" th:fragment="perfil">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-center" id="exampleModalLabel" style="text-align: center">Editar Dato</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="needs-validation" novalidate>
+                            <div class="form-group">
+                                <input type="hidden" value="" id="idDato" name="idDato">
+                            </div> 
+                            <div class="form-group">
+                                <b>Dato</b> 
+                                <input minlength="1" maxlength="40"  name="descripcion_edita" id="descripcion_edita" autocomplete="off" class="form-control" type="text" required>
+                                <div id="alerta" class="invalid-feedback"> Por favor ingresa el Dato</div>
+                                <div class="valid-feedback">
+                                    ¡Correcto!
+                                </div>
+                            </div> <!-- form-group// -->
+
+                            <hr>
+                            <div class="form-group col-12">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                <button class="btn btn-success" onclick="actualizar_Datos(document.getElementById('idDato').value)" style="width: 216px"> Actualizar </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="layout/todos :: pie"></footer>
+    </div>
+</div>
+<a th:replace="layout/todos :: scroll"></a>
+<div th:replace="layout/todos :: sesion"></div>
+<div th:replace="layout/todos :: perfil"></div>
+<script src="js/validate.js"></script>
+<script src="js/usuarios/usuarioModificarPassword.js"></script>
+<script src="js/catalogos/catalogo_si_no.js"></script>
+<script src="js/catalogos/catalogos.js"></script>
+</body>
+</html>

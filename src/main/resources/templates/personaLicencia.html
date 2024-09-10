@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<script>
+    $(function () {
+        $("#tabs").tabs({
+            select: function (event, ui) {
+                var url = $.data(ui.tab, 'load.tabs');
+                if (url) {
+                    location.href = url;
+                    return false;
+                }
+                return true;
+            },
+            selected: 4
+        });
+    });
+</script>
+<html lang="es">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Datos de Licencia del Candidato</h6>
+                                </div>
+                                <div class="col">  
+                                    <button onclick="verCandidatos()"  type="button" class="btn btn-secondary" style="width: 216px"> Ver Candidatos</button>
+                                    <button onclick="verTrabajadores()"  type="button" class="btn btn-secondary" style="width: 216px"> Ver Trabajadores</button>
+                                </div><br>
+                                <!-- Card Body -->
+                                <div class="card-body">
+
+                                    <div class="form-group" >
+
+                                        <div class="row">
+                                            <div id="tabs">
+                                                <ul id="myTab">
+
+                                                </ul>
+                                                <div id="tabs-4">
+                                                    <!-- DIV PARA LICENCIA-->
+                                                    <form id="formLicenciaPersona" class="needs-validation" novalidate>
+                                                        <div class="form-group">
+
+                                                            <div class="form-group">                                                
+                                                                <div class="alert alert-info alert-white rounded mx-auto">
+                                                                    <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                                                    <h4 id="h2TitAccion">
+                                                                        <i class="fa fa-id-card"></i><span class="fw-100" id="titulo" algign="center"> <b> Licencia del Candidato </b> </span>
+                                                                    </h4>  
+                                                                </div>
+                                                            </div>
+                                                            <div class="text-right"> <label class="text-danger"><small>*Campos Obligatorios</small></label><br>      </div>
+
+                                                            <div class="row">
+                                                                <div class="col">   
+                                                                    <label class="form-label" for="addon-wrapping-left">*N° de Licencia </label>
+                                                                    <input id="num_licencia" name="num_licencia" type="number" class="form-control" maxlength="8" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" placeholder="N° de Licencia" aria-label="numeroLicencia" aria-describedby="addon-wrapping-left" required>
+                                                                </div>
+
+                                                                <div class="col">   
+                                                                    <label class="form-label" for="addon-wrapping-left">*Tipo de licencia</label>
+                                                                    <select id="tipo_licencia" name="tipo_licencia" class="form-control" required> </select>
+                                                                </div>  
+                                                                <div class="col">   
+                                                                    <label class="form-label" for="addon-wrapping-left">*Fecha de inicio de vigencia</label>
+                                                                    <!--<div id="demo-dp-component">
+                                                                        <div class="input-group date">
+                                                                            <input type="text" class="form-control">
+                                                                            <span class="input-group-addon"><i class="fa fa-calendar fa-lg"></i></span>-->
+                                                                    <input class="form-control" type="date" id="fecha_inicio" name="fecha_inicio" value="" min="1900-01-01" max="2050-12-31" required>
+                                                                    <!--</div>
+                                                                </div>-->
+                                                                </div>                                                    
+                                                                <div class="col">   
+                                                                    <label class="form-label" for="addon-wrapping-left">*Fecha de fin de vigencia</label>
+                                                                    <!--<div id="demo-dp-component">
+                                                                        <div class="input-group date">
+                                                                            <input type="text" class="form-control">
+                                                                            <span class="input-group-addon"><i class="fa fa-calendar fa-lg"></i></span>-->
+                                                                    <input class="form-control" type="date" id="fecha_fin" name="fecha_fin" value="" min="1900-01-01" max="2050-12-31" required>
+                                                                    <input type="hidden" value="" id="id_licencia" name="id_licencia">
+                                                                    <!--</div>
+                                                                </div>-->
+                                                                </div>                                               
+                                                            </div>
+                                                            <br></br>   
+
+                                                        </div>
+                                                        <div class="col">  
+                                                            <button type="submit" name="botonenviar" class="btn btn-primary" id="botonenviar" value="Enviar" style="width: 216px"> Guardar</button>   
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div><!-- FIN CARD BODY--***************** onclick="Guardar_Direccion()"-->   
+                                    </div>
+
+                                </div>
+                                <!-- FIN TODO-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+
+            <a th:replace="layout/todos :: scroll"></a>
+            <div th:replace="layout/todos :: sesion"></div>
+            <div th:replace="layout/todos :: perfil"></div>
+            <script src="js/personal/personaLicencia.js"></script>
+            <script src="js/validate.js"></script>
+
+            <script src="js/usuarios/usuarioModificarPassword.js"></script>
+    </body>
+</html>

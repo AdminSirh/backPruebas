@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Nomina</h6>
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">Calendario Anual</h4>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="form-group" >
+                                        <div class="row">    
+                                            <div class="col">                                                  
+                                                <label class="form-label" for="addon-wrapping-left">Tipo de Nomina</label>
+                                                <select name="cars" id="cars" class="form-control" required>
+                                                    <option value="volvo">Base</option>
+                                                    <option value="saab">Jubilados</option>
+                                                    <option value="mercedes">Pensionados</option>
+                                                </select>
+                                            </div>                                           
+                                        </div>
+                                        <br> <hr size="2" width="100%" />
+                                       
+                                        <br>
+                                        <div class="row">    
+                                            <div class="col">
+                                                <a href="/incidenciasAutomaticas">
+                                                    <button class="btn btn-primary" id="botonenviar" value="Enviar" style="width: 216px">Guardar</button>
+                                                </a> 
+                                            </div>   
+                                        </div>
+                                    </div>
+                                    <!-- FIN TODO-->
+                                </div>
+                            </div>
+                            <!-- FIN TODO-->
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/nomina/allIncidencias.js"></script>
+        <script src="js/usuarios/usuarioModificarPassword.js"></script>
+        <script src="js/validate.js"></script>
+
+
+        <style>
+            #resultado {
+                background-color: red;
+                color: white;
+                font-weight: bold;
+            }
+            #resultado.ok {
+                background-color: green;
+            }
+        </style>
+    </body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+
+                            <div id="tabs">
+                                <ul id="myTab">
+                                </ul>
+                                <div id="tabs-3">
+
+                                    <!-- AQUI VA TODO EL CONTENIDO -->
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">Opciones de impresión - Constancias</h6>
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label class="form-label" for="addon-wraping-left">Buscar por No. Expediente</label>
+                                                <input id="numero_plaza" value="" class="form-control" type="number" style="width: 200px">
+                                                <br>
+                                                <input type="checkbox" name="opcion" value= 1 id="mensualIntegrado" onchange="cambioCheckboxes('mensualIntegrado')" />
+                                                <label for="opcion1">Mensual Integrado</label>
+                                                <br />
+                                                <input type="checkbox" name="opcion" value = 2 id="sinSalario" onchange="cambioCheckboxes('sinSalario')" />
+                                                <label for="opcion2">Sin Salario</label>
+                                                <br />
+                                                <input type="checkbox" name="opcion" value = 3 id="fallecimiento" onchange="cambioCheckboxes('fallecimiento')" />
+                                                <label for="opcion3">Constancia por fallecimiento</label>
+                                            </div>
+                                            <div class="text-center">
+                                                <button class="btn btn-primary" id="btnConstancia" onclick="generarDescarga()">Generar constancia</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- FIN TODO-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>      
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+                <a th:replace="layout/todos :: scroll"></a>
+                <div th:replace="layout/todos :: sesion"></div>
+                <div th:replace="layout/todos :: perfil"></div> 
+                <script src="js/validate.js"></script>
+                <script src="js/reportes/constanciasPersonal.js"></script>
+                <script src="js/reportes/reportesPersonalTabs.js"></script>
+                </body>
+                </html>

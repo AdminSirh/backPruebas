@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Datos Medicos del Candidato</h6>
+                                </div>
+                                <div class="col">  
+                                    <button onclick="verCandidatos()"  type="button" class="btn btn-secondary" style="width: 216px"> Ver Candidatos</button>
+                                    <button onclick="verTrabajadores()"  type="button" class="btn btn-secondary" style="width: 216px"> Ver Trabajadores</button>
+                                </div><br>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="form-group" >
+                                        <div class="row">
+                                            <div id="tabs">
+                                                <ul id="myTab">
+                                                </ul>
+                                                <div id="tabs-3">
+                                                    <!-- DIV PARA DATOS MEDICOS-->
+                                                    <form id="formGuardarMedicoPersona" class="needs-validation" novalidate>
+                                                        <div class="form-group">                                                      
+                                                            <div class="form-group">                                                
+                                                                <div class="alert alert-info alert-white rounded mx-auto">
+                                                                    <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                                                    <h4 id="h2TitAccion">
+                                                                        <i class="fa fa-heartbeat"></i><span class="fw-100" id="titulo" algign="center"> <b> Datos Medicos Actuales del Candidato </b> </span>
+                                                                    </h4>  
+                                                                </div>
+                                                            </div>                                                          
+                                                            <div class="text-right"> <label class="text-danger"><small>*Campos Obligatorios</small></label><br>      </div>
+                                                            <br>
+                                                            <div class="row">
+                                                                <div class="col">   
+                                                                    <label class="form-label" for="addon-wrapping-left">*Altura (metros 0.00)</label>
+                                                                    <input id="altura_edita" name="altura_edita" type="text" maxlength="4" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"  placeholder="0.0" step="1.00" class="form-control" readonly>
+                                                                    <div id="alerta" class="invalid-feedback"> Los campos no pueden estar vacíos</div>
+                                                                </div>
+                                                                <div class="col">   
+                                                                    <label class="form-label" for="addon-wrapping-left">*Peso (kg)</label>
+                                                                    <input id="peso_edita" name="peso_edita" type="number" maxlength="3" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" min="0" step="1" class="form-control"  placeholder="Peso" readonly>
+                                                                    <div id="alerta" class="invalid-feedback"> Los campos no pueden estar vacíos</div>
+                                                                </div>
+                                                                <div class="col">   
+                                                                    <label class="form-label" for="addon-wrapping-left">*Tipo de Sangre</label>
+                                                                    <select id="cmbSangre" name="cmbSangre" class="form-control" readonly> </select>
+                                                                </div>  
+                                                            </div><br>
+                                                            <div class="row"> 
+                                                                <div class="col">   
+                                                                    <label class="form-label" for="addon-wrapping-left">* ¿Padece de alguna enfermedad?</label>
+                                                                    <select id="cmbEnfermedades" name="cmbEnfermedades" class="form-control" onchange="validarEnfermedades()" readonly> </select>
+                                                                </div>
+                                                                <div class="col">   
+                                                                    <label class="form-label" for="addon-wrapping-left">Describa las enfermedades</label>
+                                                                    <textarea id="enfermedades_edita" name="enfermedades_edita" class="form-control" rows="5" cols="20" placeholder="Enfermedades" maxlength="30" readonly></textarea>
+                                                                    <div id="alerta" class="invalid-feedback"> Los campos no pueden estar vacíos</div>
+                                                                </div>    
+                                                            </div>
+                                                            <br>
+                                                            <div class="row"> 
+                                                                <div class="col">   
+                                                                    <label class="form-label" for="addon-wrapping-left">* ¿Padece de alguna alergia?</label>
+                                                                    <select id="cmbAlergias" name="cmbAlergias" class="form-control" onchange="validarAlergias()" readonly> </select>
+                                                                </div>
+                                                                <div class="col">   
+                                                                    <label class="form-label" for="addon-wrapping-left">Describa las alergias</label>
+                                                                    <textarea id="alergias_edita" name="alergias_edita" type="text" class="form-control" rows="5" cols="20" placeholder="Alergias" maxlength="30" readonly></textarea>
+                                                                    <div id="alerta" class="invalid-feedback"> Los campos no pueden estar vacíos</div>
+                                                                </div>
+                                                            </div><br>
+                                                            <div class="row">  
+                                                                <div class="col">   
+                                                                    <label class="form-label" for="addon-wrapping-left">*Nombre del medico de cabecera</label>
+                                                                    <input id="medico_cabecera_edita" style="text-transform:uppercase;" name="medico_cabecera_edita" type="text" class="form-control"  placeholder="Medico de cabecera"  maxlength="30" readonly>
+                                                                    <div id="alerta" class="invalid-feedback"> Los campos no pueden estar vacíos</div>
+                                                                </div>
+                                                                <div class="col">   
+                                                                    <label class="form-label" for="addon-wrapping-left">*Telefono del medico</label>
+                                                                    <input id="telefono_medico_edita" name="telefono_medico_edita" maxlength="10" type="number" class="form-control"  placeholder="Telefono del medico" readonly>
+                                                                    <div id="alerta" class="invalid-feedback"></div>
+                                                                </div>
+                                                                <div class="col">   
+                                                                    <label class="form-label" for="addon-wrapping-left">*Clinica</label>
+                                                                    <input id="clinica_edita" style="text-transform:uppercase;" name="clinica_edita" type="text" class="form-control"  placeholder="Clinica" maxlength="30" readonly>
+                                                                    <div id="alerta" class="invalid-feedback"> Los campos no pueden estar vacíos</div>                                                                    
+                                                                    <input type="hidden" value="" id="id_medico" name="id_medico">
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                    </form>    
+                                                </div>
+                                            </div>
+                                        </div><!-- FIN CARD BODY--*****************-->   
+                                    </div>
+                                </div>
+                                <!-- FIN TODO-->
+                            </div>
+                        </div>
+                    </div>
+                    <footer th:replace="layout/todos :: pie"></footer>
+                </div>
+            </div>
+
+            <a th:replace="layout/todos :: scroll"></a>
+            <div th:replace="layout/todos :: sesion"></div>
+            <div th:replace="layout/todos :: perfil"></div>
+            <script src="js/personal/personaMedico.js"></script>
+            <script src="js/personal/tabsPersonal.js"></script>
+    </body>
+</html>

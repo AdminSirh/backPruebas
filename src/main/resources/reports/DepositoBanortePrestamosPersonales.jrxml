@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DepositoBanortePrestamosPersonales" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a9187824-fa30-42b6-a9c2-0c988c2d7099">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SIRH_DB"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="cdmx" class="java.lang.String"/>
+	<parameter name="leyenda" class="java.lang.String"/>
+	<parameter name="nomina" class="java.lang.String"/>
+	<parameter name="periodo" class="java.lang.Integer"/>
+	<parameter name="id_nomina" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[WITH CTE_ConteoRegistros AS (
+  SELECT COUNT(*) AS total_registros
+  FROM personal_cuentas_por_cobrar pcpc
+  JOIN trabajador tr ON tr.id_trabajador = pcpc.trabajador_id
+  JOIN persona pe ON pe.id_persona = tr.persona_id
+  JOIN catalogo_expedientes c_e ON c_e.id_expediente = tr.expediente_id
+  JOIN cuenta_bancaria c_b ON c_b.trabajador_id = tr.id_trabajador
+  JOIN catalogo_bancos c_ban ON c_ban.id_banco = c_b.banco_id
+  JOIN catalogo_tipo_nomina c_t_n ON c_t_n.id_tipo_nomina = pcpc.nomina_id
+  WHERE c_t_n.desc_nomina = $P{nomina} AND pcpc.periodo_pago_actual >= $P{periodo} AND pcpc.estatus = 1 AND c_ban.id_banco = 1
+),
+CTE_SumaSaldoInicial AS (
+  SELECT SUM(pcpc.saldo_inicial) AS suma_saldo_inicial_total
+  FROM personal_cuentas_por_cobrar pcpc
+  JOIN catalogo_tipo_nomina c_t_n ON c_t_n.id_tipo_nomina = pcpc.nomina_id
+  JOIN trabajador tr ON tr.id_trabajador = pcpc.trabajador_id
+  JOIN cuenta_bancaria c_b ON c_b.trabajador_id = tr.id_trabajador
+  JOIN catalogo_bancos c_ban ON c_ban.id_banco = c_b.banco_id
+  WHERE c_t_n.desc_nomina =$P{nomina} AND pcpc.periodo_pago_actual >= $P{periodo} AND pcpc.estatus = 1 AND c_ban.id_banco = 1
+),
+CTE_fechas_periodo AS (
+  SELECT 
+  p_p.fecha_inicial,
+  p_p.fecha_final
+  FROM personal_cuentas_por_cobrar pcpc
+  JOIN periodos_pago p_p ON p_p.periodo = pcpc.periodo_inicial
+  JOIN catalogo_tipo_nomina c_t_n ON c_t_n.id_tipo_nomina = pcpc.nomina_id
+  WHERE p_p.pagado=0 AND p_p.especial=0 AND p_p.id_nomina=$P{id_nomina} AND pcpc.estatus = 1 Order by p_p.fecha_inicial ASC limit 1
+)
+SELECT 
+  CONCAT(pe.apellido_paterno, ' ', pe.apellido_materno, ' ', pe.nombre) AS nombre,
+  c_e.numero_expediente,
+  pcpc.saldo_inicial,
+  pcpc.monto_pago,
+  c_b.cuenta_bancaria,
+  pcpc.periodo_pago_actual,
+  CTE_ConteoRegistros.total_registros AS cantidad_registros,
+  CTE_SumaSaldoInicial.suma_saldo_inicial_total,
+  CTE_fechas_periodo.fecha_inicial,
+  CTE_fechas_periodo.fecha_final
+FROM personal_cuentas_por_cobrar pcpc
+JOIN trabajador tr ON tr.id_trabajador = pcpc.trabajador_id
+JOIN persona pe ON pe.id_persona = tr.persona_id
+JOIN catalogo_expedientes c_e ON c_e.id_expediente = tr.expediente_id
+JOIN cuenta_bancaria c_b ON c_b.trabajador_id = tr.id_trabajador
+JOIN catalogo_bancos c_ban ON c_ban.id_banco = c_b.banco_id
+JOIN catalogo_tipo_nomina c_t_n ON c_t_n.id_tipo_nomina = pcpc.nomina_id
+CROSS JOIN CTE_ConteoRegistros
+CROSS JOIN CTE_SumaSaldoInicial
+CROSS JOIN CTE_fechas_periodo
+WHERE c_t_n.desc_nomina = $P{nomina} AND pcpc.periodo_pago_actual >= $P{periodo} AND pcpc.estatus = 1 AND pcpc.deposito = 0 AND c_ban.id_banco = 1]]>
+	</queryString>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+	</field>
+	<field name="numero_expediente" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="numero_expediente"/>
+		<property name="com.jaspersoft.studio.field.label" value="numero_expediente"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_expedientes"/>
+	</field>
+	<field name="saldo_inicial" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="saldo_inicial"/>
+		<property name="com.jaspersoft.studio.field.label" value="saldo_inicial"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="personal_cuentas_por_cobrar"/>
+	</field>
+	<field name="monto_pago" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="monto_pago"/>
+		<property name="com.jaspersoft.studio.field.label" value="monto_pago"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="personal_cuentas_por_cobrar"/>
+	</field>
+	<field name="cuenta_bancaria" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="cuenta_bancaria"/>
+		<property name="com.jaspersoft.studio.field.label" value="cuenta_bancaria"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cuenta_bancaria"/>
+	</field>
+	<field name="periodo_pago_actual" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="periodo_pago_actual"/>
+		<property name="com.jaspersoft.studio.field.label" value="periodo_pago_actual"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="personal_cuentas_por_cobrar"/>
+	</field>
+	<field name="cantidad_registros" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="cantidad_registros"/>
+		<property name="com.jaspersoft.studio.field.label" value="cantidad_registros"/>
+	</field>
+	<field name="suma_saldo_inicial_total" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="suma_saldo_inicial_total"/>
+		<property name="com.jaspersoft.studio.field.label" value="suma_saldo_inicial_total"/>
+	</field>
+	<field name="fecha_inicial" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_inicial"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_inicial"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="periodos_pago"/>
+	</field>
+	<field name="fecha_final" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_final"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_final"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="periodos_pago"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="240" height="70" uuid="89cb30f5-499d-437c-bb5d-28ff106ec9f4"/>
+				<imageExpression><![CDATA[$P{cdmx}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="314" y="12" width="240" height="40" uuid="4246bd66-dcf2-4f69-b8ff-eee55e20d820"/>
+				<imageExpression><![CDATA[$P{leyenda}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="80" splitType="Stretch">
+			<staticText>
+				<reportElement x="80" y="1" width="388" height="16" uuid="182bf0e9-c409-4a28-932d-1ca8e0861d7d"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DEPÓSITO BANCARIO DE PRÉSTAMOS PERSONALES]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="476" y="1" width="76" height="16" uuid="86ded3ab-1fe9-4083-9948-4ec5dd3eb26b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="35" width="22" height="14" uuid="60d48960-96ae-4b0b-8a80-ee2b58dd74c1"/>
+				<text><![CDATA[Del:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="20" y="50" width="250" height="1" uuid="6f07d71d-cb6c-4f3a-8e10-b4b581e698a2">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement x="21" y="69" width="250" height="1" uuid="2b13e4fc-2880-45e5-ae97-6d49c16f2d2d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="20" y="54" width="44" height="14" uuid="19b0f564-61e8-4f64-9b95-f24c56ed865e"/>
+				<text><![CDATA[Periodo: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="61" y="54" width="68" height="16" uuid="c3f5bcef-fad3-470d-bf0f-b600ebfc4853"/>
+				<textFieldExpression><![CDATA[$P{periodo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="158" y="54" width="44" height="14" uuid="d59427b6-ef2f-4778-8b1a-9508eb50734c"/>
+				<text><![CDATA[Nómina:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="198" y="54" width="66" height="16" uuid="a4de8a32-7f8a-4956-8e83-63c1a054c1c0"/>
+				<textFieldExpression><![CDATA[$P{nomina}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="317" y="41" width="90" height="14" uuid="781a8fc8-7c14-44ec-a6b0-077fc988ce3b"/>
+				<text><![CDATA[Archivo Generado:]]></text>
+			</staticText>
+			<textField pattern="dd/MMM/yy">
+				<reportElement x="42" y="36" width="80" height="14" uuid="4b94511d-36ca-46b9-8ed1-66fd7b285612"/>
+				<textFieldExpression><![CDATA[$F{fecha_inicial}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="120" y="35" width="20" height="14" uuid="c6ba8ead-52ae-4484-94be-a6e8c95cdd58"/>
+				<text><![CDATA[al:]]></text>
+			</staticText>
+			<textField pattern="dd/MMM/yy">
+				<reportElement x="134" y="35" width="76" height="14" uuid="aa1d686a-a998-470a-8776-dc00e1c23201"/>
+				<textFieldExpression><![CDATA[$F{fecha_final}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="13" width="62" height="16" uuid="3a846489-619f-4667-8c8f-04a87c2fc6d8"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Expediente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="66" y="13" width="62" height="16" uuid="a3b5ba0f-539f-4119-87b3-556e4fa26f5c"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="429" y="13" width="42" height="16" uuid="2d8868c5-37e7-4889-839e-e6b83f28b377"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Importe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="491" y="13" width="52" height="16" uuid="e2a5f732-2165-46f4-a8d4-ff56bb84d5b0"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Abono]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="317" y="14" width="66" height="16" uuid="29b74e69-95a2-47d2-92a5-10dcc7872748"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cta. Bancaria]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="32" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="1" width="60" height="14" uuid="06da517b-86dd-4bea-9149-753da3b7b3b6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0295c0bf-1e6e-4f4e-aec4-c01517da163d"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero_expediente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="0" width="170" height="14" uuid="c37d6c73-6c00-450e-bfd8-3ca0c88cfe93">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="25dfc227-1b84-41db-8c51-d48e1e2ebfe0"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="436" y="0" width="30" height="14" uuid="c55cd649-251d-468a-b437-ba2d15ef1b01">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5fe2d98f-091e-4230-addf-7d58b627144d"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saldo_inicial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="509" y="0" width="34" height="12" uuid="43549c5b-fedc-4919-baa1-8cc0d0b85964">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3111a7b4-4c2d-492e-8bc4-aa5b8f2a49f1"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{monto_pago}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="302" y="1" width="100" height="12" uuid="eaac0474-960c-40ca-841b-028f8ab5c595">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a1913416-216f-4fc4-9972-62ea1c55eed5"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cuenta_bancaria}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="432" y="0" width="6" height="14" uuid="67ca70a1-fb49-4bc6-b9c4-37f65f4fe6e3"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[$]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="504" y="0" width="10" height="14" uuid="c5e909a6-5865-43e1-ad9e-9009ba988b10"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[$]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<summary>
+		<band height="107" splitType="Stretch">
+			<staticText>
+				<reportElement x="5" y="10" width="104" height="12" uuid="b3ebad27-f13f-4ad2-a144-52e90a6b3025"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL DE PERSONAL:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="103" y="10" width="44" height="12" uuid="d2c05684-dbcc-4310-b1a3-8b037a468b17"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cantidad_registros}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="387" y="9" width="34" height="12" uuid="a7464c56-ee4e-4997-8e44-4cb42c34b145"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="429" y="9" width="38" height="12" uuid="91987acd-b6ae-43c7-ad8b-d90467480822"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{suma_saldo_inicial_total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="390" y="35" width="46" height="14" uuid="81190ac4-1edf-442a-8d98-7332949f8f50"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Revisa]]></text>
+			</staticText>
+			<line>
+				<reportElement x="342" y="80" width="151" height="1" uuid="1f7d320d-b286-489b-ace2-88c0cb7a158b">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="364" y="83" width="110" height="24" uuid="c8d249e0-c9bd-4e57-895c-ec9934c9c7ed"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Subgerente de Nómina Lic. Ernesto Sánchez Kutscher]]></text>
+			</staticText>
+			<line>
+				<reportElement x="427" y="2" width="45" height="1" uuid="fb4dde94-5447-4169-8b3b-2992dd77bd9b">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement x="427" y="7" width="45" height="1" uuid="dde8a45f-02e0-4e4e-aae9-a7dcb530d632">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="426" y="9" width="14" height="14" uuid="b5b031b1-a361-4b20-ae1e-0df8eb46e273"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[$]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

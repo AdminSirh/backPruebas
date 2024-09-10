@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Candidatos</h6>
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">Personal / Candidatos</h4>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="form-group" >
+                                        <div class="row">
+                                            <div class="m-lg-3 ">
+                                                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#agregarCandidatoModal"><span class="fa fa-user-circle"></span> Agregar Nuevo Candidato</button>                                              
+                                            </div>
+                                            <div class="input-group">
+                                                <div class="panel-container collapse show m-lg-3"> <!--  m-auto se centra la tabla-->
+                                                    <div class="table-responsive">                                                       
+                                                        <!-- PRUEBA BÚSQUEDA -->
+                                                        <div class="alert alert-info alert-white rounded mx-auto">
+                                                            <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                                            <div class="icon ">
+                                                                <strong><h5>Candidatos Registrados</h5></strong> <i class="fa fa-search mx-auto"></i><strong> Criterios de Búsqueda: </strong> No. Expediente, Nombre, Apellidos, Género, Curp, Fecha Captura, Fecha de Nacimiento
+                                                            </div>
+                                                        </div>                                                       
+                                                        <table class="table table-bordered" id="noteTable" width="100%" cellspacing="0">
+                                                            <thead class="bg-success-900 thead-dark">
+                                                                <tr>
+                                                                    <th>Nombre</th>
+                                                                    <th>Apellido Paterno</th>
+                                                                    <th>Apellido Materno</th>
+                                                                    <th>Fecha de Nacimiento</th>
+                                                                    <th>Genero</th>
+                                                                    <th>Estado Civil</th>
+                                                                    <th>Curp</th>
+                                                                    <th>Fecha Captura</th>
+                                                                    <th>Editar</th>
+                                                                    <th>Expediente</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody> </tbody>
+                                                        </table>
+                                                    </div>   
+                                                </div> 
+                                            </div>  
+                                        </div>
+                                    </div><!-- FIN CARD BODY--*****************--> 
+
+                                </div>
+                            </div>
+                            <!-- FIN TODO-->
+                        </div>
+                    </div>
+                </div>
+
+                <!------------------------------------------------------- MODAL AGREGAR CANDIDATO------------------------------------------------------------------------------->
+                <div class="modal fade" id="agregarCandidatoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true" th:fragment="perfil">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Agregar Candidato</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="FormGuardarCandidatos" class="needs-validation" novalidate>
+                                    <div class="text-right"> <label class="text-danger"><small>* Campos Obligatorios</small></label><br>      </div>
+                                    <div class="form-group">
+                                        <input name="nombre_candidato" style="text-transform:uppercase;" id="nombre_candidato" class="form-control" minlength="4" maxlength="40" autocomplete="off" placeholder="* Nombre de Candidato" type="text" required>
+                                        <div class="valid-feedback">
+                                            ¡Correcto!
+                                        </div>
+                                    </div> <!-- form-group// -->
+                                    <div class="form-group">
+                                        <input name="apellido_paterno_candidato" style="text-transform:uppercase;" id="apellido_paterno_candidato" class="form-control" minlength="4" maxlength="50" autocomplete="off" placeholder="Apellido Paterno de Candidato" type="text">
+                                        <div class="valid-feedback">
+                                            ¡No requerido!
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input name="apellido_materno_candidato" style="text-transform:uppercase;" id="apellido_materno_candidato" class="form-control" minlength="4" maxlength="50" autocomplete="off" placeholder="Apellido Materno de Candidato" type="text">
+                                        <div class="valid-feedback">
+                                            ¡No requerido!
+                                        </div>
+                                    </div>
+                                    <div class="form-group">                    
+                                        <div class="input-group flex-nowrap">                                                                                      
+                                            <select id="cmbGenero" name="cmbGenero" class="form-control" required>  
+                                            </select>                                         
+                                            <div class="valid-feedback">
+                                                ¡Correcto!
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <div class="form-group">                    
+                                        <div class="input-group flex-nowrap">
+                                            <select id="cmbEstadoCivil" name="cmbEstadoCivil" class="form-control" required>
+                                            </select>
+                                            <div class="valid-feedback">
+                                                ¡Correcto!
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <div class="form-group">
+                                        <input name="curp" id="curp_candidato" oninput="validarInput(this)" style="text-transform: uppercase" class="form-control" minlength="4" maxlength="50" autocomplete="off" placeholder="* CURP" type="text" required>
+                                        <pre id="resultado"></pre>
+                                    </div>
+                                    <div class="text-left" id="personaAntecedente" ></div><br></br>
+                                    <div class="form-group col-12">
+                                        <button class="btn btn-secondary" id="btn_Cancelar" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                        <button type="submit"  class="btn btn-primary" style="width: 216px"> Guardar </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--***********************************************************************MODAL AGREGAR EXPEDIENTE************************************************************************************** -->
+
+                <div class="modal fade" id="agregarExpedienteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" th:fragment="perfil">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title text-center" id="exampleModalLabel" style="text-align: center">Asignar Expediente</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="needs-validation" novalidate>
+                                    <!--  <div class="text-right"> <label class="text-danger"><small>* Campos Obligatorios</small></label></div>-->
+                                    <div class="text-left" id="exp_sugerido"> </div>
+
+                                    <div class="form-group">                    
+                                        <div class="input-group flex-nowrap">                                                                                      
+                                            <input id="expediente" name="expediente" class="form-control"  readonly required>
+                                            <input id="id_expediente" name="id_expediente" class="form-control"  type="hidden" required> 
+                                                                                     
+                                            <div class="invalid-feedback"> ¡Selecciona un número de expediente!</div>
+                                        </div>
+
+                                        <div class="text-left" id="alertaDatosFaltantes"> </div>
+
+                                        <div class="text-left" id="datos_faltantesPersona"> </div>
+                                        <input type="hidden" id="contadorPersona" name="contadorPersona">
+
+                                        <div class="text-left" id="datos_faltantesContacto"> </div>
+                                        <input type="hidden" id="contadorContacto" name="contadorContacto">
+
+                                        <div class="text-left" id="datos_faltantesDireccion"> </div>
+                                        <input type="hidden" id="contadorDireccion" name="contadorDireccion">
+
+                                        <div class="text-left" id="documentos_faltantes"> </div>
+                                        <input type="hidden" id="contadorDocumentos" name="contadorDocumentos">
+
+                                        <div class="text-left" id="datos_faltantesLicencia"> </div>
+                                        <input type="hidden" id="contadorLicencia" name="contadorLicencia">
+
+                                        <div class="text-left" id="datos_faltantesBeneficiarios"> </div>
+                                        <input type="hidden" id="contadorBeneficiarios" name="contadorBeneficiarios">
+
+                                        <div class="text-left" id="datos_faltantesMedicos"> </div>
+                                        <input type="hidden" id="contadorMedicos" name="contadorMedicos">
+
+                                    </div> 
+                                    <hr>
+                                    <div class="form-group col-12">
+                                        <button class="btn btn-secondary" type="button" id="btn_Cancelar_Exp" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                        <button class="btn btn-success" type="submit" id="btn_Guardar" style="width: 216px"> Guardar </button>
+                                    </div>
+
+                                </form> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/personal/allPersonal.js"></script>
+        <script src="js/usuarios/usuarioModificarPassword.js"></script>
+        <script src="js/validate.js"></script>
+
+        <style>
+            #resultado {
+                background-color: red;
+                color: white;
+                font-weight: bold;
+            }
+            #resultado.ok {
+                background-color: green;
+            }
+        </style>
+    </body>
+</html>

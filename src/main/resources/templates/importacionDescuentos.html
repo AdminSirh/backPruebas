@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            <div id="tabs">
+                                <ul id="myTab">
+                                </ul>
+                                <div id="tabs-1">
+                                    <!-- AQUI VA TODO EL CONTENIDO -->
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">Nomina</h6>
+                                            <h4 class="m-0 font-weight-bold text-primary" align="right">Importación de Descuentos</h4>
+                                        </div>
+                                        <div class="col">  
+                                            <button onclick="fonacotAdmin()"  type="button" class="btn btn-secondary" style="width: 216px"> Ver Trabajadores</button>   
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="card-body container" >
+                                            <center>
+                                                <label id= "actualizacion" for="actualizacion" class="mt-1 mx-10"> </label>
+                                            </center>
+                                            <center>
+                                                <label id= "fecha_carga" for="fecha_carga" class="mt-1 mx-10"> </label>
+                                            </center>
+                                            <center>
+                                                <label for="descripcion" class="mt-1 mx-10"> INCIDENCIA / DESCRPCIÓN 354</label>
+                                            </center>
+                                            <br><br>
+                                            <div class="row">
+                                                <div class="col container">
+                                                    <label for="obtener" class="mt-1 mx-2">Obtener Información </label>
+                                                    <form>
+                                                        <div class="d-flex">
+                                                            <input type="file" class="btn btn-primary"  id="file" style="width: 200px" onchange="revisaExpedientes()"/>
+                                                            <input type="hidden" name="numeros_desconocidos" id="numeros_desconocidos">
+                                                        </div><br>
+                                                        <div class="d-flex">
+                                                            <button type="button" class="btn btn-primary" id="guarda"  onclick="guardaMovimientos()" style="width: 200px">  Guardar Movimientos</button>
+                                                        </div><br>
+                                                        <div class="d-flex">
+                                                            <button type="button" class="btn btn-primary" id="elimina" data-toggle="modal" data-target="#eliminaMovimientosModal" onclick="detectaMovimientos(),eliminaMovimientos()" style="width: 200px">  Eliminar Movimientos</button>
+                                                        </div><br>
+                                                    </form>
+                                                </div>
+
+                                                <div  class="col container">
+                                                        <div class="d-flex">
+                                                            <label for="nomina" class="mt-2 mx-5">Tipo de Nómina </label>
+                                                        </div><br>
+                                                        <div class="d-flex">
+                                                            <label for="periodos_g" class="mt-2 mx-5">Periodos de Generación </label>
+                                                        </div><br>
+                                                        <div class="d-flex">
+                                                            <label for="periodos_a" class="mt-2 mx-5">Periodos de Aplicación </label>
+                                                        </div>
+                                                </div>
+                                                <div  class="col">
+                                                        <div class="d-flex">
+                                                            <input type="hidden" name="nombre_nomina" id="nombre_nomina">
+                                                            <select  name="tipo_nomina" id="tipo_nomina" oninput="obtenPeriodos(),validaBotonFile(),limpiarTabla(),resetSelect(),obtenerNominaNombre()" style="width: 275px" class="form-control"></select>
+                                                        </div><br>
+                                                        <div class="d-flex">
+                                                            <select  name="periodo_generacion" id="periodo_generacion" style="width: 275px" class="form-control"></select>
+                                                        </div><br>
+                                                        <div class="d-flex">
+                                                            <select  name="periodo_aplicacion" id="periodo_aplicacion" style="width: 275px" class="form-control"></select>
+                                                            <input type="hidden" value="" id="id_periodos" name="id_periodos">
+                                                            <input type="hidden" value="" id="id_trabajador" name="id_trabajador">
+                                                            <input type="hidden" name="saldo_actual_consulta" id="saldo_actual_consulta">
+                                                        </div><br>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="table-responsive">
+                                                <!-- PRUEBA BÚSQUEDA -->
+                                                <div class="alert alert-info alert-white rounded mx-auto">
+                                                    <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                                    <div class="icon ">
+                                                        <h5><strong>Trabajadores   </strong><i class="fas fa-id-badge"></i></h5>
+                                                    </div>
+                                                </div>
+                                                <table class="table table-bordered" id="tabla_Descuentos" cellspacing="0" style="width: 1000px">
+                                                    <thead class="bg-success-900 thead-dark">
+                                                        <tr>
+                                                            <th>EXPEDIENTE</th>
+                                                            <th>TRABAJADOR</th>
+                                                            <th>CANTIDAD</th>
+                                                            <th>P. GENERACIÓN</th>
+                                                            <th>P. APLICACIÓN</th>
+                                                            <th>PROCESADO</th>
+                                                            <th>NUM. PERIODOS</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div> 
+                                            <br>
+                                            <br>
+
+                                        </div><!-- FIN CARD BODY--*****************-->
+                                        <!--***************** MODAL PARA MENSAJE DE CARGA--*****************-->
+                                        <div class="modal fade" id="modalMensaje" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                            aria-hidden="true" th:fragment="perfil">
+                                           <div class="modal-dialog" role="document">
+                                               <div class="modal-content">
+                                                   <div class="modal-header">
+                                                       <h5 class="modal-title" id="exampleModalLabel"> Datos Ingresados</h5>
+                                                       <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                           <span aria-hidden="true">×</span>
+                                                       </button>
+                                                   </div>
+                                                   <div class="modal-body">
+                                                       <div class="text-left" id="alertaAgrega"> </div>
+                                                       <form id="formMensaje" class="needs-validation" onsubmit="return false;" novalidate>
+                                                           <div class="form-group">
+                                                               <div id = "alerta">
+                                                               </div>
+                                                           </div>
+                                                       </form>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                        </div>
+                                        <!--***************** MODAL PARA ELIMINAR MOVIMIENTOS--*****************-->
+                                        <div class="modal fade" id="eliminaMovimientosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                            aria-hidden="true" th:fragment="perfil">
+                                           <div class="modal-dialog" role="document">
+                                               <div class="modal-content">
+                                                   <div class="modal-header">
+                                                       <h5 class="modal-title" id="exampleModalLabel"> Nominas cargadas</h5>
+                                                       <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                           <span aria-hidden="true">×</span>
+                                                       </button>
+                                                   </div>
+                                                   <div class="modal-body">
+                                                       <div class="text-left" id="alertaAgrega"> </div>
+                                                       <form id="formEliminaMovimientos" class="needs-validation" onsubmit="return false;" novalidate>
+                                                           <div class="form-group">
+                                                               <label class="form-label" for="addon-wrapping-left"> Nóminas</label>
+                                                               <select style="width: 200px" id="nominas_cargadas" name="nominas_cargadas" class="form-control" required> </select>
+                                                               <div id = "alerta">
+                                                               </div>
+                                                           </div> <!-- form-group// -->
+                                                           <hr>
+                                                           <div class="form-group col-12">
+                                                               <button class="btn btn-secondary" id="btn_Cancelar" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                               <button type="submit"  class="btn btn-primary" style="width: 216px"> Confirmar </button>
+                                                           </div>
+                                                       </form>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                        <!--***************** MODAL ALERTA DE EXCEL--*****************-->
+                                         <div class="modal fade" id="alertaNumDescModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                            aria-hidden="true" th:fragment="perfil">
+                                           <div class="modal-dialog" role="document">
+                                               <div class="modal-content">
+                                                   <div class="modal-header">
+                                                       <h5 class="modal-title" id="exampleModalLabel"> Números de SS Desconocidos</h5>
+                                                       <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                           <span aria-hidden="true">×</span>
+                                                       </button>
+                                                   </div>
+                                                   <div class="modal-body">
+                                                       <div class="text-left" id="alertaAgrega"> </div>
+                                                       <form id="formAlertaModal" class="needs-validation" onsubmit="return false;" novalidate>
+
+                                                           <div class="form-group">
+                                                               <label class="form-label" for="addon-wrapping-left"> Existen Números Desconocidos en su Archivo.</label>
+                                                               <label class="form-label" for="addon-wrapping-left"> ¿Desea que se descarguen en un documento de texto?</label>
+                                                                
+                                                           </div> <!-- form-group// -->
+                                                           <hr>
+                                                           <div class="form-group col-12">
+                                                               <button class="btn btn-secondary" id="cancelar" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                               <button type="submit"  class="btn btn-primary" style="width: 216px"> Confirmar </button>
+                                                           </div>
+                                                       </form>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                        <!--***************** MODAL ALERTA DE DUPLICADOS--*****************-->
+                                         <div class="modal fade" id="alertaDuplicadosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                            aria-hidden="true" th:fragment="perfil">
+                                           <div class="modal-dialog" role="document">
+                                               <div class="modal-content">
+                                                   <div class="modal-header">
+                                                       <h5 class="modal-title" id="exampleModalLabel"> Números Duplicados</h5>
+                                                       <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                           <span aria-hidden="true">×</span>
+                                                       </button>
+                                                   </div>
+                                                   <div class="modal-body">
+                                                       <div class="text-left" id="alertaAgrega"> </div>
+                                                       <form id="formAlerta2Modal" class="needs-validation" onsubmit="return false;" novalidate>
+
+                                                           <div class="form-group">
+                                                               <label class="form-label" for="addon-wrapping-left"> Existen Números Duplicados en su Archivo.</label>
+                                                               <label class="form-label" for="addon-wrapping-left"> ¿Desea que se descarguen en un documento de texto?</label>
+                                                                
+                                                           </div> <!-- form-group// -->
+                                                           <hr>
+                                                           <div class="form-group col-12">
+                                                               <button class="btn btn-secondary" id="cancela" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                               <button type="submit"  class="btn btn-primary" style="width: 216px"> Confirmar </button>
+                                                           </div>
+                                                       </form>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                        
+                                        
+                                    </div>
+                                    <!-- FIN TODO-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/creditoFonacot/importacionDescuentos.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+        <script src="js/validate.js"></script>
+        <script src="js/usuarios/usuarioModificarPassword.js"></script>
+
+
+        <style>
+            #resultado {
+                background-color: red;
+                color: white;
+                font-weight: bold;
+            }
+            #resultado.ok {
+                background-color: green;
+            }
+        </style>
+    </body>
+</html>

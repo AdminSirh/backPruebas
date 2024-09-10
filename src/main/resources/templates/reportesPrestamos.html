@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html lang="es">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Prestamos </h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div id="tabs">
+                                            <ul id="myTab">
+                                            </ul>
+                                            <div id="tabs-3">
+                                                <div class="panel-hdr" style="width: 1000px">
+                                                    <h2 id="h2TitAccion">
+                                                        <span class="fw-100 mx-lg-5" id="titulo" algign="center"> <b>Reportes de Prestamos </b> </span>
+                                                    </h2>  
+                                                    <br>
+                                                    <table class="table table-bordered" id="tablaDocumentos" width="100%" cellspacing="0">
+                                                        <thead class="bg-success-500 thead-dark" >
+                                                            <tr>
+                                                                <th>Reporte</th>
+                                                                <th>Generar</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="3" >FONACOT</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Historico Préstamos FONACOT Por Expediente</td>
+                                                                <td><button type="button" class="btn btn-primary" onclick="abrirModalParametros()"><span class="fa fa-search"></span> Generar</button></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="3">Préstamos Personales</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Exporta Préstamos Personales a Archivo Para Banorte</td>
+                                                                <td><button type="button" class="btn btn-primary" onclick="modalBanorte()"><span class="fa fa-search"></span> Generar</button></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Exporta Préstamos Personales a Excel Para Diferentes Bancos</td>
+                                                                <td><button type="button" class="btn btn-primary" onclick="modalOtrosBancos()"><span class="fa fa-search"></span> Generar</button></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Formato Préstamo Personal</td>
+                                                                <td><button type="button" class="btn btn-primary" onclick="modalFormatoPrestamos()"><span class="fa fa-search"></span> Generar</button></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Historico Préstamos Personales Por Expediente</td>
+                                                                <td><button type="button" class="btn btn-primary" onclick="abrirModalParametrosPersonal()"><span class="fa fa-search"></span> Generar</button></td>
+                                                            </tr>
+                                                           </thead>
+                                                    </table>
+                                                </div>
+                                                <br>
+                                            </div>
+
+                                            <!--***********************************************************************MODAL VER PARA REPORTES************************************************************************************** -->
+                                            <div class="modal fade" id="reportesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                                                <div class="modal-dialog " role="document" style="max-width: 1300px!important;">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title text-center" id="exampleModalLabel" style="text-align: center">Reporte</h5>
+                                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <iframe id="reportes_frame" style='width:1200px; height:600px;'></iframe>
+                                                            <div  style="display:flex; justify-content:flex-end; width:100%; padding:0;">
+                                                                <button class="btn btn-secondary " type="button" data-dismiss="modal" style="width: 216px">Cerrar</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!--***********************************************************************MODAL PARAMETROS HISTORICO FONACOT************************************************************************************** -->
+                                            <div class="modal fade" id="parametrosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                aria-hidden="true" th:fragment="perfil">
+                                               <div class="modal-dialog" role="document">
+                                                   <div class="modal-content">
+                                                       <div class="modal-header">
+                                                           <h5 class="modal-title" id="exampleModalLabel"> Historico FONACOT</h5>
+                                                           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                               <span aria-hidden="true">×</span>
+                                                           </button>
+                                                       </div>
+                                                       <div class="modal-body">
+                                                           <div class="text-left" id="alertaAgrega"> </div>
+                                                           <form id="formParametrosReporte" class="needs-validation" onsubmit="return false;" novalidate>
+
+                                                               <div class="form-group">
+                                                                   <label class="form-label" for="addon-wrapping-left">* Expediente </label>
+                                                                   <input name="expediente" id="expediente" class="form-control" minlength="1" maxlength="10" autocomplete="off" type="number" oninput="validacion(this)" style="width: 250px" required>
+                                                                   <div id = "alerta">
+                                                                   </div>
+                                                               </div> <!-- form-group// -->
+                                                               <br>
+                                                               <div class="form-group">
+                                                                   <label class="form-label" for="addon-wrapping-left">* Periodo </label>
+                                                                   <input name="periodo" id="periodo" class="form-control" minlength="1" maxlength="10" autocomplete="off" type="number" oninput="validacion(this)" style="width: 250px" required>
+                                                                   <div id = "alerta">
+                                                                   </div>
+                                                               </div>
+                                                               <br>
+                                                               
+                                                               <div class="form-group col-12">
+                                                                   <button type="button" class="btn btn-primary" onclick="verReporteFonacot()" style="width: 200px">Ver</button>
+                                                                   <button type="button" class="btn btn-primary" onclick="descargarReporteFornacot()" style="width: 200px">Descargar</button>
+                                                               </div>
+                                                           </form>
+                                                       </div>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                            <!--***********************************************************************MODAL FORMATO PRESTAMO PERSONAL************************************************************************************** -->
+                                            <div class="modal fade" id="prestamoPersonalModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                            aria-hidden="true" th:fragment="perfil">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel"> Tipo de Contrato</h5>
+                                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="text-left" id="alertaAgrega"> </div>
+                                                            <form id="formMuestraCombo" class="needs-validation" novalidate>
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="addon-wrapping-left"> Contratos</label>
+                                                                    <select style="width: 300px" id="contratos" name="contratos" class="form-control" required> </select>
+                                                                    <div id = "alerta">
+                                                                    </div>
+                                                                </div> <!-- form-group// -->
+                                                                <hr>
+                                                                <div class="form-group col-12">
+                                                                    <button type="button" class="btn btn-primary" onclick="verificaOpcionVer()" style="width: 200px">Ver</button>
+                                                                     <button type="button" class="btn btn-primary" onclick="verificaOpcionDescarga()" style="width: 200px">Descargar</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--***********************************************************************MODAL DIFERENTES BANCOS************************************************************************************** -->
+                                            <div class="modal fade" id="depositoDiferentesBancosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                aria-hidden="true" th:fragment="perfil">
+                                               <div class="modal-dialog" role="document">
+                                                   <div class="modal-content">
+                                                       <div class="modal-header">
+                                                           <h5 class="modal-title" id="exampleModalLabel"> Diferentes Bancos</h5>
+                                                           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                               <span aria-hidden="true">×</span>
+                                                           </button>
+                                                       </div>
+                                                       <div class="modal-body">
+                                                           <div class="text-left" id="alertaAgrega"> </div>
+                                                           <form id="formDiferentesBancos" class="needs-validation" onsubmit="return false;" novalidate>
+
+                                                               <div class="form-group">
+                                                                   <label class="form-label" for="addon-wrapping-left">* Nomina </label>
+                                                                   <select style="width: 250px" id="nomina" name="nomina" class="form-control" required> </select>
+                                                                   <div id = "alerta">
+                                                                   </div>
+                                                               </div> <!-- form-group// -->
+                                                               <br>
+                                                               <div class="form-group">
+                                                                   <label class="form-label" for="addon-wrapping-left">* Periodo </label>
+                                                                   <input name="periodo_deposito" id="periodo_deposito" class="form-control" autocomplete="off" type="number" oninput="validacion(this)" style="width: 250px" required>
+                                                                   <div id = "alerta">
+                                                                   </div>
+                                                               </div>
+                                                               <br>
+                                                               
+                                                               <div class="form-group col-12">
+                                                                   <button type="button" class="btn btn-primary" onclick="verReporteOtrosBancos()" style="width: 200px">Ver</button>
+                                                                   <button type="button" class="btn btn-primary" onclick="descargarOtrosBancos()" style="width: 200px">Descargar</button>
+                                                               </div>
+                                                           </form>
+                                                       </div>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                            <!--***********************************************************************MODAL DEPOSITOS BANORTE************************************************************************************** -->
+                                            <div class="modal fade" id="depositoBanorteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                aria-hidden="true" th:fragment="perfil">
+                                               <div class="modal-dialog" role="document">
+                                                   <div class="modal-content">
+                                                       <div class="modal-header">
+                                                           <h5 class="modal-title" id="exampleModalLabel"> Depositos Banorte</h5>
+                                                           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                               <span aria-hidden="true">×</span>
+                                                           </button>
+                                                       </div>
+                                                       <div class="modal-body">
+                                                           <div class="text-left" id="alertaAgrega"> </div>
+                                                           <form id="formBanorte" class="needs-validation" onsubmit="return false;" novalidate>
+
+                                                               <div class="form-group">
+                                                                   <label class="form-label" for="addon-wrapping-left">* Nomina </label>
+                                                                   <select style="width: 250px" id="nomina_banorte" name="nomina_banorte" class="form-control" required> </select>
+                                                                   <div id = "alerta">
+                                                                   </div>
+                                                               </div> <!-- form-group// -->
+                                                               <br>
+                                                               <div class="form-group">
+                                                                   <label class="form-label" for="addon-wrapping-left">* Periodo </label>
+                                                                   <input name="periodo_banorte" id="periodo_banorte" class="form-control" autocomplete="off" type="number" oninput="validacion(this)" style="width: 250px" required>
+                                                                   <div id = "alerta">
+                                                                   </div>
+                                                               </div>
+                                                               <br>
+                                                               
+                                                               <div class="form-group col-12">
+                                                                   <button type="button" class="btn btn-primary" onclick="verReporteBanorte()" style="width: 200px">Ver</button>
+                                                                   <button type="button" class="btn btn-primary" onclick="descargarBanorte()" style="width: 200px">Descargar</button>
+                                                               </div>
+                                                           </form>
+                                                       </div>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                             <!--***********************************************************************MODAL PARAMETROS HISTORICO PERSONALES************************************************************************************** -->
+                                            <div class="modal fade" id="parametrosPersonalModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                aria-hidden="true" th:fragment="perfil">
+                                               <div class="modal-dialog" role="document">
+                                                   <div class="modal-content">
+                                                       <div class="modal-header">
+                                                           <h5 class="modal-title" id="exampleModalLabel"> Historico Prestamos Personales</h5>
+                                                           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                               <span aria-hidden="true">×</span>
+                                                           </button>
+                                                       </div>
+                                                       <div class="modal-body">
+                                                           <div class="text-left" id="alertaAgrega"> </div>
+                                                           <form id="formParametrosReportePersonal" class="needs-validation" onsubmit="return false;" novalidate>
+
+                                                               <div class="form-group">
+                                                                   <label class="form-label" for="addon-wrapping-left">* Expediente </label>
+                                                                   <input name="expediente_personal" id="expediente_personal" class="form-control" minlength="1" maxlength="10" autocomplete="off" type="number" oninput="validacion(this)" style="width: 250px" required>
+                                                                   <div id = "alerta">
+                                                                   </div>
+                                                               </div> <!-- form-group// -->
+                                                               <br>
+                                                               <div class="form-group">
+                                                                   <label class="form-label" for="addon-wrapping-left">* Periodo </label>
+                                                                   <input name="periodo_personal" id="periodo_personal" class="form-control" minlength="1" maxlength="10" autocomplete="off" type="number" oninput="validacion(this)" style="width: 250px" required>
+                                                                   <div id = "alerta">
+                                                                   </div>
+                                                               </div>
+                                                               <br>
+                                                               
+                                                               <div class="form-group col-12">
+                                                                   <button type="button" class="btn btn-primary" onclick="verReportePersonal()" style="width: 200px">Ver</button>
+                                                                   <button type="button" class="btn btn-primary" onclick="descargarReportePersonal()" style="width: 200px">Descargar</button>
+                                                               </div>
+                                                           </form>
+                                                       </div>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- FIN TODO-->
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/reportes/allReportesPrestamos.js"></script>
+        <script src="js/validate.js"></script>
+        <script src="js/usuarios/usuarioModificarPassword.js"></script>
+    </body>
+</html>

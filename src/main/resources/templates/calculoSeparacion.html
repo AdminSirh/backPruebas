@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4" style="width: 950px">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">Cálculos por Separación</h4>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="form-group" >
+                                        <div class="panel-container collapse show m-lg-3"><!--  m-auto se centra la tabla-->
+                                            <!-- PRUEBA BÚSQUEDA -->
+                                            <div class="alert alert-info alert-white rounded mx-auto">
+                                                <form id="formCalculo" class="needs-validation" novalidate>
+                                                    <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                                    <div class="icon ">
+                                                        <strong><h5>Cálculos por Separación <i class="fas fa-hourglass"></i></h5></strong><br>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col"> 
+                                                            Fecha Ingreso:<br> <input class="form-control" type="date" autocomplete="off" id="fecha_ingreso" name="fecha_ingreso" min="1900-01-01" max="2050-12-31" oninput="reajustaAntiguedad()" style="width: 228px;" required disabled>
+                                                        </div>
+                                                        <div class="col"> 
+                                                            Fecha Baja: <br><input class="form-control" type="date" autocomplete="off" id="fecha_baja" name="fecha_baja" min="1900-01-01" max="2050-12-31" oninput="reajustaAntiguedad()" style="width: 228px;" required>
+                                                        </div>
+                                                        <div class="col"> 
+                                                            Calcular: <br><button name="botonenviar" class="btn btn-primary"  id="botonenviar" value="Enviar" style="width: 216px"><i class="fas fa-dollar-sign"></i></button>
+                                                        </div>
+                                                    </div>  
+                                                </form>
+                                            </div>   
+                                            <div>
+                                                <label class="form-label" for="addon-wrapping-left"><strong>ANTIGUEDAD:</strong></label>
+                                                <hr>
+                                                <label for="anios" class="mt-1 mx-5">Años: </label>
+                                                <label for="meses" class="mt-1 mx-5">Meses: </label>
+                                                <label for="dias" class="mt-1 mx-5">Días: </label>
+                                            </div>
+                                            <label class="form-label"><strong>TIPO:</strong></label>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <input id="finiquito" type="radio" name="opcion" value="opcion1">
+                                                    <label for="finiquito_liquidacion" class="mt-1 mx-2">Finiquito y Liquidación </label>
+                                                </div>
+                                                <div class="col">
+                                                    <input id="jubilacion" type="radio" name="opcion" value="opcion2">
+                                                    <label for="jubilacion" class="mt-1 mx-2">Jubilación</label>
+                                                </div>
+                                                <div class="col">
+                                                    <input id="pagoMarcha" type="radio" name="opcion" value="opcion3">
+                                                    <label for="pago_marcha" class="mt-1 mx-2">Pago de Marcha (Fallecimiento)</label>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div id="opcionesAdicionales" style="display: none;">
+                                                <label class="form-label"><strong>TIPO DE FINIQUITO Y LIQUIDACIÓN:</strong></label>
+                                                <hr>
+                                                <div class="col">
+                                                    <input id="finiqRenunciaVol" type="radio" name="opcion_extra" value="opcion4">
+                                                    <label for="renuncia_voluntaria" class="mt-1 mx-2">Renuncia Voluntaria</label>
+                                                </div>
+                                                <div class="col">
+                                                    <input id="finiqRecisionContrato" type="radio" name="opcion_extra" value="opcion5">
+                                                    <label for="rescision_contrato" class="mt-1 mx-2">Rescisión de Contrato</label>
+                                                </div>
+                                                <div class="col">
+                                                    <input id="finiqRemocionCargo" type="radio" name="opcion_extra" value="opcion6">
+                                                    <label for="remocion_cargo" class="mt-1 mx-2">Remoción de cargo</label>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                    </div><!-- FIN CARD BODY--*****************--> 
+                                    <!--***********************************************************************MODAL DETALLE CÁLCULO************************************************************************************** -->
+                                    <div class="modal fade" id="detalleSeparacionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                                        <div class="modal-dialog" role="document" style=" max-width: 60%;">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title text-center" id="tituloModal" style="text-align: center"></h5>
+                                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <!--Estos valores booleanos son enviados al backend para determinar el cálculo a realizar-->
+                                                    <input id="boolFiniquito" type="text" hidden>
+                                                    <input id="boolJubilacion" type="text" hidden>
+                                                    <input id="boolPagoMarcha" type="text" hidden>
+                                                    <input id="boolFiniqRenuncia" type="text" hidden>
+                                                    <input id="boolFiniqRecision" type="text" hidden>
+                                                    <input id="boolFiniqRemocion" type="text" hidden>
+                                                    <input id="idNomina" type="text" hidden>
+                                                    <div class="alert alert-info alert-white rounded mx-left" style="width: 100%;">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <label for="campo_expediente" class="m-0 font-weight-bold text-dark">Expediente:</label>
+                                                                <input type="text" id="campo_expediente" class="form-control text-center" style="width: 280px; height: 25px;" readonly>
+                                                            </div>
+                                                            <div class="col">
+                                                                <label for="campo_nombre" class="m-0 font-weight-bold text-dark">Trabajador:</label>
+                                                                <input type="text" id="campo_nombre" class="form-control text-center" style="width: 280px; height: 25px;" readonly>
+                                                            </div>
+                                                            <div class="col">
+                                                                <label for="campo_rfc" class="m-0 font-weight-bold text-dark">Reg. Fed. Cont</label>
+                                                                <input type="text" id="campo_rfc" class="form-control text-center" style="width: 280px; height: 25px;" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <label for="campo_adscripcion" class="m-0 font-weight-bold text-dark">Adsccripcion:</label>
+                                                                <input type="text" id="campo_adscripcion" class="form-control text-center" style="width: 280px; height: 25px;" readonly>
+                                                            </div>
+                                                            <div class="col">
+                                                                <label for="campo_puesto" class="m-0 font-weight-bold text-dark">Categoría:</label>
+                                                                <input type="text" id="campo_puesto" class="form-control text-center" style="width: 280px; height: 25px;" readonly>
+                                                            </div>
+                                                            <div class="col">
+                                                                <label for="campo_num_imss" class="m-0 font-weight-bold text-dark">Ced. I.M.S.S.</label>
+                                                                <input type="text" id="campo_num_imss" class="form-control text-center" style="width: 280px; height: 25px;" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <label for="campo_fecha_nacimiento" class="m-0 font-weight-bold text-dark">Fecha Nacimiento:</label>
+                                                                <input type="text" id="campo_fecha_nacimiento" class="form-control text-center" style="width: 280px; height: 25px;" readonly>
+                                                            </div>
+                                                            <div class="col">
+                                                                <label for="campo_nomina" class="m-0 font-weight-bold text-dark">Nómina:</label>
+                                                                <input type="text" id="campo_nomina" class="form-control text-center" style="width: 280px; height: 25px;" readonly>
+                                                            </div>
+                                                            <div class="col">
+                                                                <label for="campo_prestaciones_si_no" class="m-0 font-weight-bold text-dark">Prestaciones:</label>
+                                                                <input type="text" id="campo_prestaciones_si_no" class="form-control text-center" style="width: 280px; height: 25px;" readonly>
+                                                            </div>
+                                                            <div class="col">
+                                                                <label for="campo_salario_minimo" class="m-0 font-weight-bold text-dark">Sal. Min. Vig.</label>
+                                                                <input type="text" id="campo_salario_minimo" class="form-control text-center" style="width: 280px; height: 25px;" readonly>
+                                                            </div>
+                                                            <div class="col">
+                                                                <label for="campo_sueldo_diario_tab" class="m-0 font-weight-bold text-dark">Sueldo Diario Tabulado</label>
+                                                                <input type="text" id="campo_sueldo_diario_tab" class="form-control text-center" style="width: 280px; height: 25px;" readonly>
+                                                            </div>
+                                                            <div class="col">
+                                                                <label for="campo_sueldo_mensual_tab" class="m-0 font-weight-bold text-dark">Sueldo Mensual Tabulado</label>
+                                                                <input type="text" id="campo_sueldo_mensual_tab" class="form-control text-center" style="width: 280px; height: 25px;" readonly>
+                                                            </div>
+                                                            <div class="col">
+                                                                <label for="campo_salario_integrado_diario" class="m-0 font-weight-bold text-dark">Salario Integrado Diario</label>
+                                                                <input type="text" id="campo_salario_integrado_diario" class="form-control text-center" style="width: 280px; height: 25px;" readonly>
+                                                            </div>
+                                                            <div class="col">
+                                                                <label for="campo_salario_integrado_mensual" class="m-0 font-weight-bold text-dark">Salario Integrado Mensual</label>
+                                                                <input type="text" id="campo_salario_integrado_mensual" class="form-control text-center" style="width: 280px; height: 25px;" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <form id="frmCalculaFiniquito" class="needs-validation" novalidate>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <table class="table table-bordered" id="tabla_percepciones" style="width: 500px;" cellspacing="0">
+                                                                    <thead class="bg-success-900 thead-dark">
+                                                                        <tr>
+                                                                            <th>PERCEPCIONES</th>
+                                                                            <th>PERIODO</th>
+                                                                            <th>DÍAS</th>
+                                                                            <th>MESES</th>
+                                                                            <th>IMPORTE</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody> <tr>
+                                                                            <td><div class="form-check">
+                                                                                    <input class="form-check-input" type="checkbox" value="" id="chkIndemnizacion">
+                                                                                    <label class="form-check-label" for="chkIndemnizacion">
+                                                                                        Indemnización
+                                                                                    </label>
+                                                                                </div></td>
+                                                                            <td id="periodo_indemnizacion"></td>
+                                                                            <td id="dias_indemnizacion"></td>
+                                                                            <td id="meses_indemnizacion"></td>
+                                                                            <td id="total_indemnizacion"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><div class="form-check">
+                                                                                    <input class="form-check-input" type="checkbox" value="" id="chkVeniteDiasAnio">
+                                                                                    <label class="form-check-label" for="chkVeniteDiasAnio">
+                                                                                        20 Días por Año
+                                                                                    </label>
+                                                                                </div></td>
+                                                                            <td id="periodo_veinte_dias_anio"></td>
+                                                                            <td id="dias_veinte_dias_anio"></td>
+                                                                            <td id="meses_veinte_dias_anio"></td>
+                                                                            <td id="total_veinte_dias_anio"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td> <div class="form-check">
+                                                                                    <input class="form-check-input" type="checkbox" value="" id="chkPrimaAntiguedad">
+                                                                                    <label class="form-check-label" for="chkPrimaAntiguedad">
+                                                                                        Prima de Antigüedad
+                                                                                    </label>
+                                                                                </div></td>
+                                                                            <td id="periodo_prima_antiguedad"></td>
+                                                                            <td id="dias_prima_antiguedad"></td>
+                                                                            <td id="meses_prima_antiguedad"></td>
+                                                                            <td id="total_prima_antiguedad"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><div class="form-check">
+                                                                                    <input class="form-check-input" type="checkbox" value="" id="chkComPorAnt">
+                                                                                    <label class="form-check-label" for="chkComPorAnt">
+                                                                                        Comp. por Antigüedad
+                                                                                    </label>
+                                                                                </div></td>
+                                                                            <td id="periodo_comp_antiguedad"></td>
+                                                                            <td id="dias_comp_antiguedad"></td>
+                                                                            <td id="meses_comp_antiguedad"></td>
+                                                                            <td id="total_comp_antiguedad"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><div class="form-check">
+                                                                                    <input class="form-check-input" type="checkbox" value="" id="chkDiasVacaciones">
+                                                                                    <label class="form-check-label" for="chkDiasVacaciones">
+                                                                                        Vacaciones
+                                                                                    </label>
+                                                                                </div></td>
+                                                                            <td id="periodo_vacaciones"></td>
+                                                                            <td id="dias_vacaciones"></td>
+                                                                            <td id="meses_vacaciones"></td>
+                                                                            <td id="total_vacaciones"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td> <div class="form-check">
+                                                                                    <input class="form-check-input" type="checkbox" value="" id="chkPrimaVacacional">
+                                                                                    <label class="form-check-label" for="chkPrimaVacacional">
+                                                                                        Prima Vacacional
+                                                                                    </label>
+                                                                                </div></td>
+                                                                            <td id="periodo_prima_vacacional"></td>
+                                                                            <td id="dias_prima_vacacional"></td>
+                                                                            <td id="meses_prima_vacacional"></td>
+                                                                            <td id="total_prima_vacacional"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><div class="form-check">
+                                                                                    <input class="form-check-input" type="checkbox" value="" id="chkAguinaldo">
+                                                                                    <label class="form-check-label" for="chkAguinaldo">
+                                                                                        Aguinaldo
+                                                                                    </label>
+                                                                                </div></td>
+                                                                            <td id="periodo_aguinaldo"></td>
+                                                                            <td id="dias_aguinaldo"></td>
+                                                                            <td id="meses_aguinaldo"></td>
+                                                                            <td id="total_aguinaldo"></td>
+                                                                        </tr>
+
+                                                                    </tbody>
+                                                                </table>
+                                                                <!--                                                                <div class="form-check">
+                                                                                                                                    <input class="form-check-input" type="checkbox" value="" id="chkPagoFiniquitoNomina">
+                                                                                                                                    <label class="form-check-label" for="chkPagoFiniquitoNomina">
+                                                                                                                                        Pago Finiquito Nómina
+                                                                                                                                    </label>
+                                                                                                                                </div>-->
+                                                                <label id="total_percepciones_label" style="font-weight: bold;">
+                                                                    TOTAL DE PERCEPCIONES:
+                                                                </label>
+                                                            </div>
+                                                            <div class="col">
+                                                                <table class="table table-bordered" id="tablaDeducciones" style="width: 500px;" cellspacing="0">
+                                                                    <thead class="bg-success-900 thead-dark">
+                                                                        <tr>
+                                                                            <th>DEDUCCIONES</th>
+                                                                            <th>IMPORTE</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody> 
+                                                                        <tr>
+                                                                            <td><div class="form-check">
+                                                                                    <input class="form-check-input" type="checkbox" value="" id="chkIsrIndemnizacion">
+                                                                                    <label class="form-check-label" for="chkIsrIndemnizacion">
+                                                                                        I.S.R. (Indemnización)
+                                                                                    </label>
+                                                                                </div></td>
+                                                                            <td id="isr_indemnizacion"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><div class="form-check">
+                                                                                    <input class="form-check-input" type="checkbox" value="" id="chkIsrFiniquito">
+                                                                                    <label class="form-check-label" for="chkIsrFiniquito">
+                                                                                        I.S.R. (Finiquito)
+                                                                                    </label>
+                                                                                </div></td>
+                                                                            <td id="isr_finiquito"></td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                                <label>
+                                                                    D/FINIQUITO NÓMINA:
+                                                                </label>
+                                                                <br>
+                                                                <label id="total_deducciones_label" style="font-weight: bold;">
+                                                                    TOTAL DEDUCCIONES:
+                                                                </label>
+                                                                <br>
+                                                                <label id="total_percibir_label" style="font-weight: bold;">
+                                                                    TOTAL A PERCIBIR:
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-12 d-flex justify-content-center">
+                                                            <button class="btn btn-secondary" id="btn_cancelar_" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                            <button onclick="definirReciboDescargar()" class="btn btn-info ml-2" style="width: 216px" type="button">Generar Recibo</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- FIN DEL MODAL -->
+                                </div>
+                            </div>
+                            <!-- FIN TODO-->
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/calculoSeparacion/calculosSeparacion.js"></script>
+        <script src="js/validate.js"></script>
+        <script src="js/usuarios/usuarioModificarPassword.js"></script>
+    </body>
+</html>

@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ComplementoCABase" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="300799ad-937c-4ec7-8241-3bafef23063a">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Remote Database"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="urlImg" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="periodo" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[WITH MainQuery AS (
+    SELECT 
+        asTrabajador.id_trabajador,
+        asPeriodosPago.fecha_inicial,
+        asPeriodosPago.fecha_final,
+        asAreas.desc_area,
+        asTrabajadorPlaza.ubicacion_id,
+        asPeriodosPago.periodo,
+        asPersona.nombre,
+        asPersona.apellido_paterno,
+        asPersona.apellido_materno,
+        asExpediente.numero_expediente,
+        asTrabajadorPlaza.tipo_nomina_id,
+        asPuesto.puesto,
+        dias_descanso.dia_descanso,
+        dias_habiles.dia_horario
+    FROM trabajador_plaza asTrabajadorPlaza
+    JOIN Trabajador asTrabajador ON asTrabajadorPlaza.trabajador_id = asTrabajador.id_trabajador 
+    JOIN Persona asPersona ON asTrabajador.persona_id = asPersona.id_persona
+    JOIN Catalogo_plaza asPlaza ON asTrabajadorPlaza.plaza_id = asPlaza.id_plaza
+    JOIN Catalogo_puesto asPuesto ON asPlaza.puesto_id = asPuesto.id_puesto
+    JOIN Catalogo_Expedientes asExpediente ON asTrabajador.expediente_id = asExpediente.id_expediente
+    JOIN Catalogo_areas asAreas ON asTrabajadorPlaza.areas_id = asAreas.id_area
+    JOIN Periodos_pago asPeriodosPago ON asTrabajadorPlaza.tipo_nomina_id = asPeriodosPago.id_nomina
+
+    -- Subconsulta para obtener los días de descanso del trabajador
+    LEFT JOIN (
+        SELECT trabajador_id, STRING_AGG(CONCAT(dia_id, ':', dia_descanso)::text, ',') as dia_descanso
+        FROM Libro_dias
+        GROUP BY trabajador_id
+    ) dias_descanso ON asTrabajador.id_trabajador = dias_descanso.trabajador_id
+    
+    LEFT JOIN(
+    SELECT 
+    Plaza.trabajador_id,
+    STRING_AGG(
+        REGEXP_REPLACE(
+            CONCAT(NombreDias.id_dia,' - ', NombreDias.dia, ' - ', LibroDias.horario_entrada, ' - ', LibroDias.horario_salida),
+            '^\d+\s-\s',
+            ''
+        ),
+        ', ' ORDER BY NombreDias.id_dia
+    ) AS dia_horario,
+    Persona.apellido_paterno
+FROM libro_dias as LibroDias
+JOIN trabajador_plaza as Plaza ON LibroDias.trabajador_id = Plaza.trabajador_id
+JOIN catalogo_dias as NombreDias ON LibroDias.dia_id = id_dia
+JOIN trabajador as Trabajador ON Plaza.trabajador_id = id_trabajador
+JOIN persona as Persona ON trabajador.persona_id = id_persona
+WHERE Plaza.tipo_nomina_id = 1 
+AND LibroDias.dia_descanso != 1
+GROUP BY Plaza.trabajador_id, Persona.apellido_paterno
+ORDER BY Persona.apellido_paterno
+	    )dias_habiles ON asTrabajador.id_trabajador = dias_habiles.trabajador_id
+
+    WHERE asTrabajadorPlaza.tipo_nomina_id = 1 
+        AND asPeriodosPago.id_nomina = 1
+        AND asPeriodosPago.periodo = $P{periodo}
+)
+
+SELECT 
+    fecha_inicial,
+    fecha_final,
+    desc_area,
+    nombre,
+    apellido_paterno,
+    apellido_materno,
+    numero_expediente,
+    dia_descanso,
+    dia_horario,
+    id_deposito AS ubicacion_deposito,
+    desc_deposito,
+    periodo,
+    estatus
+FROM (
+    SELECT 
+        MainQuery.*,
+        ROW_NUMBER() OVER (PARTITION BY id_trabajador ORDER BY apellido_paterno, id_trabajador) as row_num,
+        asDepositos.desc_deposito,
+        asDepositos.id_deposito,
+        asDias.dia,
+        asLibroDias.estatus,
+        asLibroDias.horario_entrada,
+        asLibroDias.horario_salida
+    FROM MainQuery
+    LEFT JOIN Libro_dias asLibroDias ON MainQuery.id_trabajador = asLibroDias.trabajador_id
+    LEFT JOIN Catalogo_dias asDias ON asLibroDias.dia_id = asDias.id_dia
+    LEFT JOIN Catalogo_depositos asDepositos ON asLibroDias.deposito_id = asDepositos.id_deposito
+) as subquery
+WHERE row_num = 1
+AND estatus = 1
+ORDER BY apellido_paterno, id_trabajador;]]>
+	</queryString>
+	<field name="fecha_inicial" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_inicial"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_inicial"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="periodos_pago"/>
+	</field>
+	<field name="fecha_final" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_final"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_final"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="periodos_pago"/>
+	</field>
+	<field name="desc_area" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="desc_area"/>
+		<property name="com.jaspersoft.studio.field.label" value="desc_area"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_areas"/>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="apellido_paterno" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="apellido_paterno"/>
+		<property name="com.jaspersoft.studio.field.label" value="apellido_paterno"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="apellido_materno" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="apellido_materno"/>
+		<property name="com.jaspersoft.studio.field.label" value="apellido_materno"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="numero_expediente" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="numero_expediente"/>
+		<property name="com.jaspersoft.studio.field.label" value="numero_expediente"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_expedientes"/>
+	</field>
+	<field name="dia_descanso" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="dia_descanso"/>
+		<property name="com.jaspersoft.studio.field.label" value="dia_descanso"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="libro_dias"/>
+	</field>
+	<field name="dia_horario" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="dia_horario"/>
+		<property name="com.jaspersoft.studio.field.label" value="dia_horario"/>
+	</field>
+	<field name="ubicacion_deposito" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="ubicacion_deposito"/>
+		<property name="com.jaspersoft.studio.field.label" value="ubicacion_deposito"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_depositos"/>
+	</field>
+	<field name="desc_deposito" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="desc_deposito"/>
+		<property name="com.jaspersoft.studio.field.label" value="desc_deposito"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_depositos"/>
+	</field>
+	<field name="periodo" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="periodo"/>
+		<property name="com.jaspersoft.studio.field.label" value="periodo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="periodos_pago"/>
+	</field>
+	<field name="estatus" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="estatus"/>
+		<property name="com.jaspersoft.studio.field.label" value="estatus"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="libro_dias"/>
+	</field>
+	<group name="Depositos" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{ubicacion_deposito}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="112" splitType="Stretch">
+			<textField>
+				<reportElement x="27" y="47" width="519" height="19" uuid="3fc22372-881c-4a40-9c80-93b2067a24ca"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["CONTROL DE ASISTENCIA DEL PERSONAL DE BASE EN " + $F{desc_deposito}+ " UBICACIÓN: " +$F{ubicacion_deposito}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="181" y="66" width="210" height="20" uuid="9847028d-bee8-4dc4-8133-adce7f633b34"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["SEMANA DEL : "  + new SimpleDateFormat("d/MMM/yyyy").format($F{fecha_inicial}) + " al " + new SimpleDateFormat("d/MMM/yyyy").format($F{fecha_final})]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="383" y="79" width="206" height="14" uuid="39a28465-f649-4696-a317-13bddaf461d1">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("EEEE, d 'de' MMMM, yyyy h:mm:ss a").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="20" y="79" width="100" height="14" uuid="518be511-779c-43a0-a0a3-14a5532bff65">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["Periodo: " +$F{periodo}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="0" y="0" width="181" height="40" uuid="40363817-9484-4774-902f-95886a39021f"/>
+				<imageExpression><![CDATA[$P{urlImg}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="374" y="0" width="196" height="30" uuid="2a64a392-2599-4f65-8908-0478b72a99af"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Servicio de Transportes Eléctricos de la Ciudad de México]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="424" y="24" width="146" height="12" uuid="be157ec5-48f7-44c1-bc46-0c8ae1e529da"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Gerencia de Administración de Capital Humano]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="424" y="30" width="146" height="12" uuid="b1e70bc1-6c89-4258-a6c4-fd5618d28a9c"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Subgerencia de Nómina]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="19" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="30" y="1" width="60" height="16" backcolor="#C2C2C2" uuid="d0b93a0e-4893-4969-b367-82d53fe839d4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="921c4438-bf27-4f37-a026-77a927144d3f"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[EXPED. ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="1" width="30" height="16" backcolor="#C2C2C2" uuid="d749d6cc-15a1-42b0-819a-4b20fa5f2682">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="921c4438-bf27-4f37-a026-77a927144d3f"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="90" y="1" width="140" height="16" backcolor="#C2C2C2" uuid="5290bd7b-f520-405a-85d2-068bebfd6e70">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="921c4438-bf27-4f37-a026-77a927144d3f"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[NOMBRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="230" y="1" width="140" height="16" backcolor="#C2C2C2" uuid="b3663015-2d74-4e8a-a7e3-e5e1736a12fd">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="921c4438-bf27-4f37-a026-77a927144d3f"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[AREA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="370" y="1" width="150" height="16" backcolor="#C2C2C2" uuid="fe2f184e-e13d-4422-a046-c78a441bde79">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="921c4438-bf27-4f37-a026-77a927144d3f"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[HORARIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="520" y="1" width="50" height="16" backcolor="#C2C2C2" uuid="53918ae6-2a8a-48f9-8061-df8dfcd44238">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="921c4438-bf27-4f37-a026-77a927144d3f"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[PASEOS]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="43" splitType="Stretch">
+			<textField>
+				<reportElement x="30" y="-2" width="60" height="35" uuid="6aaad4ea-7e9e-4212-b895-059ae4439209">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="921c4438-bf27-4f37-a026-77a927144d3f"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero_expediente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="-2" width="140" height="35" uuid="2a299898-e3fd-45f0-a814-9033c47d7426">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="921c4438-bf27-4f37-a026-77a927144d3f"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre} + ' ' +$F{apellido_paterno} + ' ' + $F{apellido_materno}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="230" y="-2" width="140" height="35" uuid="25538779-f84f-4955-ad71-b59097ebf325">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="921c4438-bf27-4f37-a026-77a927144d3f"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{desc_area}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="370" y="-2" width="150" height="35" uuid="72559831-5709-4c77-9e13-dc05b5e4653a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="921c4438-bf27-4f37-a026-77a927144d3f"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dia_horario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="520" y="-2" width="50" height="35" uuid="bd649674-3cad-4d70-b1d2-078eb902a4a5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="921c4438-bf27-4f37-a026-77a927144d3f"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{dia_descanso}.contains("2:1") ? "L" : "") +
+($F{dia_descanso}.contains("3:1") ? ($F{dia_descanso}.contains("2:1") ? " - M" : "M") : "") +
+($F{dia_descanso}.contains("4:1") ? ($F{dia_descanso}.contains("2:1") || $F{dia_descanso}.contains("3:1") ? " - MI" : "MI") : "") +
+($F{dia_descanso}.contains("5:1") ? ($F{dia_descanso}.contains("2:1") || $F{dia_descanso}.contains("3:1") || $F{dia_descanso}.contains("4:1") ? " - J" : "J") : "") +
+($F{dia_descanso}.contains("6:1") ? ($F{dia_descanso}.contains("2:1") || $F{dia_descanso}.contains("3:1") || $F{dia_descanso}.contains("4:1") || $F{dia_descanso}.contains("5:1") ? " - V" : "V") : "") +
+($F{dia_descanso}.contains("7:1") ? ($F{dia_descanso}.contains("2:1") || $F{dia_descanso}.contains("3:1") || $F{dia_descanso}.contains("4:1") || $F{dia_descanso}.contains("5:1") || $F{dia_descanso}.contains("6:1") ? " - S" : "S") : "") +
+($F{dia_descanso}.contains("1:1") ? ($F{dia_descanso}.contains("2:1") || $F{dia_descanso}.contains("3:1") || $F{dia_descanso}.contains("4:1") || $F{dia_descanso}.contains("5:1") || $F{dia_descanso}.contains("6:1") || $F{dia_descanso}.contains("7:1") ? " - D" : "D") : "")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="-2" width="30" height="35" uuid="da2b9022-6466-45ac-bebc-29db236839f4"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="111" splitType="Stretch">
+			<staticText>
+				<reportElement x="101" y="0" width="80" height="20" uuid="c74c9fcd-6551-4611-935b-583dda5ce01b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Elaboró]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="65" y="68" width="154" height="15" uuid="f2dcd861-caa3-4fdf-866e-99576d2ee4cd">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Encargado del proceso de nómina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="65" y="83" width="154" height="15" uuid="92461486-7db0-45c1-8472-9029afe0eb8a">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Fernando San Luis Vizcaino]]></text>
+			</staticText>
+			<line>
+				<reportElement x="65" y="68" width="153" height="1" uuid="d937ffd8-e64e-4a7a-918d-ea95b59f213f">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="383" y="0" width="80" height="20" uuid="ec15b86e-6ccf-4b3e-96db-4b7a6299b819"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Recibe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="347" y="68" width="154" height="15" uuid="fe9043e1-a73f-4370-a924-bc837f9a8ed8">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="347" y="83" width="154" height="15" uuid="ea9454f5-b150-44b0-962d-f0d6c2e4f220">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Puesto:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="347" y="68" width="153" height="1" uuid="5b4f1efa-01f3-49fc-9d1c-3f14995fc72e">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

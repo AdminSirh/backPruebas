@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Consulta de Pagos</h6>
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">Nomina / Consulta de Pagos</h4>
+                                </div>
+                                <div class="col">  
+                                    <button onclick="verPagos()"  type="button" class="btn btn-secondary" style="width: 216px"> Ver Pagos</button>   
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body" style="width: 1000px">
+                                    <div class="form-group" >
+                                        <div class="row">
+                                            <input id="nomina" name="nomina" type="hidden">
+                                            
+                                            <div class="input-group">
+                                                <div class="panel-container collapse show m-lg-3"> <!<!--  m-auto se centra la tabla-->
+                                                    <ul id="myTab">
+                                                    </ul>
+                                                    <div id="tabs-1"></div>
+                                                    <div class="table-responsive" style="width: 900px" >
+                                                        <!-- PRUEBA BÚSQUEDA -->
+                                                        <div class="alert alert-info alert-white rounded mx-auto">
+                                                            <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                                            <div class="icon ">
+                                                                <strong><h5> <i class="fa fa-coins" aria-hidden="true"> Conceptos</i></h5></strong> <i class="fa fa-search mx-auto"></i><strong> Criterios de Búsqueda: </strong> Clave, Concepto, Periodo
+                                                            </div>
+                                                        </div>  
+                                                        <table class="table table-bordered" id="tabla_Conceptos" width="100%" cellspacing="0">
+                                                            <thead class="bg-success-900 thead-dark">
+                                                                <tr>
+                                                                    <th style="width: 100px;">Clave</th>
+                                                                    <th style="width: 110px;">Concepto</th>
+                                                                    <th style="width: 70px;">Cantidad</th>
+                                                                    <th style="width: 70px;">Periodo Generación</th>
+                                                                    <th style="width: 70px;">Periodo Aplicación</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody> </tbody>
+                                                        </table>
+                                                    </div>   
+                                                    <div class="d-flex">
+                                                        <label class="mt-1 mx-1">Percepciones Totales: $</label>
+                                                        <input type="number" name="percepciones" id="percepciones" style="width: 150px" class="form-control" readonly>
+                                                    </div>
+                                                    <br>
+                                                    <div class="d-flex">
+                                                        <label class="mt-1 mx-1">Deducciones Totales: $</label>
+                                                        <input type="number" name="deducciones" id="deducciones" style="width: 150px" class="form-control" readonly>
+                                                    </div>
+                                                    <br>
+                                                    <div class="d-flex">
+                                                        <label class="mt-1 mx-1">Neto: $</label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                        <input type="number" name="sueldo_neto" id="sueldo_neto" style="width: 150px" class="form-control" readonly>
+                                                    </div>
+                                                </div> 
+                                            </div> 
+                                        </div>
+                                    </div><!-- FIN CARD BODY--*****************--> 
+
+                                </div>
+                            </div>
+                            <!-- FIN TODO-->
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/pagos/detallePagosConceptos.js"></script>
+        <script src="js/pagos/tabsPagos.js"></script>
+        <script src="js/validate.js"></script>
+    </body>
+</html>

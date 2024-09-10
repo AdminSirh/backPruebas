@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<script>
+    $(function () {
+        $("#tabs").tabs({
+            select: function (event, ui) {
+                var url = $.data(ui.tab, 'load.tabs');
+                if (url) {
+                    location.href = url;
+                    return false;
+                }
+                return true;
+            }
+        });
+    });
+</script>
+<html lang="es">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4 " style="width: 1000px">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Datos de Jubilación</h6> 
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="form-group" >
+                                        <div class="row">
+                                            <div id="tabs">
+                                                <ul id="myTabTrabajador">
+                                                </ul>
+                                                
+                                                <div id="tabs-1">
+                                                    <form id="formGuardarTrabajador" class="needs-validation" novalidate>
+                                                        <div class="form-group">
+
+                                                        </div>
+                                                        <div class="col">  
+                                                            <button type="submit" name="botonenviar" class="btn btn-primary" id="botonenviar" value="Enviar" style="width: 216px"> Guardar</button>   
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div><!-- FIN CARD BODY--*****************-->   
+                                    </div>
+                                </div>
+                                <!-- FIN TODO <script src="js/personal/trabajadorDatosGenerales.js"></script>-->
+                            </div>
+                        </div>
+                    </div>
+                    <footer th:replace="layout/todos :: pie"></footer>
+                </div>
+            </div>
+            <a th:replace="layout/todos :: scroll"></a>
+            <div th:replace="layout/todos :: sesion"></div>
+            <div th:replace="layout/todos :: perfil"></div>
+            
+            <script src="js/trabajador/trabajadorJubilacion.js"></script>
+            <script src="js/validate.js"></script>
+            <script src="js/usuarios/usuarioModificarPassword.js"></script>
+    </body>
+</html>

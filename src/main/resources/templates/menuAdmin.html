@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+        <!-- Custom scripts for all pages-->
+
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Administración de Menu</h6>
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">Administración / Menu</h4>
+                                </div>
+                                <!-- Card Body -->
+
+                                <div class="card-body" >
+                                    <div class="m-lg-3 ">
+                                        <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#agregarMenuModal"><span class="fa fa-object-group"></span> Agregar Nuevo Menu</button>
+                                        <br>
+                                    </div>
+                                    <!-- PRUEBA BÚSQUEDA -->
+                                    <div class="alert alert-info alert-white rounded mx-auto">
+                                        <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                        <div class="icon ">
+                                            <strong><h5>Menus Registrados</h5></strong>
+                                        </div>
+                                    </div>   
+                                    <table class="table table-bordered" id="tablaMenu" width="100%" cellspacing="0">
+                                        <thead class="bg-success-900 thead-dark">
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Nombre del Menú</th>
+                                                <th>Descripción</th>
+                                                <th>Icono</th>
+                                                <th>Orden</th>
+                                                <th>Editar</th>
+                                                <th>Sub Menú</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody> </tbody>
+                                    </table>
+                                    <ul class="pagination justify-content-center" style="margin:20px 0; cursor: pointer;">  </ul>
+                                </div>
+                            </div>
+                            <!-- FIN TODO-->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="agregarMenuModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true" th:fragment="perfil">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Agregar Menu</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" id="formGuardarMenu" class="needs-validation" novalidate>
+                                    <div class="text-right"> <label class="text-danger"><small>* Campos Obligatorios</small></label><br>      </div>
+                                    <div class="form-group">
+                                        <input name="menuNombre" id="menuNombre" class="form-control" minlength="3" maxlength="25" autocomplete="off" placeholder="*Nombre de menu" type="text" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input name="descripcion" id="descripcion" class="form-control" minlength="3" maxlength="25" autocomplete="off" placeholder="*Descripcion" type="text" required>                                
+                                    </div>
+                                    <div class="form-group">
+                                        <input  id= "orden" name="orden" class="form-control" placeholder="* Orden" type="number" required>
+                                       
+                                    </div>
+                                    <hr>
+                                    <div class="form-group col-12">
+                                        <button class="btn btn-secondary" type="button" id="btn_Cancelar" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                        <button type="submit" name="botonenviar" class="btn btn-primary" id="botonenviar" value="Enviar" style="width: 216px"> Guardar </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--**************************************************************MODAL PARA EDITAR MENU***************************************************************************** -->
+                <div class="modal fade" id="modificarMenuModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true" th:fragment="perfil">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Modificar Menu</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form  id="formdata">
+                                    <div class="text-right"> <label class="text-danger"><small>* Campos Obligatorios</small></label><br>      </div>
+                                    <div class="form-group">
+                                        <input id= "menuNombre_edita" name="menuNombre_edita" class="form-control" placeholder="* Menu" type="text">
+                                        <input type="hidden" value="" id="id_menu" name="id_menu" >
+                                    </div> <!-- form-group// -->
+                                    <div class="form-group">
+                                        <input  id= "descripcion_edita" name="descripcion_edita" class="form-control" placeholder="* Descripcion" type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <input  id= "orden_edita" name="orden_edita" class="form-control" placeholder="* Orden" type="number">
+                                    </div>
+                                    <div class="form-group col-12">
+                                        <button class="btn btn-secondary" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                        <button type="submit" name="botonenviar" onclick="actualizar_Menu(document.getElementById('id_menu').value)" class="btn btn-primary"  style="width: 216px"> Guardar </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/menu/allMenu.js"></script>
+        <script src="js/validate.js"></script>
+        <script src="js/usuarios/usuarioModificarPassword.js"></script>
+    </body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            <div id="tabs">
+                                <ul id="myTab">
+                                </ul>
+                                <div id="tabs-1">
+
+                                    <!-- AQUI VA TODO EL CONTENIDO -->
+                                    <div class="card shadow mb-4" style="width: 700px">
+                                        <!-- Card Header - Dropdown -->
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">Aviso Movimiento de Personal</h6>
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="card-body">
+                                            <div class="form-group" >
+                                                <div class="alert alert-info alert-white rounded mx-auto">
+                                                    <h4 id="h2TitAccion">
+                                                        <i class="fas fa-exchange-alt" aria-hidden="true"></i><b> Aviso Movimiento de Personal </b>               
+                                                    </h4>     
+                                                </div>
+                                                <br>
+
+                                                <!-- Primera fila -->
+                                                <div class="row">
+                                                    <!-- Primera columna -->
+                                                    <div class="col-4">
+                                                        <input id="id_trabajador" name="id_trabajador" class="form-control"  type="hidden" >   
+                                                        <input id="nomina_tabulador" name="nomina_tabulador" class="form-control"  type="hidden" > 
+                                                        <input id="parametro_base" name="parametro_base" class="form-control"  type="hidden" > 
+                                                        <input id="parametro_confianza" name="parametro_confianza" class="form-control"  type="hidden" > 
+                                                        <input id="parametro_funcionarios" name="parametro_funcionarios" class="form-control"  type="hidden" > 
+                                                        <label style="width:300px;" class="form-label" for="addon-wrapping-left">* Expediente del trabajador</label>
+                                                        <input id="expediente" name="expediente" class="form-control" autocomplete="off" type="number" oninput="buscaIdExpediente()" style="width:200px;" required> 
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <label style="width:300px;" class="form-label" for="addon-wrapping-left">* Número de reporte</label>
+                                                        <input id="numero_reporte" name="numero_reporte" class="form-control" autocomplete="off" type="number" style="width:200px;" required> 
+                                                    </div>
+                                                    <div style="margin-left: 10px;" id="nombre_trabajador">
+                                                              
+                                                    </div>
+                                                </div>
+                                                <hr>
+
+                                                <div style="display: inline-block; margin-right: 20px;">
+                                                    <button class="btn btn-primary" id="buscar-btn" onclick="consultarHistoricoVer(document.getElementById('id_trabajador').value)"><span class="fa fa-search"></span>Ver</button>
+                                                </div>
+                                                <div style="display: inline-block; margin-right: 40px;">
+                                                    <button class="btn btn-primary" id="reporte-btn"  onclick="consultarHistoricoDescargar(document.getElementById('id_trabajador').value)"><span class="fa fa-download"></span> Descargar</button>
+                                                </div>
+                                                
+                                            </div><!-- FIN CARD BODY--*****************-->   
+                                            <!--***********************************************************************MODAL VER PARA REPORTES************************************************************************************** -->
+                                            <div class="modal fade" id="reportesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                                                <div class="modal-dialog " role="document" style="max-width: 1300px!important;">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title text-center" id="exampleModalLabel" style="text-align: center">Reporte</h5>
+                                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <iframe id="reportes_frame" style='width:1200px; height:600px;'></iframe>
+                                                            <div  style="display:flex; justify-content:flex-end; width:100%; padding:0;">
+                                                                <button class="btn btn-secondary " type="button" data-dismiss="modal" style="width: 216px">Cerrar</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- FIN TODO-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>      
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+                <a th:replace="layout/todos :: scroll"></a>
+                <div th:replace="layout/todos :: sesion"></div>
+                <div th:replace="layout/todos :: perfil"></div> 
+                <script src="js/reportes/reporteAvisoMovimientoPersonal.js"></script>
+                <script src="js/reportes/reportesPersonalTabs.js"></script>
+                <script src="js/validate.js"></script>
+                
+                </body>
+                </html>

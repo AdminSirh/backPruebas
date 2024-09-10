@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            
+                                    <!-- AQUI VA TODO EL CONTENIDO -->
+                                    <div class="card shadow mb-4" style="width: 800px">
+                                        <!-- Card Header - Dropdown -->
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">Pre-Nómina</h6>
+                                            
+                                            <h4 class="m-0 font-weight-bold text-primary" align="right">Descuento Personal</h4>
+                                            <h4 class="m-0 font-weight-bold text-primary" align="right" id = "id_incidencia_anticipada">60</h4>
+                                        </div>
+                                         <div class="col"> 
+                                             <button onclick="prestamosPersonalesAdmin()"  type="button" class="btn btn-secondary" style="width: 216px"> Ver Trabajadores</button>   
+                                        </div>
+                                        
+                                        <!-- Card Body -->
+                                        <div class="card-body container" >
+                                            <form class="needs-validation" novalidate>
+                                                <div id="tabs">
+                                                    <ul id="myTab">
+                                                    </ul>
+                                                    <div id="tabs-1">
+                                                <div class="alert alert-info alert-white rounded mx-auto">
+                                                    <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                                    <div class="icon ">
+                                                        <h5><strong>Descuentos Individuales    </strong><i class="fas fa-coins"></i></h5>
+                                                    </div>
+                                                </div> 
+                                                <div class="row m-lg-3"> 
+                                                    <div class="d-flex">
+                                                        <span style="margin-right: 165px;">
+                                                            <label class="mt-1 mx-1" for="addon-wrapping-left" >Primer Periodo de Aplicación </label>
+                                                            <select  name="periodo_aplicacion" id="periodo_aplicacion" oninput="buscaPeriodoPago()" style="width: 280px" class="form-control"></select>
+                                                        </span>
+                                                    </div>
+                                                    <div class="d-flex">
+                                                        <span >
+                                                            <label for="saldo" class="mt-1 mx-1">Saldo Inicial</label>
+                                                            <input type="number" name="saldo_inicial" id="saldo_inicial" min="0" style="width: 150px" oninput="calculos(),validacionPesos(this)" autocomplete="off" class="form-control">
+                                                            
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <br><br>
+
+                                            <div class="row">
+                                                <div class="col container">
+                                                    <form>
+                                                        <div class="d-flex">
+                                                            <input type="hidden" name="id_cuenta_por_cobrar" id="id_cuenta_por_cobrar">
+                                                            <input type="hidden" name="periodo_oculto" id="periodo_oculto">
+                                                            <input type="hidden" name="id_nomina" id="id_nomina">
+                                                            <input type="hidden" name="expediente" id="expediente">
+                                                            <input type="hidden" name="nombre" id="nombre">
+                                                            <input type="hidden" name="impuesto_banco" id="impuesto_banco">
+                                                            <input type="radio" name="opcion" value="opcion1">
+                                                            <label for="periodos_fijos" class="mt-1 mx-2">Periodos Fijos </label>
+                                                            <input type="number" name="periodos_fijos" min="0" id="periodos_fijos" style="width: 150px" value="10" oninput="calculos(),validacionNumero(this)" autocomplete="off" class="form-control" readonly>
+                                                        </div><br>
+                                                        <div class="d-flex">
+                                                            <input type="radio" name="opcion" value="opcion3">
+                                                            <label for="monto_fijo" class="mt-1 mx-2">Monto Fijo</label>
+                                                            &nbsp &nbsp &nbsp
+                                                            <input type="number" name="monto_fijo" id="monto_fijo" min="0" style="width: 150px" oninput="calculos(),validacionPesos(this)" autocomplete="off" class="form-control" readonly>
+                                                        </div><br>
+                                                    </form>
+                                                </div>
+
+                                                <div  class="col container">
+                                                        <div class="d-flex">
+                                                            <label for="saldo_actual" class="mt-1 mx-5">Saldo Actual: </label>
+                                                        </div><br>
+                                                        <div class="d-flex">
+                                                            <label for="pago" class="mt-1 mx-5">Pago: </label>
+                                                        </div><br>
+                                                        <div class="d-flex">
+                                                            <label for="periodos_restantes" class="mt-1 mx-5">Periodos Restantes: </label>
+                                                        </div>
+                                                </div>
+                                                <div  class="col">
+                                                        <div class="d-flex">
+                                                            <label for="saldo_actual_pesos" id= "saldo_actual_pesos" class="mt-1 mx-5">0.00 </label>
+                                                        </div><br>
+                                                        <div class="d-flex">
+                                                            <label for="pago_pesos" id= "pago_pesos" class="mt-1 mx-5" >0.00 </label>
+                                                        </div><br>
+                                                        <div class="d-flex">
+                                                            <label for="periodos_restantes_entero" id= "periodos_restantes_entero" class="mt-1 mx-5"> 0 </label>
+                                                        </div><br>
+                                                </div>
+                                            </div>
+                                            <div class="row m-lg-2">
+                                                <div  class="col">
+                                                    <button type="button" id = "botonGuardar" onclick="guardarDosificacion()" class="btn btn-success" > Guardar Dosificación</button>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="row m-lg-3">
+                                                <div  class="col">
+                                                    <button id = "botonEliminar" type="button" class="btn btn-primary" onclick = "eliminarCuenta()"><span class="fas fa-trash"></span> Eliminar Cuenta</button>
+                                                </div>
+                                                <div  class="col">
+                                                    <button id = "botonSaldar" type="button" class="btn btn-primary" onclick = "saldarCuenta()"><span class="fas fa-coins"></span> Saldar Cuenta</button>
+                                                </div>
+                                            </div>
+                                        </div><!-- FIN CARD BODY--*****************--> 
+                                    </div>
+                            <!-- FIN TODO-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--**************************************************************MODAL PARA CONTRASEÑA ****************************************************************************** -->
+                <div class="modal fade" id="compararContraseniaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true" th:fragment="perfil">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel"> Agregar Contraseña</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="text-left" id="alertaAgrega"> </div>
+                                <form id="formComprobarContrasenia" class="needs-validation" onsubmit="return false;" novalidate>
+                                    
+                                    <div class="form-group">
+                                        <input name="tipo" id="tipo" type="hidden">
+                                        <label class="form-label" for="addon-wrapping-left"> Contraseña</label>
+                                        <input name="contrasenia" id="contrasenia" class="form-control" minlength="1" maxlength="10" autocomplete="off" type="password" required>
+                                        <div id = "alerta">
+                                        </div>
+                                    </div> <!-- form-group// -->
+                                    <hr>
+                                    <div class="form-group col-12">
+                                        <button class="btn btn-secondary" id="btn_Cancelar" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" onclick="comparaPassword()" style="width: 216px">Confirmar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--**************************************************************MODAL PARA DESCUENTO ****************************************************************************** -->
+                <div class="modal fade" id="saldarCuentaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true" th:fragment="perfil">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel"> Saldar Descuento Programado</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="text-left" id="alertaAgrega"> </div>
+                                <form id="formsaldarCuenta" class="needs-validation" novalidate>
+                                    <div class="text-right"> <label class="text-danger"><small>* Campos Obligatorios</small></label><br>      </div>
+                                    <div class="form-group">
+                                        <center>60 PRESTAMOS PERSONALES</center>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="addon-wrapping-left" id = "expediente_saldar_cuenta"> </label>
+                                        &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                                        <label class="form-label" for="addon-wrapping-left" id = "nombre_saldar_cuenta"></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="addon-wrapping-left"> Saldo Inicial: </label>
+                                        &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                                        <label class="form-label" for="addon-wrapping-left" id = "saldo_inicial_saldar_cuenta"></label>
+                                    </div>
+                                     <div class="form-group">
+                                        <label class="form-label" for="addon-wrapping-left"> Importe Abono: </label>
+                                        &nbsp &nbsp &nbsp &nbsp
+                                        <label class="form-label" for="addon-wrapping-left" id = "importe_abono_saldar_cuenta"></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="addon-wrapping-left"> Saldo Actual: </label>
+                                        &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                                        <label class="form-label" for="addon-wrapping-left" id = "saldo_actual_saldar_cuenta"></label>
+                                    </div>
+                                    <div class="d-flex">
+                                        <label class="form-label" for="addon-wrapping-left">* Periodo Aplicación:</label>
+                                        &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+                                        <input name="periodo_saldar_cuenta" id="periodo_saldar_cuenta" class="form-control" style="width: 180px" autocomplete="off" type="number" oninput="validacionPeriodo(this)" required>
+                                        
+                                    </div>
+                                    <br><br>
+                                    <div>
+                                        <label class="form-label" for="addon-wrapping-left">* Justificación:</label>
+                                        <center><input style="width:250px; height:100px;" id="justificacion" name="justificacion" class="form-control" maxlength="50" placeholder="Máx. 50 caracteres" required></center>
+                                        
+                                    </div>
+                                    <hr>
+                                    <div class="form-group col-12">
+                                        <button class="btn btn-secondary" id="cancelar_saldar" type="button" data-dismiss="modal" style="width: 200px">Cancelar</button>
+                                        <button type="submit" name="botonenviar" class="btn btn-primary" id="botonenviar" value="Enviar" style="width: 216px"> Confirmar </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--**************************************************************MODAL DIFERENTE BANCO ****************************************************************************** -->
+                <div class="modal fade" id="alertaBancoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true" th:fragment="perfil">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel"> Otro Banco</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="text-left" id="alertaAgrega"> </div>
+                                <form id="formAlertaBanco" class="needs-validation" onsubmit="return false;" novalidate>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="addon-wrapping-left" id="mensaje_banco"> </label>
+                                    </div> <!-- form-group// -->
+                                    <hr>
+                                    <div class="form-group col-12">
+                                        <center><button class="btn btn-primary" id="btn_Aceptar" type="button" data-dismiss="modal" style="width: 216px">Aceptar</button></center>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/creditoPersonal/descuentoPersonal.js"></script>
+        <script src="js/creditoPersonal/tabsPrestamoPersonal.js"></script>
+        <script src="js/validate.js"></script>
+        <script src="js/usuarios/usuarioModificarPassword.js"></script>
+
+
+        <style>
+            #resultado {
+                background-color: red;
+                color: white;
+                font-weight: bold;
+            }
+            #resultado.ok {
+                background-color: green;
+            }
+        </style>
+    </body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<script>
+    $(function () {
+        $("#tabs").tabs({
+            select: function (event, ui) {
+                var url = $.data(ui.tab, 'load.tabs');
+                if (url) {
+                    location.href = url;
+                    return false;
+                }
+                return true;
+            }
+        });
+    });
+</script>
+
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+        <!-- Custom scripts for all pages-->
+        <script src="js/page_areas.js"></script>
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h3 class="m-0 font-weight-bold text-primary">Administracion de catalogos</h3>
+                                </div>
+                                
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <!--Primera hilera de tabs--> 
+                                    <div class="form-group">
+                                        <div class="row" >
+                                            <div id="tabs" >
+                                                <ul id="myTab" >
+                                                </ul>
+                                            </div>  
+                                        </div>
+                                    </div>
+
+                                    <!--Segunda hilera de tabs-->   
+                                    <div class="form-group">
+                                        <div class="row" >
+                                            <div id="tabs2" >
+                                                <ul id="myTab2">
+                                                </ul>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                    
+                                    <!--Tercera hilera de tabs-->   
+                                    <div class="form-group">
+                                        <div class="row" >
+                                            <div id="tabs3" >
+                                                <ul id="myTab3">
+                                                </ul>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                    <div class="form-group" >
+                                        <div class="row">
+                                            <div id="tabs">
+                                                <ul id="myCatalogo">
+                                                    
+                                                </ul>
+                                                <div id="tabs-1">
+                                                     <div class="m-lg-3 ">
+                                                         <br>
+                                                
+                                                <button type="button" class="btn btn-outline-success"  data-toggle="modal" data-target="#agregarAreaModal"><span class="fa fa-user-circle"></span> Agregar Nueva Área</button>                                              
+                                            </div>
+                                            <div class="input-group">
+                                                <div class="panel-container collapse show m-lg-3"> <!--  m-auto se centra la tabla-->
+                                                    
+                                                    <div class="table-responsive">                                                       
+                                                        <!-- PRUEBA BÚSQUEDA -->
+                                                        <div class="alert alert-info alert-white rounded mx-auto">
+                                                            <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                                            <div class="icon ">
+                                                                <strong><h5>Área registradas</h5></strong> <i class="fa fa-search mx-auto"></i><strong> Criterios de Búsqueda: </strong> Descripción de área, Determinante, Código, Presupuesto, Estatus  </div>
+                                                        </div>  
+                                                        <div style="width:1600px; overflow: scroll;">
+                                                        <table class="table table-bordered" id="TablaCatalogo" width="100%" cellspacing="0">
+                                                            <thead class="bg-success-900 thead-dark">
+                                                                <tr>
+                                                                    <th>Descripción del área</th>
+                                                                    <th>Determinante</th>
+                                                                    <th>Código del área</th>
+                                                                    <th>Presupuesto</th>
+                                                                    <th>Código del Personal</th>
+                                                                    <th>Hw estatus</th>
+                                                                    <th>Hw área</th>
+                                                                    <th>HW bis</th>
+                                                                    <th>Programa</th>
+                                                                    <th>Doc autorización</th>
+                                                                    <th>Fecha del movimiento</th>
+                                                                    <th>Fecha de Captura</th>
+                                                                    <th>Editar</th>
+                                                                    <th>Cambiar Activo/inactivo</th>
+                                                                    
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody> </tbody>
+                                                        </table>
+                                                        </div>
+                                                        </div>
+                                                    </div>   
+                                                </div> 
+                                            </div>
+                                                </div>
+                                                
+                                            </div>
+                                             
+                                        </div>
+                                    <!-- FIN CARD BODY-->
+                                </div>
+                            </div>
+                                <!-- INICIO DEL MODAL PARA GUARDAR Areas-->
+                                
+              <div class="modal fade" id="agregarAreaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true" th:fragment="perfil">
+                        <div class="modal-dialog modal-xl" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Agregar Área</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="formGuardarArea" class="needs-validation" novalidate>
+                                        <div class="text-right"> <label class="text-danger"><small>* Campos Obligatorios</small></label><br>      </div>
+                                        <div class="row">
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*Descripción del área</label>
+                                                <input name="desc_area" id="desc_area" class="form-control" minlength="1" maxlength="120" autocomplete="off" placeholder="Descripción del área" type="text" step="any" required>
+                                            </div>
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*Determinante</label>
+                                                <input name="determinante" id="determinante" class="form-control" minlength="1" maxlength="4" autocomplete="off" placeholder="Determinante" type="text"  required>
+                                            </div>
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*Código del área</label>
+                                                <input name="codigo_area" id="codigo_area" class="form-control" minlength="1" maxlength="4" autocomplete="off" placeholder="Código del área" type="number" required >
+                                            </div>
+                                        </div><br>
+                                        <div class="row">
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*Presupuesto</label>
+                                                <input name="presupuesto" id="presupuesto" class="form-control" minlength="1" maxlength="10" autocomplete="off" placeholder="Presupuesto" type="text" step="any" required>
+                                            </div>
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*Código del personal</label>
+                                                <input name="codigo_personal" id="codigo_personal" class="form-control" minlength="1" maxlength="10" autocomplete="off" placeholder="Código del personal" type="number" step="any" required>
+                                            </div>
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*HW estatus</label>
+                                                <input name="hw_status" id="hw_status" class="form-control" minlength="1" maxlength="5" autocomplete="off" placeholder="HW estatus" type="text" step="any" required>
+                                            </div>
+                                        </div><br>
+                                        <div class="row">
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*HW área</label>
+                                                <input name="hw_area" id="hw_area" class="form-control" minlength="1" maxlength="5" autocomplete="off" placeholder="HW área" type="number" step="any" required>
+                                            </div>
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*HW bis</label>
+                                                <input name="hw_bis" id="hw_bis" class="form-control" minlength="1" maxlength="5" autocomplete="off" placeholder="HW bis" type="number" step="any" required>
+                                            </div>
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*Programa</label>
+                                                <input name="programa" id="programa" class="form-control" minlength="1" maxlength="4" autocomplete="off" placeholder="Programa" type="number" step="any" required>
+                                            </div>
+                                        </div><br>
+                                        <div class="row">
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*Doc autorización</label>
+                                                <input name="doc_autorizacion" id="doc_autorizacion" class="form-control" minlength="1" maxlength="120" autocomplete="off" placeholder="Doc autorización" type="text" step="any" required>
+                                            </div>
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*Nivel de área</label>
+                                                <input name="id_nivel_area" id="id_nivel_area" class="form-control" minlength="1" maxlength="2" autocomplete="off" placeholder="Nivel" type="number" step="any" required>
+                                            </div>
+                                            
+                                        </div><br>
+                                        
+                                        <br>
+                                        <br>
+                                        <div class="form-group col-12">
+                                            <button class="btn btn-secondary" id="btn_Cancelar" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                            <button type="submit" name="botonenviar" class="btn btn-primary" id="botonenviar" value="Enviar" style="width: 216px"> Guardar Área </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>         
+                                                         <!-- INICIO DEL MODAL PARA Editar Areas-->
+                       <div class="modal fade" id="editarAreaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true" th:fragment="perfil">
+                        <div class="modal-dialog modal-xl" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Editar Área</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="formEditarArea" class="needs-validation was-validated" novalidate >
+                                        <div class="form-group">
+                                        <input type="hidden" value="" id="id_Area" name="id_Area">
+                                        
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*Descripción del área</label>
+                                                <input name="desc_area_edita" id="desc_area_edita" class="form-control" minlength="1" maxlength="120" autocomplete="off" placeholder="Descripción del área" type="text" step="any" required>
+                                            </div>
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*Determinante</label>
+                                                <input name="determinante_edita" id="determinante_edita" class="form-control" minlength="1" maxlength="4" autocomplete="off" placeholder="Determinante" type="text"  required>
+                                            </div>
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*Código del área</label>
+                                                <input name="codigo_area_edita" id="codigo_area_edita" class="form-control" minlength="1" maxlength="4" autocomplete="off" placeholder="Código del área" type="number" required >
+                                            </div>
+                                        </div><br>
+                                        <div class="row">
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*Presupuesto</label>
+                                                <input name="presupuesto_edita" id="presupuesto_edita" class="form-control" minlength="1" maxlength="10" autocomplete="off" placeholder="Presupuesto" type="text" step="any" required>
+                                            </div>
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*Código del personal</label>
+                                                <input name="codigo_personal_edita" id="codigo_personal_edita" class="form-control" minlength="1" maxlength="10" autocomplete="off" placeholder="Código del personal" type="number" step="any" required>
+                                            </div>
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*HW estatus</label>
+                                                <input name="hw_status_edita" id="hw_status_edita" class="form-control" minlength="1" maxlength="5" autocomplete="off" placeholder="HW estatus" type="text" step="any" required>
+                                            </div>
+                                        </div><br>
+                                        <div class="row">
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*HW área</label>
+                                                <input name="hw_area_edita" id="hw_area_edita" class="form-control" minlength="1" maxlength="5" autocomplete="off" placeholder="HW área" type="number" step="any" required>
+                                            </div>
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*HW bis</label>
+                                                <input name="hw_bis_edita" id="hw_bis_edita" class="form-control" minlength="1" maxlength="5" autocomplete="off" placeholder="HW bis" type="number" step="any" required>
+                                            </div>
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*Programa</label>
+                                                <input name="programa_edita" id="programa_edita" class="form-control" minlength="1" maxlength="4" autocomplete="off" placeholder="Programa" type="number" step="any" required>
+                                            </div>
+                                        </div><br>
+                                        <div class="row">
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*Doc autorización</label>
+                                                <input name="doc_autorizacion_edita" id="doc_autorizacion_edita" class="form-control" minlength="1" maxlength="120" autocomplete="off" placeholder="Doc autorización" type="text" step="any" required>
+                                            </div>
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">*Nivel del area</label>
+                                                <input name="id_nivel_area_edita" id="id_nivel_area_edita" class="form-control" minlength="1" maxlength="1" autocomplete="off" placeholder="Nivel" type="number" required>
+                                            </div>
+                                            
+                                        </div><br>
+                                        
+                                        <br>
+                                        <br>
+                                        <div class="form-group col-12">
+                                            <button class="btn btn-secondary" id="btn_CancelarEdicion" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                            <button class="btn btn-success" onclick="actualizar_Datos(document.getElementById('id_Area').value)" style="width: 216px"> Actualizar </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>   
+                    <!--*****************************************************************MODAL PARA CAMBIAR ESTATUS DE Area********************************************************* -->
+
+                <div class="modal fade" id="modalStatus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true" th:fragment="perfil">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Cambiar Status De Area</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body mx-auto">
+                                <button class="btn btn-secondary mx-3" type="button" data-dismiss="modal">Cancelar</button>
+                                <button id="botonDeshabilitar" type="submit" class="btn btn-danger" >Deshabilitar Usuario</button>
+                            </div>
+                            <div class="modal-footer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="modalStatusActivar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true" th:fragment="perfil">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Cambiar Status De Usuario</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body mx-auto">
+                                <button class="btn btn-secondary mx-3" type="button" data-dismiss="modal">Cancelar</button>
+                                <button id="botonCambiar" type="submit" class="btn btn-success" >Activar Usuario</button>
+                            </div>
+                            <div class="modal-footer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                       <!-- FIN TODO-->
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+         <script src="js/catalogos/allCatalogosArea.js"></script>
+         <script src="js/catalogos/catalogos.js"></script>
+         <script src="js/validate.js"></script>
+    </body>
+</html>

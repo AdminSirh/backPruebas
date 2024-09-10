@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PrestamosPersonalesExpediente" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="746a7ab7-b2b3-4669-8b94-5266cebb2f8a">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SIRH_DB"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="Img" class="java.lang.String"/>
+	<parameter name="expediente" class="java.lang.String"/>
+	<parameter name="imgNomina" class="java.lang.String"/>
+	<parameter name="periodo" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+    CONCAT_WS(
+        '                 ', 
+        cpc.id_personal_cuentas_cobrar,
+        TO_CHAR(cpc.fecha_movimiento, 'dd/mm/YYYY'), 
+        CONCAT('$', ROUND(cpc.saldo_inicial::numeric, 1)), -- Redondea saldo_inicial
+        CONCAT('$', ROUND(cpc.monto_pago::numeric, 1)),   -- Redondea monto_pago
+        cpc.numero_deuda,
+        cpc.numero_periodos_pago
+    ) AS cuentas,
+    a_c.periodo,
+    CONCAT('$', a_c.abono) as abono,
+    CONCAT('$', a_c.saldo_actual) as saldo_actual,
+    a_c.estatus,
+    c_e.numero_expediente,
+    c_t_n.desc_nomina,
+    CONCAT(per.apellido_materno, ' ', per.apellido_paterno, ' ', per.nombre) AS nombre,
+    (SELECT COUNT(DISTINCT cpc2.id_personal_cuentas_cobrar) 
+     FROM personal_cuentas_por_cobrar cpc2
+     JOIN trabajador tr2 ON tr2.id_trabajador = cpc2.trabajador_id
+     JOIN catalogo_expedientes c_e2 ON c_e2.id_expediente = tr2.expediente_id
+     WHERE c_e2.numero_expediente =  $P{expediente} AND cpc2.monto_pago != 6.96) AS cantidad_cuentas_diferentes
+FROM personal_cuentas_por_cobrar cpc
+JOIN personal_actualizacion_cuentas a_c ON a_c.personal_cuentas_por_cobrar_id = cpc.id_personal_cuentas_cobrar
+JOIN trabajador tr ON tr.id_trabajador = cpc.trabajador_id
+JOIN persona per ON per.id_persona = tr.persona_id
+JOIN catalogo_tipo_nomina c_t_n ON c_t_n.id_tipo_nomina = cpc.nomina_id
+JOIN catalogo_expedientes c_e ON c_e.id_expediente = tr.expediente_id
+WHERE c_e.numero_expediente = $P{expediente} and a_c.periodo >=  $P{periodo}
+ORDER BY a_c.id_personal_actualizacion_cuentas ASC]]>
+	</queryString>
+	<field name="cuentas" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="cuentas"/>
+		<property name="com.jaspersoft.studio.field.label" value="cuentas"/>
+	</field>
+	<field name="periodo" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="periodo"/>
+		<property name="com.jaspersoft.studio.field.label" value="periodo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="personal_actualizacion_cuentas"/>
+	</field>
+	<field name="abono" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="abono"/>
+		<property name="com.jaspersoft.studio.field.label" value="abono"/>
+	</field>
+	<field name="saldo_actual" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="saldo_actual"/>
+		<property name="com.jaspersoft.studio.field.label" value="saldo_actual"/>
+	</field>
+	<field name="estatus" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="estatus"/>
+		<property name="com.jaspersoft.studio.field.label" value="estatus"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="personal_actualizacion_cuentas"/>
+	</field>
+	<field name="numero_expediente" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="numero_expediente"/>
+		<property name="com.jaspersoft.studio.field.label" value="numero_expediente"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_expedientes"/>
+	</field>
+	<field name="desc_nomina" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="desc_nomina"/>
+		<property name="com.jaspersoft.studio.field.label" value="desc_nomina"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_tipo_nomina"/>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+	</field>
+	<field name="cantidad_cuentas_diferentes" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="cantidad_cuentas_diferentes"/>
+		<property name="com.jaspersoft.studio.field.label" value="cantidad_cuentas_diferentes"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="112" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="200" height="50" uuid="5d55e922-7d11-4aaf-a46d-e6da6fbbd7ef"/>
+				<imageExpression><![CDATA[$P{Img}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="360" y="0" width="195" height="50" uuid="b84592a8-cab1-47a8-88ac-da1dd191e55f"/>
+				<imageExpression><![CDATA[$P{imgNomina}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="133" y="56" width="314" height="16" uuid="8d1564c9-cdc6-489a-a35c-348346cf1014"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[REPORTE ANALITICO DE PRESTAMOS PERSONALES POR EXPEDIENTE]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="497" y="57" width="60" height="14" uuid="2418b150-3969-4893-8f8c-dcf7472f23c6"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-8" y="78" width="36" height="24" uuid="fb627194-84e1-45aa-b48a-1b16ced21ff5"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ID. CUENTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="44" y="79" width="42" height="24" uuid="100c34bd-ef2a-4f1c-90a0-6cb0f8b639b7"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[FECHA CAPTURA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="105" y="78" width="50" height="24" uuid="cbeaad20-afdd-4f91-a81c-a080e8b36598"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[MONTO PRESTAMO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="166" y="78" width="58" height="24" uuid="ef6587cc-51f2-4fde-9db9-30cf002682ec"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[MONTO DESCUENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="237" y="80" width="30" height="22" uuid="ad175d67-13e2-48e6-8e0b-dba636fb4a4b"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[No. DEUDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="285" y="82" width="32" height="20" uuid="af973430-9fa8-41f5-ba5d-2e4a56f07f54"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[PLAZO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="332" y="80" width="50" height="22" uuid="9e1767fb-048d-45f6-acb6-9a8e07fd02cd"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[PERIODO APLICACION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="398" y="82" width="38" height="20" uuid="61b7024c-887f-42ce-8bd8-8e28bd8bd3cb"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ABONO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="456" y="82" width="30" height="20" uuid="62641323-6380-446c-913c-3a80a75d6ef0"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[SALDO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="500" y="82" width="40" height="20" uuid="60c7c0ee-16b8-4bfb-9b7b-12b8ac82e624"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ESTADO]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="39" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="1" y="28" width="559" height="1" uuid="a579e608-722c-4645-80c2-88ce063eff0d">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="34" y="2" width="36" height="16" uuid="731d2fdb-8ba9-4214-9b45-b92a151ee328"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NOMINA:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="1" y="17" width="34" height="14" uuid="264294bb-2f77-4e4a-b277-dfec3302ccd1"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{expediente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="2" width="86" height="16" uuid="0cd67a56-f5fd-413d-a5df-b06429415b58"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{desc_nomina}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="34" y="17" width="136" height="20" uuid="736f2ca5-80b5-4871-9366-c181edcfbfe7"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre}.toUpperCase()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="19" splitType="Stretch">
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="347" y="2" width="42" height="16" uuid="9122d4fe-be8c-4c28-a240-8633e7be0002">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="19fd7e21-d5dc-4609-9fab-dcca80e707d1"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{periodo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="479" y="1" width="95" height="14" uuid="d245df44-482e-4613-8693-70fcdf96fc74">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="906c03f1-41d2-4bc6-8e0e-6001e4fb108f"/>
+				</reportElement>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estatus} == 3 ? "CUENTA SALDADA" : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="1" y="3" width="320" height="16" uuid="60791015-ce48-48cb-9471-7e200f513e1e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="02078ad6-adb3-4efe-bfc7-2f1f6533e5c8"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cuentas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="412" y="1" width="40" height="14" uuid="35187a10-0f34-4093-9e15-0f57e5b0293e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abono}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="457" y="1" width="30" height="12" uuid="c7716ab1-75f9-48b0-bf7e-cc8dc07e3397"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saldo_actual}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="98" splitType="Stretch">
+			<staticText>
+				<reportElement x="125" y="12" width="90" height="20" uuid="178219d9-9883-4061-a084-8df9147ed29a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Total Trabajadores:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="125" y="43" width="116" height="20" uuid="05db9f56-6bea-464a-a491-588da147eca5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Tot. Gral. Trabajadores:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="13" width="90" height="20" uuid="8d67fa2a-8efc-4afa-a065-018cc325d12c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Total Prestamos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="43" width="116" height="20" uuid="45162014-b5ec-46bf-b579-78d3d303b216"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Tot. Gral. Prestamos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="230" y="12" width="34" height="14" uuid="24e74073-835d-465e-8fd0-27380e68fb55"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="230" y="43" width="34" height="16" uuid="2ba95885-aa30-4f1e-8eae-981601f73378"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[1]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="395" y="12" width="30" height="20" uuid="e18fc912-3160-48b9-88df-9413b2eb5ad3"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cantidad_cuentas_diferentes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="394" y="42" width="30" height="16" uuid="c5f02adb-00bd-4af6-9d91-b4cafa4c241d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cantidad_cuentas_diferentes}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="388" y="-1" width="172" height="16" uuid="63c83c74-19de-42d5-bb7d-97fc46de5f3c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="906c03f1-41d2-4bc6-8e0e-6001e4fb108f"/>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estatus} == 1 ? "Saldo Pendiente: " + $F{saldo_actual} + " CUENTA ACTIVA" : ""]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

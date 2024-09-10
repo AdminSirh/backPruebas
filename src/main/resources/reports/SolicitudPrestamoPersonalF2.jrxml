@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SolicitudPrestamoPersonalC" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f25ca694-b488-43c8-aced-5a34bd14aed6">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SIRH_DB"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="img" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT CONCAT ('Lic.', pe.nombre, ' ' ,pe.apellido_paterno, ' ', pe.apellido_materno) AS titular_sub_nomina
+FROM catalogo_areas c_a
+JOIN catalogo_expedientes c_e ON c_e.id_expediente = c_a.expediente_titular_id
+JOIN trabajador tr ON tr.expediente_id = c_e.id_expediente
+JOIN persona pe ON pe.id_persona = tr.persona_id
+WHERE c_a.expediente_titular_id = 15]]>
+	</queryString>
+	<field name="titular_sub_nomina" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="titular_sub_nomina"/>
+		<property name="com.jaspersoft.studio.field.label" value="titular_sub_nomina"/>
+	</field>
+	<title>
+		<band height="79" splitType="Stretch">
+			<image>
+				<reportElement x="187" y="0" width="270" height="50" uuid="fb94af14-b9df-482c-8898-6ddd2ef92f82"/>
+				<imageExpression><![CDATA[$P{img}]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement x="-4" y="54" width="570" height="20" forecolor="#D1D1D1" backcolor="#CCC8C8" uuid="c0cdf097-ac0d-4364-91f8-fc46a8879f85"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="181" y="55" width="228" height="18" uuid="40e3cfeb-533c-48fa-8a8c-1a478277e944"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Solicitud de préstamo personal (Funcionarios)]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="89" splitType="Stretch">
+			<staticText>
+				<reportElement x="2" y="8" width="28" height="14" uuid="56161415-ae03-494f-a714-6494f7ee92b4"/>
+				<text><![CDATA[Folio:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="27" width="38" height="14" uuid="f3de14c1-ff87-4b26-88f6-52c3d6a228cd"/>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="45" width="58" height="14" uuid="706b7805-6b6e-4c0b-840a-95f731519444"/>
+				<text><![CDATA[Expediente:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="64" width="28" height="14" uuid="fda7d66a-000e-4b31-befb-42e8a3708eba"/>
+				<text><![CDATA[Área:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="70" y="19" width="171" height="1" uuid="11cdf99d-01fd-4244-921e-86a8c6a56326">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement x="70" y="37" width="171" height="1" uuid="cd703085-171d-4292-8490-6cde6f8fbc01">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement x="71" y="55" width="171" height="1" uuid="c6449097-7b3c-4eda-b91f-3194dff408a2">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement x="70" y="74" width="171" height="1" uuid="5bbec222-3491-47d0-b977-679846beae71">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement x="383" y="37" width="171" height="1" uuid="c7a197d9-9aea-490a-aac3-617a62cdc45b">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement x="384" y="55" width="171" height="1" uuid="0640b8f8-f67f-40de-b00f-d27a2069cfa2">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="277" y="8" width="46" height="14" uuid="6b7058d8-0d95-430a-b54f-93044a597a7c"/>
+				<text><![CDATA[Adeuda:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="277" y="27" width="96" height="14" uuid="96ae0f11-f387-44d5-8316-5331c62c6730"/>
+				<text><![CDATA[Cantidad solicitada:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="277" y="45" width="104" height="14" uuid="662f6d0c-782b-4220-816b-dfc692b0df58"/>
+				<text><![CDATA[Control de préstamos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="440" y="8" width="46" height="14" uuid="f19c9689-c81a-4698-9f0a-bcd7d3912c85"/>
+				<text><![CDATA[Sí   (       )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="505" y="8" width="50" height="14" uuid="1bae8264-d57d-40ee-928f-f00996280cfd"/>
+				<text><![CDATA[No   (       )]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="237" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<staticText>
+				<reportElement x="2" y="5" width="56" height="14" uuid="9a1a68cc-5cec-4fdc-aa6b-159be1844e97"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[A favor de: ]]></text>
+			</staticText>
+			<line>
+				<reportElement x="69" y="15" width="486" height="1" uuid="92891894-be35-480e-bca7-adecc07b7f02">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="2" y="21" width="298" height="14" uuid="06cbe2d7-2273-430a-a856-3eb40bf14d1e"/>
+				<text><![CDATA[solicito me sea otorgado un préstamo personal por la cantidad de]]></text>
+			</staticText>
+			<line>
+				<reportElement x="300" y="31" width="255" height="1" uuid="8ef1b398-c4ef-4cec-a584-70e9580f8723"/>
+			</line>
+			<staticText>
+				<reportElement x="2" y="37" width="198" height="14" uuid="ed6c10fd-633e-4c19-a778-46bb4807c492"/>
+				<text><![CDATA[mismo que autorizo me sea descontado en]]></text>
+			</staticText>
+			<line>
+				<reportElement x="199" y="48" width="111" height="1" uuid="2dd98b4e-4e18-432c-9a73-ce9785b8ccf5">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="311" y="37" width="174" height="14" uuid="6b9b84c8-4139-4ba4-982c-d8eacde079c9"/>
+				<text><![CDATA[exhibiciones quincenales, cada una de]]></text>
+			</staticText>
+			<line>
+				<reportElement x="484" y="48" width="71" height="1" uuid="73ffddc6-9f0a-4d5b-8dd3-0f065e71cf4e">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="2" y="53" width="418" height="14" uuid="e195f8ed-72b3-4cef-80d4-e331d770fcc9"/>
+				<text><![CDATA[en caso de separación del Organismo, éste tendrá la facultad de descontarlo en mi finiquito.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="202" width="44" height="14" uuid="a5a64fce-e8b7-4edb-96fc-8ddd2dd691c0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[S. NÓMINA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="506" y="205" width="44" height="14" uuid="377c7ec4-e0c8-4126-b62c-f3985a26a2c8"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[F. AD. 114]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="87" y="77" width="36" height="14" uuid="97e2d821-7ce8-4507-92ed-455f2d913318"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Solicita]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="114" width="56" height="14" uuid="1f19b50b-543b-4092-94b9-afbf1b4aa011"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Funcionario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="136" y="143" width="52" height="14" uuid="6b9da726-03e6-4114-b2cd-23a1050408a5"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vo. Bo.]]></text>
+			</staticText>
+			<line>
+				<reportElement x="108" y="178" width="110" height="1" uuid="adbdf603-f0c1-4d9e-ac7b-a736ccaaace1">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="70" y="180" width="188" height="26" uuid="a6c76637-7072-44d6-a73f-1834d113f80b"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Director de ejecutivo de administración y finanzas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="258" y="77" width="36" height="14" uuid="682761a3-72a5-46f0-8d79-f4e28ff41113"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Revisa]]></text>
+			</staticText>
+			<line>
+				<reportElement x="224" y="112" width="110" height="1" uuid="0d20336b-e7e2-4602-a7dc-59a414ab232d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="227" y="113" width="106" height="14" uuid="7e0ce554-1e44-47fb-aae4-6dce353a21ca"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Subgerencia de nómina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="428" y="78" width="36" height="14" uuid="e87012da-9b62-4fe3-b999-8c8be0764ee2"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Revisa]]></text>
+			</staticText>
+			<line>
+				<reportElement x="393" y="113" width="110" height="1" uuid="80178da7-052d-48c5-adad-99aee1b56c55">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="384" y="114" width="130" height="28" uuid="e8d5202d-52b2-4e07-b0da-eca55711e3d3"/>
+				<textElement textAlignment="Center">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Subgerencia de contabilidad y registro]]></text>
+			</staticText>
+			<line>
+				<reportElement x="49" y="112" width="110" height="1" uuid="eca0b6d6-974c-4648-8a04-dd77de2771b1">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="338" y="147" width="42" height="14" uuid="ac2d0d50-5d88-42bf-8c42-66cbfd6e1a26"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Autoriza]]></text>
+			</staticText>
+			<line>
+				<reportElement x="304" y="182" width="110" height="1" uuid="a33c540e-a703-4388-a5f4-5dfb0a394100">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="310" y="183" width="102" height="22" uuid="651b034d-7aea-4eef-91ec-8aa5c5778c4e"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Director general]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="394">
+			<image>
+				<reportElement x="187" y="18" width="270" height="50" uuid="183a97c4-eb1e-4e43-a826-6ae0fffbf7eb"/>
+				<imageExpression><![CDATA[$P{img}]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement x="-4" y="68" width="570" height="20" forecolor="#D1D1D1" backcolor="#CCC8C8" uuid="77e16a0f-fa38-4b08-b76e-cb919c11f377"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="181" y="69" width="228" height="18" uuid="fc55c610-6a9e-412e-8af9-27658b0b9cb8"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Solicitud de préstamo personal (Funcionarios)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="97" width="28" height="14" uuid="16778c2e-ab71-4da0-abf3-57a733e14b35"/>
+				<text><![CDATA[Folio:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="116" width="38" height="14" uuid="56b3a56c-a12c-4bcf-85c6-eb8ce2d3354f"/>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="134" width="58" height="14" uuid="614bca04-5be0-4e16-90c2-81afd1f3f276"/>
+				<text><![CDATA[Expediente:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="153" width="28" height="14" uuid="947f43eb-cfe8-4696-9c17-4bda21a0cc69"/>
+				<text><![CDATA[Área:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="70" y="108" width="171" height="1" uuid="f5000812-d365-455d-9d63-ae94b9a0eeff">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement x="70" y="126" width="171" height="1" uuid="9bec6ad3-8e15-4b44-bada-654172906b80">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement x="71" y="144" width="171" height="1" uuid="cf8fba8d-33f8-42ca-b51d-23e5b8d07627">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement x="70" y="163" width="171" height="1" uuid="49878f92-f32f-46e5-a626-795c0c46a24b">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement x="383" y="126" width="171" height="1" uuid="b2d11ecb-450c-4c40-ba28-8f4ce569c0b2">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement x="384" y="144" width="171" height="1" uuid="0342ad61-da74-4169-9767-aad40b9d37de">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="277" y="97" width="46" height="14" uuid="7c459e5d-0525-4f03-b751-86f9c8f1e858"/>
+				<text><![CDATA[Adeuda:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="277" y="116" width="96" height="14" uuid="03b8e9fe-6537-441e-9c9b-013e5b575a01"/>
+				<text><![CDATA[Cantidad solicitada:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="277" y="134" width="104" height="14" uuid="5806dbca-1cf7-43e2-b8f3-5a00a84f2564"/>
+				<text><![CDATA[Control de préstamos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="440" y="97" width="46" height="14" uuid="155489bc-935f-4891-830e-cdce24d93cac"/>
+				<text><![CDATA[Sí   (       )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="505" y="97" width="50" height="14" uuid="58c1f1bc-9e3b-46ab-86c9-8f6509ec0f3f"/>
+				<text><![CDATA[No   (       )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="180" width="56" height="14" uuid="5781efe8-ff3c-4464-8d22-03cc6368bca6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[A favor de: ]]></text>
+			</staticText>
+			<line>
+				<reportElement x="69" y="190" width="486" height="1" uuid="f4725379-cbad-4bba-85a0-6a8124d9a53d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="2" y="196" width="298" height="14" uuid="2747760d-88d0-40a1-8676-5ae041ca7b96"/>
+				<text><![CDATA[solicito me sea otorgado un préstamo personal por la cantidad de]]></text>
+			</staticText>
+			<line>
+				<reportElement x="300" y="206" width="255" height="1" uuid="a82e0443-eb1e-4cc6-8c2d-7235b3802503"/>
+			</line>
+			<staticText>
+				<reportElement x="2" y="212" width="198" height="14" uuid="c90ffda8-3c0b-405f-98fe-11bc3776643a"/>
+				<text><![CDATA[mismo que autorizo me sea descontado en]]></text>
+			</staticText>
+			<line>
+				<reportElement x="199" y="223" width="111" height="1" uuid="1f23244f-352d-4504-80a6-6a989c590748">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="311" y="212" width="174" height="14" uuid="a25d2634-0532-433b-82e6-f5c3a8963666"/>
+				<text><![CDATA[exhibiciones quincenales, cada una de]]></text>
+			</staticText>
+			<line>
+				<reportElement x="484" y="223" width="71" height="1" uuid="da94e4c6-9603-402b-bb9a-276f518518fd">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="2" y="228" width="418" height="14" uuid="1934e642-9e3b-4d15-952b-206a1fd1294c"/>
+				<text><![CDATA[en caso de separación del Organismo, éste tendrá la facultad de descontarlo en mi finiquito.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="377" width="44" height="14" uuid="ce06de20-6b38-4d2d-a681-861bf8ba1242"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[S. NÓMINA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="506" y="380" width="44" height="14" uuid="d6fb0b88-2ec2-489e-8a70-94e67ba71eeb"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[F. AD. 114]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="87" y="252" width="36" height="14" uuid="2c856f2b-2c53-4195-9b08-6ecb28c519c0"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Solicita]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="289" width="56" height="14" uuid="7e672df0-e6f0-4d36-9153-41773f14553f"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Funcionario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="136" y="318" width="52" height="14" uuid="95a5a2fe-f82b-46ea-a867-fd12309c7bbf"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vo. Bo.]]></text>
+			</staticText>
+			<line>
+				<reportElement x="108" y="353" width="110" height="1" uuid="02ba72a5-13cd-4f2c-be13-28fb451f4215">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="70" y="355" width="188" height="26" uuid="e3f9b176-1dfb-43da-84ee-b96149cc1611"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Director de ejecutivo de administración y finanzas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="258" y="252" width="36" height="14" uuid="fa886ef0-5f1b-41a5-9511-48f5d36e041a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Revisa]]></text>
+			</staticText>
+			<line>
+				<reportElement x="224" y="287" width="110" height="1" uuid="d34be517-23b4-4d08-a18a-94b0f3b7cff1">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="227" y="288" width="106" height="14" uuid="9b1d920a-c287-4504-b008-1410c6f5d7c7"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Subgerencia de nómina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="428" y="253" width="36" height="14" uuid="3d320558-639b-4b98-bcc5-b24e8b4ef350"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Revisa]]></text>
+			</staticText>
+			<line>
+				<reportElement x="393" y="288" width="110" height="1" uuid="fc729ca2-b5f8-47fd-a0d1-44ffc678105c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="384" y="289" width="130" height="28" uuid="f98bcc89-c9c6-46c2-a4e9-6dbb41c9981b"/>
+				<textElement textAlignment="Center">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Subgerencia de contabilidad y registro]]></text>
+			</staticText>
+			<line>
+				<reportElement x="49" y="287" width="110" height="1" uuid="13a89645-b826-4c9f-b8a9-139ee16316f8">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="338" y="322" width="42" height="14" uuid="eac09a0f-ed44-41b3-b43f-60c8a92149b6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Autoriza]]></text>
+			</staticText>
+			<line>
+				<reportElement x="304" y="357" width="110" height="1" uuid="b1597bfd-7762-4bc2-a3c5-cdb065e43d24">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="310" y="358" width="102" height="22" uuid="33e52be0-8f21-43f6-a9f1-3ee0f0c19219"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Director general]]></text>
+			</staticText>
+			<line>
+				<reportElement x="4" y="3" width="551" height="1" uuid="cc60d7c9-2319-424f-af86-0e5ee1fb38ec">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageFooter>
+</jasperReport>

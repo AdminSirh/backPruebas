@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+        <!-- Custom scripts for all pages-->
+        <script src="js/page_areas.js"></script>
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h3 class="m-0 font-weight-bold text-primary" id="home">Administracion de catálogos</h3>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <!-- Inicio Card Body-->
+
+                                    <!--Primera hilera de tabs--> 
+                                    <div class="form-group">
+                                        <div class="row" >
+                                            <div id="tabs" >
+                                                <ul id="myTab" >
+                                                </ul>
+                                            </div>  
+                                        </div>
+                                    </div>
+
+                                    <!--Segunda hilera de tabs-->   
+                                    <div class="form-group">
+                                        <div class="row" >
+                                            <div id="tabs2" >
+                                                <ul id="myTab2">
+                                                </ul>
+                                            </div>  
+                                        </div>
+                                    </div>    
+                                    
+                                    <!--Tercera hilera de tabs-->   
+                                    <div class="form-group">
+                                        <div class="row" >
+                                            <div id="tabs3" >
+                                                <ul id="myTab3">
+                                                </ul>
+                                            </div>  
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" >
+                                        <div class="row">
+                                            <div class="input-group">
+                                                <div class="panel-container collapse show m-lg-3"> <!<!--  m-auto se centra la tabla-->
+                                                    <div class="table-responsive">
+                                                        <!-- PRUEBA BÚSQUEDA -->
+                                                        <div class="alert alert-info alert-white rounded mx-auto">
+                                                            <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                                            <div class="icon ">
+                                                                <strong><h5>Cargos <i class="fa fa-briefcase" aria-hidden="true"></i></h5></strong> <i class="fa fa-search mx-auto"></i><strong> Criterios de Búsqueda: </strong> Id,Cargo de la administración pública, Estatus
+                                                            </div>
+                                                        </div>  
+
+                                                        <div class="m-lg-3 ">
+                                                            <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#agregarCargoModal"><span class="fa fa-user-circle"></span> Agregar Nuevo Cargo</button>                                              
+                                                        </div>
+
+                                                        <table class="table table-bordered" id="tabla_Cargos" width="100%" cellspacing="0">
+                                                            <thead class="bg-success-900 thead-dark">
+                                                                <tr>
+                                                                    <th>ID</th>
+                                                                    <th>Cargo de la administración pública</th>
+                                                                    <th>Estatus</th>    
+                                                                    <th>Editar</th> 
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody> </tbody>
+                                                        </table>
+                                                    </div>   
+                                                </div> 
+                                            </div> 
+
+                                        </div>  
+                                    </div><!-- FIN CARD BODY--*****************-->   
+                                </div>
+
+                            </div>
+                            <!-- FIN TODO-->
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+
+            <!------------------------------------------------------- MODAL AGREGAR CARGO------------------------------------------------------------------------------->
+            <div class="modal fade" id="agregarCargoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true" th:fragment="perfil">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Agregar Cargo</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="text-left" id="alertaDescCargo"> </div>
+                            <form id="FormGuardarCargo" class="needs-validation" novalidate>
+                                <div class="text-right"> <label class="text-danger"><small>* Campos Obligatorios</small></label><br>      </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="addon-wrapping-left">* Nombre del Cargo</label>
+                                    <input name="cargo_admon_pub" id="cargo_admon_pub" class="form-control" minlength="1" maxlength="10" autocomplete="off" type="text" required>
+                                    <div id="alerta" class="invalid-feedback"> Por favor ingresa el Nombre del Cargo.</div>
+                                    <div class="valid-feedback">
+                                        ¡Correcto!
+                                    </div>
+                                </div> <!-- form-group// -->
+                                <br></br>
+                                <div class="form-group col-12">
+                                    <button class="btn btn-secondary" id="btn_Cancelar_Agregar" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                    <button type="submit"  class="btn btn-primary" style="width: 216px"> Guardar </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!------------------------------------------------------- FIN DEL MODAL------------------------------------------------------------------------------->
+
+
+            <!------------------------------------------------------- MODAL EDITAR CARGO------------------------------------------------------------------------------->
+            <div class="modal fade" id="modificarCargoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true" th:fragment="perfil">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modificar Cargo</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="text-left" id="alertaNombreCargo_edi"> </div>
+                            <form id="FormModificarCargo" class="needs-validation" novalidate>
+                                <div class="text-right"> <label class="text-danger"><small>* Campos Obligatorios</small></label><br>      </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="addon-wrapping-left">* Nombre del Cargo</label>
+                                    <input name="cargo_admon_pub_edi" id="cargo_admon_pub_edi" class="form-control" minlength="1" maxlength="10" autocomplete="off" type="text" required>
+                                    <div id="alerta" class="invalid-feedback"> Por favor ingresa el nombre del Cargo.</div>
+                                    <div class="valid-feedback">
+                                        ¡Correcto!
+                                    </div>
+                                </div> <!-- form-group// -->
+                                <div class="form-group col-12">
+                                    <button class="btn btn-secondary" id="btn_Cancelar_Editar" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                    <button type="submit"  class="btn btn-primary" style="width: 216px"> Guardar </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!------------------------------------------------------- FIN DEL MODAL------------------------------------------------------------------------------->
+
+            <!------------------------------------------------------- MODAL CAMBIO ESTATUS CARGO (Cuando está activo)---------------------------------------------------------------------------->
+            <div class="modal fade" id="modalStatusCargo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true" th:fragment="perfil">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Cambiar Estatus De Cargo</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body mx-auto">
+                            <button id="btnEstDesactivar" class="btn btn-secondary mx-3"  type="button" data-dismiss="modal">Cancelar</button>
+                            <button id="botonDeshabilitarEstatus" type="submit" class="btn btn-danger">Deshabilitar Cargo</button>
+                        </div>
+                        <div class="modal-footer"></div>
+                    </div>
+                </div>
+            </div>
+            <!------------------------------------------------------- FIN DEL MODAL------------------------------------------------------------------------------->
+
+            <!------------------------------------------------------- MODAL CAMBIA ESTATUS CARGO (Cuabdo está inactivo)------------------------------------------------------------------------------->
+            <div class="modal fade" id="modalStatusCargoActiva" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel" aria-hidden="true" th:fragment="perfil">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Cambiar Status De Cargo</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body mx-auto">
+                            <button id="btnEstActivar" class="btn btn-secondary mx-3"  type="button" data-dismiss="modal">Cancelar</button>
+                            <button id="botonActivarCargo" type="submit" class="btn btn-success">Activar Cargo</button>
+                        </div>
+                        <div class="modal-footer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!------------------------------------------------------- FIN DEL MODAL------------------------------------------------------------------------------->
+            <a th:replace="layout/todos :: scroll"></a>
+            <div th:replace="layout/todos :: sesion"></div>
+            <div th:replace="layout/todos :: perfil"></div>
+            <script src="js/validate.js"></script>
+            <script src="js/catalogos/catalogoCargo.js"></script>
+            <script src="js/catalogos/catalogos.js"></script>
+    </body>
+</html>

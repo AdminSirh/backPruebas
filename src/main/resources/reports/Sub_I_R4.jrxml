@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.17.0.final using JasperReports Library version 6.17.0-6d93193241dd8cc42629e188b94f9e0bc5722efd  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SubR3" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="600346c4-0a0c-4860-aadc-5e3e19f1e940">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataBaseMayo"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="0"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="1000"/>
+	<parameter name="urlImg" class="java.lang.String"/>
+	<parameter name="mes" class="java.lang.Integer"/>
+	<parameter name="orden" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT 
+  consulta_original.tipo_nomina,
+  consulta_original.codigo_puesto,
+  consulta_original.nivel,
+  consulta_original.puesto,
+  COUNT(*) AS total_plazas_asignadas
+FROM (
+  SELECT 
+    catalogoTipoContrato.id_tipo_contrato,
+    catalogoTipoContrato.tipo_nomina, 
+    catalogoPuesto.nivel,
+    catalogoPuesto.id_puesto,
+    catalogoPuesto.puesto, 
+    catalogoPuesto.codigo_puesto, 
+    catalogoEstatusPlaza.id_estatus_plaza,
+    catalogoEstatusPlaza.descripcion
+  FROM 
+    public.trabajador_plaza trabajadorPlaza
+    JOIN catalogo_plaza catalogoPlaza ON catalogoPlaza.id_plaza = trabajadorPlaza.plaza_id
+    JOIN catalogo_tipo_contrato catalogoTipoContrato ON trabajadorPlaza.tipo_contrato_id = catalogoTipoContrato.id_tipo_contrato
+    JOIN catalogo_puesto catalogoPuesto ON catalogoPlaza.puesto_id = catalogoPuesto.id_puesto
+    JOIN catalogo_estatus_plaza catalogoEstatusPlaza ON catalogoPlaza.estatus_plaza_id = catalogoEstatusPlaza.id_estatus_plaza
+    JOIN catalogo_areas catalogoAreas ON trabajadorPlaza.areas_id = catalogoAreas.id_area
+) AS consulta_original
+WHERE consulta_original.descripcion = 'Asignado'
+GROUP BY 
+  consulta_original.tipo_nomina,
+  consulta_original.codigo_puesto,
+  consulta_original.nivel,
+  consulta_original.puesto
+  ORDER BY  $P!{orden}]]>
+	</queryString>
+	<field name="tipo_nomina" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tipo_nomina"/>
+		<property name="com.jaspersoft.studio.field.label" value="tipo_nomina"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_tipo_contrato"/>
+	</field>
+	<field name="codigo_puesto" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="codigo_puesto"/>
+		<property name="com.jaspersoft.studio.field.label" value="codigo_puesto"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_puesto"/>
+	</field>
+	<field name="nivel" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="nivel"/>
+		<property name="com.jaspersoft.studio.field.label" value="nivel"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_puesto"/>
+	</field>
+	<field name="puesto" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="puesto"/>
+		<property name="com.jaspersoft.studio.field.label" value="puesto"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_puesto"/>
+	</field>
+	<field name="total_plazas_asignadas" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="total_plazas_asignadas"/>
+		<property name="com.jaspersoft.studio.field.label" value="total_plazas_asignadas"/>
+	</field>
+	<variable name="totalPorNivel" class="java.lang.Long" resetType="Group" resetGroup="nivel" calculation="Sum">
+		<variableExpression><![CDATA[$F{total_plazas_asignadas}]]></variableExpression>
+	</variable>
+	<variable name="totalPorTipoContrato" class="java.lang.Long" resetType="Group" resetGroup="tipoNomina" calculation="Sum">
+		<variableExpression><![CDATA[$F{total_plazas_asignadas}]]></variableExpression>
+	</variable>
+	<variable name="totalPlazasSTE" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{total_plazas_asignadas}]]></variableExpression>
+	</variable>
+	<group name="tipoNomina">
+		<groupExpression><![CDATA[$F{tipo_nomina}]]></groupExpression>
+		<groupHeader>
+			<band height="30">
+				<textField>
+					<reportElement x="10" y="0" width="100" height="30" uuid="c4557c73-d0ed-42fd-bc81-3fc17a42b993"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{tipo_nomina}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="31">
+				<textField>
+					<reportElement x="600" y="10" width="60" height="20" uuid="27391daf-8a9c-406d-975d-3ac573a85a68"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalPorTipoContrato}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="270" y="10" width="219" height="20" uuid="a45c9152-018f-46d6-9fa7-54e041a61b43"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total de plazas de  " + $F{tipo_nomina}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="231" y="10" width="429" height="1" uuid="66a62e88-b286-428b-a40e-64acc865c142">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<graphicElement>
+						<pen lineWidth="4.0" lineStyle="Double"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="230" y="30" width="429" height="1" uuid="95acc1de-f910-4429-ac90-1b199c070666">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<graphicElement>
+						<pen lineWidth="4.0" lineStyle="Double"/>
+					</graphicElement>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="nivel">
+		<groupExpression><![CDATA[$F{nivel}]]></groupExpression>
+		<groupFooter>
+			<band height="22">
+				<textField>
+					<reportElement x="240" y="-1" width="259" height="20" uuid="0981642e-10b6-4d53-ad53-65229488c171"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["TOTAL DE PLAZAS OCUPADAS NIVEL: " + $F{nivel}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="600" y="-1" width="100" height="20" uuid="4476657a-683b-4119-8645-30781a0ef9b1"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalPorNivel}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="231" y="21" width="429" height="1" uuid="d42ad62f-f058-453f-bd41-1a8a91fc47b1">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="30" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="177" height="30" uuid="4e60f6a6-304f-4dc3-9f15-a0e61e069582"/>
+				<imageExpression><![CDATA[$P{urlImg}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="220" y="0" width="384" height="30" uuid="c36f7b7c-9d41-4096-b166-ac0b8cd6549f"/>
+				<textFieldExpression><![CDATA["PLANTILLA DE PERSONAL (CIERRE MENSUAL AL MES DE "+ (new java.text.DateFormatSymbols().getMonths()[$P{mes} - 1].toUpperCase()) + " " + Calendar.getInstance().get(Calendar.YEAR) + ")"]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd, MMMMM , yyyy">
+				<reportElement x="620" y="0" width="84" height="20" uuid="d3d0bf09-caf2-4901-8613-3e4883a092e3"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm">
+				<reportElement x="704" y="0" width="46" height="20" uuid="fea88f7f-a87f-40ab-a048-f297672693ce"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="19" splitType="Stretch">
+			<staticText>
+				<reportElement x="130" y="0" width="100" height="18" uuid="20569dfd-28bd-46b1-9cde-b333d661e63e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7bf67f57-8e51-4d7d-9051-0b01b868d7f3"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código del Puesto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="0" width="100" height="18" uuid="044972f7-7c02-43bb-b7db-19eaae7cc192">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c9132245-4aeb-4d7c-b54f-c1cfcb24c968"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Puesto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="520" y="0" width="160" height="19" uuid="994ecfe7-b48c-40c0-a582-056ccd7592de">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ba088276-7b24-4433-b361-9cf056494d7a"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Conteo Plazas Asignadas]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="130" y="0" width="100" height="19" uuid="7a38184b-0e3b-44e7-9822-aebfedcf77bd">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7bf67f57-8e51-4d7d-9051-0b01b868d7f3"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{codigo_puesto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="1" width="100" height="19" uuid="56eb5111-dfb8-45a8-bd46-07d51aa25270">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c9132245-4aeb-4d7c-b54f-c1cfcb24c968"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{puesto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="520" y="-1" width="167" height="20" uuid="738b6cae-52b1-4a9b-8a1e-1d9ba45380eb">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ba088276-7b24-4433-b361-9cf056494d7a"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{total_plazas_asignadas}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="70" splitType="Stretch">
+			<textField>
+				<reportElement x="280" y="40" width="100" height="30" uuid="d611ed00-cd68-42e5-b9a3-2334516e7683"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="380" y="40" width="153" height="30" uuid="68ca9289-0ebd-49b3-acf1-bd4e13e635a6"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" de " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="31" splitType="Stretch">
+			<textField>
+				<reportElement x="600" y="10" width="60" height="20" uuid="b49a2d94-0597-4593-a20c-ec8dd57caeb7"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalPlazasSTE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="270" y="10" width="219" height="20" uuid="fa6558a7-073f-43ec-b2b5-db596812cff5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TOTAL DE PLAZAS DEL S.T.E."]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="231" y="10" width="429" height="1" uuid="0818c532-6d4e-4d59-b49e-d298697d000a">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="4.0" lineStyle="Double"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="230" y="30" width="429" height="1" uuid="b58cc46d-7876-41e4-805c-fd5861e04be9">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="4.0" lineStyle="Double"/>
+				</graphicElement>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

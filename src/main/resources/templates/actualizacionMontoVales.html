@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+        <!-- Custom scripts for all pages-->
+        <script src="js/page_areas.js"></script>
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4" style="width: 800px">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Actualizacion Monto de Vales</h6>
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">Cálculos / Actualizacion Monto de Vales</h4>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+
+                                    <div class="form-group" >
+                                        <div class="row">
+
+                                            <div class="input-group">
+                                                <div class="panel-container collapse show m-lg-3"> <!<!--  m-auto se centra la tabla-->
+                                                    <div class="table-responsive">
+                                                        <!-- PRUEBA BÚSQUEDA -->
+                                                        <div class="alert alert-info alert-white rounded mx-2" style="width: 600px">
+                                                            <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                                            <div class="icon ">
+                                                                <strong><h5>Montos <i class="fas fa-calculator" aria-hidden="true"></i></h5></strong> <i class="fa fa-search mx-auto"></i><strong> Criterios de Búsqueda: </strong> Monto, Inicio, Fin
+                                                            </div>
+                                                        </div> 
+                                                        <div class="m-lg-3 ">
+                                                            <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#agregarMontoModal"><span class="fa fa-dollar-sign"></span> Agregar Monto</button>                                              
+                                                        </div>
+                                                        <table class="table table-bordered" id="tabla_Montos" width="100%" cellspacing="0">
+                                                            <thead class="bg-success-900 thead-dark">
+                                                                <tr>
+                                                                    <th>Id</th>
+                                                                    <th>Inicio</th>
+                                                                    <th>Fin</th>
+                                                                    <th>Monto Confianza</th>
+                                                                    <th>Monto Base</th>
+                                                                    <th>Editar</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody> </tbody>
+                                                        </table>
+                                                    </div>   
+                                                </div> 
+                                            </div> 
+                                        </div>  
+                                    </div><!-- FIN CARD BODY--*****************-->   
+                                </div>
+                            </div>
+                            <!-- FIN TODO-->
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+
+        <!--**************************************************************MODAL PARA AGREGAR****************************************************************************** -->
+        <div class="modal fade" id="agregarMontoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true" th:fragment="perfil">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"> Agregar Monto</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formGuardarMonto" class="needs-validation" novalidate>
+                           <div class="form-group">
+                               <div class="row">
+                                    <div class="col">   
+                                        <label class="form-label" for="addon-wrapping-left">*Dia Inicio</label>
+                                        <input style="width: 200px" class="form-control" type="number" id="dia_inicio" min="0" name="dia_inicio" oninput="validacion(this)" autocomplete="off" required>
+                                    </div>
+                                    <div class="col">   
+                                        <label class="form-label" for="addon-wrapping-left">*Dia Fin </label>
+                                        <input style="width: 200px" class="form-control" type="number" id="dia_fin" min="0" name="dia_fin" oninput="validacion(this)" autocomplete="off" required>
+                                    </div>
+
+                                </div>
+                                <br><br>
+                                <div class="row">
+                                    <div class="col">   
+                                        <label class="form-label" for="addon-wrapping-left">*Monto Confianza</label>
+                                        <input style="width: 200px" class="form-control" type="number" id="monto_confianza" min="0" name="monto_confianza" oninput="validacion(this)" autocomplete="off" required>
+                                    </div>
+                                    <div class="col">   
+                                        <label class="form-label" for="addon-wrapping-left">*Monto Base</label>
+                                        <input style="width: 200px" class="form-control" type="number" id="monto_base" min="0" name="monto_base" oninput="validacion(this)" autocomplete="off" required>
+                                    </div>
+                                </div>
+                                <br><br>
+                                <div class="row">
+                                    <div class="col">   
+                                        <button class="btn btn-secondary" id="btn_Cancelar1" type="button" data-dismiss="modal" style="width:200px;">Cancelar</button>
+                                    </div>
+                                    <div class="col">   
+                                        <button type="submit" name="botonenviar"  class="btn btn-primary" id="botonenviar1" value="Enviar" style="width:200px;"> Guardar </button>
+                                    </div>
+                                </div>
+                            </div>  
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <!--**************************************************************MODAL PARA EDITAR****************************************************************************** -->
+        <div class="modal fade" id="editarMontoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" th:fragment="perfil">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-center" id="exampleModalLabel" style="text-align: center">Editar Monto</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="col">   
+                                    <label class="form-label" for="addon-wrapping-left">*Dia Inicio</label>
+                                    <input style="width: 200px" class="form-control" type="number" id="dia_inicio_edita" min="0" name="dia_inicio_edita" oninput="validacion(this)" autocomplete="off" required>
+                                </div>
+                                <div class="col">   
+                                    <label class="form-label" for="addon-wrapping-left">*Dia Fin </label>
+                                    <input style="width: 200px" class="form-control" type="number" id="dia_fin_edita" min="0" name="dia_fin_edita" oninput="validacion(this)" autocomplete="off" required>
+                                </div>
+
+                            </div>
+                            <br><br>
+                            <div class="row">
+                                <div class="col">   
+                                    <label class="form-label" for="addon-wrapping-left">*Monto Confianza</label>
+                                    <input style="width: 200px" class="form-control" type="number" id="monto_confianza_edita" name="monto_confianza_edita" oninput="validacion(this)" min="0" autocomplete="off" required>
+                                </div>
+                                <div class="col">   
+                                    <label class="form-label" for="addon-wrapping-left">*Monto Base</label>
+                                    <input style="width: 200px" class="form-control" type="number" id="monto_base_edita" name="monto_base_edita" min="0" oninput="validacion(this)" autocomplete="off" required>
+                                </div>
+                            </div>
+                            <br><br>
+                            <div class="row">
+                                <div class="col">   
+                                    <button class="btn btn-secondary" id="btn_Cancelar" type="button" data-dismiss="modal" style="width:200px;">Cancelar</button>
+                                </div>
+                                <div class="col">   
+                                    <button type="submit" name="botonenviar"  class="btn btn-primary" id="botonenviar" value="Enviar" style="width:200px;"> Guardar </button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="layout/todos :: pie"></footer>
+    </div>
+</div>
+<a th:replace="layout/todos :: scroll"></a>
+<div th:replace="layout/todos :: sesion"></div>
+<div th:replace="layout/todos :: perfil"></div>
+<script src="js/validate.js"></script>
+<script src="js/valesFinAnio/actualizacionMontos.js"></script>
+</body>
+</html>

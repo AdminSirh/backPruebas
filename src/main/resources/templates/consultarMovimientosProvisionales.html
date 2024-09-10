@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Movimientos provisionales de personal</h6>
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">Incidencias Generales / RA 10</h4>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <button onclick="regresarTrabajador()" type="button" class="btn btn-secondary" style="width: 216px"> Regresar al trabajador</button>
+                                    <br>
+                                    <br>
+                                    <form id="frmMovimiento" class="needs-validation" novalidate>
+                                        <!-- Selects en una fila -->
+                                        <b>  <label for="descripcion" class="mt-1 mx-10">Opciones de Filtrado</label> <i class="fa fa-filter" aria-hidden="true"></i> </b>
+                                        <hr>
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <div class="flex-grow-1 mb-2">
+                                                <label for="fechaInicialSuplencia">Fecha Inicial Movimiento:</label>
+                                                <input id="fechaInicialSuplencia" style="width: 250px"  type="date" class="form-control" required>
+                                            </div>
+                                            <div class="flex-grow-1 mb-2">
+                                                <label for="fechaFinalSuplencia">Fecha Final Movimiento:</label>
+                                                <input id="fechaFinalSuplencia" style="width: 250px"  type="date" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <table class="table table-bordered" id="tabla_historico_capturas_ra10" width="100%" cellspacing="0">
+                                            <thead class="bg-success-900 thead-dark">
+                                                <tr>
+                                                    <th>Fecha Inicial Movto.</th>
+                                                    <th>Fecha Final Movto.</th>
+                                                    <th>Periodo Generación</th>
+                                                    <th>Periodo Aplicación</th>  
+                                                    <th>Comentario</th> 
+                                                    <th>Total a pagar</th> 
+                                                    <th>Editar</th> 
+                                                    <th>Estatus</th> 
+                                                </tr>
+                                            </thead>
+                                            <tbody> </tbody>
+                                        </table>
+                                    </form>
+                                </div>
+                            </div><!-- FIN TODO-->
+                        </div>
+                    </div>
+                    <!------------------------------------------------------- MODAL AGREGAR CAPTURA SEMANAL------------------------------------------------------------------------------->
+                    <div class="modal fade" id="modificarCapturaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true" th:fragment="perfil">
+                        <div class="modal-dialog modal-xl" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="titulo_edicion"></h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="card w-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Trabajador</h5>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label for="campo_expediente" class="m-0 font-weight-bold text-dark">Expediente:</label>
+                                                    <input type="text" id="campo_expediente" class="form-control text-center" style="width: 100%;" readonly="">
+                                                </div>
+                                                <div class="col">
+                                                    <label for="campo_nombre" class="m-0 font-weight-bold text-dark">Trabajador:</label>
+                                                    <input type="text" id="campo_nombre" class="form-control text-center" style="width: 100%;" readonly="">
+                                                </div>
+                                                <div class="col">
+                                                    <label for="campo_puesto_trabajador" class="m-0 font-weight-bold text-dark">Puesto:</label>
+                                                    <input type="text" id="campo_puesto_trabajador" class="form-control text-center" style="width: 100%;" readonly="">
+                                                </div>
+                                                <div class="col">
+                                                    <label for="nivel" class="m-0 font-weight-bold text-dark">Nivel:</label>
+                                                    <input type="text" id="nivel" class="form-control text-center" style="width: 100%;" readonly="">
+                                                </div>
+                                                <div class="col">
+                                                    <label for="puestoActual8Hrs" class="m-0 font-weight-bold text-dark">Sldo.Hr.8:</label>
+                                                    <input type="text" id="puestoActual8Hrs" class="form-control text-center" style="width: 100%;" readonly="">
+                                                </div>
+                                                <div class="col">
+                                                    <label for="puestoActual7Hrs" class="m-0 font-weight-bold text-dark">Sldo.Hr.7:</label>
+                                                    <input type="text" id="puestoActual7Hrs" class="form-control text-center" style="width: 100%;" readonly="">
+                                                </div>
+                                                <div class="col">
+                                                    <label for="tipo" class="m-0 font-weight-bold text-dark">Tipo:</label>
+                                                    <input type="text" id="tipo" class="form-control text-center" style="width: 100%;" readonly="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card w-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Información Suplencia</h5>
+                                            <form id="suplenciaForm">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label for="campo_expediente_supl" class="m-0 font-weight-bold text-dark">Epdte. Suplente:</label>
+                                                        <input type="text" id="campo_expediente_supl" class="form-control text-center" style="width: 100%;" readonly="">
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="campo_nombre_supl" class="m-0 font-weight-bold text-dark">Trabajador Suplente:</label>
+                                                        <input type="text" id="campo_nombre_supl" class="form-control text-center" style="width: 100%;" readonly="">
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="campo_puesto_trabajador_supl" class="m-0 font-weight-bold text-dark">Puesto Suplente:</label>
+                                                        <input type="text" id="campo_puesto_trabajador_supl" class="form-control text-center" style="width: 100%;" readonly="">
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="nivel_supl" class="m-0 font-weight-bold text-dark">Nivel Suplente:</label>
+                                                        <input type="text" id="nivel_supl" class="form-control text-center" style="width: 100%;" readonly="">
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="puestoSuplencia8Hrs" class="m-0 font-weight-bold text-dark">Sldo.Hr.8 Supl:</label>
+                                                        <input type="text" id="puestoSuplencia8Hrs" class="form-control text-center" style="width: 100%;" readonly="">
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="puestoSuplencia7Hrs" class="m-0 font-weight-bold text-dark">Sldo.Hr.7 Supl:</label>
+                                                        <input type="text" id="puestoSuplencia7Hrs" class="form-control text-center" style="width: 100%;" readonly="">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <input id="booleanOperativo"  class="form-control" style="width: 100px;" hidden>
+                                    <input id="booleanAdministrativo"  class="form-control" style="width: 100px;" hidden>
+                                    <br>
+                                    <label for="periodo_aplicacion">Periodo de Aplicación:</label>
+                                    <select name="periodo_aplicacion" id="periodo_aplicacion" style="width: 280px" class="form-control"></select>
+                                    <br>
+                                    <form id="formCapturaSemanal" class="needs-validation" novalidate>
+                                        <table class="table table-bordered" id="tabla_movimiento_trabajador" width="100%" cellspacing="0">
+                                            <thead class="bg-success-900 thead-dark" style="text-align: center;">
+                                                <!--ENCABEZADOS PRINCIPALES -->
+                                                <tr>
+                                                    <th>Observaciones</th>
+                                                    <th colspan="7">Días</th>
+                                                    <th>Total a pagar</th>
+                                                </tr>
+                                                <!--ENCABEZADOS SECUNDARIOS -->
+                                                <tr>
+                                                    <td>Motivo</td>
+                                                    <td>M</td>
+                                                    <td>J</td>
+                                                    <td>V</td>
+                                                    <td>S</td>
+                                                    <td>D</td>
+                                                    <td>L</td>
+                                                    <td>M</td>
+                                                    <td id="celdaTotal" rowspan="3">$...</td>
+                                                </tr>
+                                                <!--CONTENIDO A CAPTURAR -->
+                                                <tr>
+                                                    <td><textarea name="campo_motivo" id="campo_motivo" class="form-control" minlength="1" maxlength="400" rows="4" required></textarea> </td>
+                                                    <td><input class="form-check-input" type="checkbox" id="registroDia1" name="registroDia1" style="transform: scale(1.5);"></td>
+                                                    <td><input class="form-check-input" type="checkbox" id="registroDia2" name="registroDia2" style="transform: scale(1.5);"></td>
+                                                    <td><input class="form-check-input" type="checkbox" id="registroDia3" name="registroDia3" style="transform: scale(1.5);"></td>
+                                                    <td><input class="form-check-input" type="checkbox" id="registroDia4" name="registroDia4" style="transform: scale(1.5);"></td>
+                                                    <td><input class="form-check-input" type="checkbox" id="registroDia5" name="registroDia5" style="transform: scale(1.5);"></td>
+                                                    <td><input class="form-check-input" type="checkbox" id="registroDia6" name="registroDia6" style="transform: scale(1.5);"></td>
+                                                    <td><input class="form-check-input" type="checkbox" id="registroDia7" name="registroDia7" style="transform: scale(1.5);"></td>
+                                                </tr>
+                                                <!--INCIDENCIAS REGISTRADAS EN KARDEX -->
+                                                <tr>
+                                                    <th>Incidencias Registradas en el Periodo:</th>
+                                                    <td><input id="incidencia_dia1"  class="form-control" style="width: 60px;" disabled></td>
+                                                    <td><input id="incidencia_dia2"  class="form-control" style="width: 60px;" disabled></td>
+                                                    <td><input id="incidencia_dia3"  class="form-control" style="width: 60px;" disabled></td>
+                                                    <td><input id="incidencia_dia4"  class="form-control" style="width: 60px;" disabled></td>
+                                                    <td><input id="incidencia_dia5"  class="form-control" style="width: 60px;" disabled></td>
+                                                    <td><input id="incidencia_dia6"  class="form-control" style="width: 60px;" disabled></td>
+                                                    <td><input id="incidencia_dia7"  class="form-control" style="width: 60px;" disabled></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody> </tbody>
+                                        </table>
+                                        <div class="d-flex justify-content-end">
+                                            <button type="submit" class="btn btn-primary" style="width: 216px">Guardar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!------------------------------------------------------- MODAL CAMBIO ESTATUS (Cuando está activo)---------------------------------------------------------------------------->
+                    <div class="modal fade" id="modalDesactiva" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true" th:fragment="perfil">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Cambiar Estatus Captura R.A 10</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body mx-auto">
+                                    <button class="btn btn-secondary mx-3"  type="button" data-dismiss="modal">Cancelar</button>
+                                    <button id="bajaCaptura" type="submit" class="btn btn-danger">Deshabilitar Captura</button>
+                                </div>
+                                <div class="modal-footer"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!------------------------------------------------------- FIN DEL MODAL------------------------------------------------------------------------------->
+
+                    <!------------------------------------------------------- MODAL CAMBIA ESTATUS (Cuabdo está inactivo)------------------------------------------------------------------------------->
+                    <div class="modal fade" id="modalActiva" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalLabel" aria-hidden="true" th:fragment="perfil">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Cambiar Estatus Captura R.A 10</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body mx-auto">
+                                    <button class="btn btn-secondary mx-3"  type="button" data-dismiss="modal">Cancelar</button>
+                                    <button id="activaCaptura" type="submit" class="btn btn-success">Activar Captura</button>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+            <a th:replace="layout/todos :: scroll"></a>
+            <div th:replace="layout/todos :: sesion"></div>
+            <div th:replace="layout/todos :: perfil"></div>
+            <script src="js/validate.js"></script>
+            <script src="js/ra10Varios/consultaHistoricaRa10.js"></script>
+    </body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <style>
+            #progress-container {
+                display: none;
+            }
+        </style>
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            <div id="tabs">
+                                <ul id="myTab">
+                                </ul>
+                                <div id="tabs-1">
+                                    <!-- AQUI VA TODO EL CONTENIDO -->
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">Incidencias Kárdex / Importación Incidencias Kárdex</h6>
+                                            <h4 class="m-0 font-weight-bold text-primary" align="right">Importación de Incidencias Kárdex</h4>
+                                        </div>
+                                        <div class="col">  
+                                            <button onclick="incidenciasAdmin()"  type="button" class="btn btn-secondary" style="width: 216px"> Ver Trabajadores</button> 
+                                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modalInformacionImportacion"> <i class="fa fa-table" aria-hidden="true"></i> Mostrar Ejemplo CSV</button>
+                                        </div>
+                                        <div class="col d-flex justify-content-end">
+                                            <label for="cmbIncidencia" class="mr-2">Incidencia:</label>
+                                            <select  name="cmbIncidencia" id="cmbIncidencia" style="width: 300px" class="form-control">
+                                                <option value=''>* Tipo de Incidencia </option>
+                                            </select>
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="card-body container" >
+                                            <center>
+                                                <label id="descripcionIncidencia" for="descripcion" class="mt-1 mx-10" style="font-size: 24px;">SIN INCIDENCIA SELECCIONADA</label>
+                                            </center>
+                                            <hr class="my-4">
+                                            <div class="row">
+                                                <div class="col container">
+                                                    <label for="obtener" class="mt-1 mx-2">Obtener Información </label>
+                                                    <form>
+                                                        <div class="d-flex">
+                                                            <input type="file" accept=".csv" id="file" style="width: 350px"/>
+                                                            <div id="progress-container">
+                                                                Progreso de la carga:
+                                                                <span id="progress-label">0%</span>
+                                                                <progress id="progress" value="0" max="100"></progress>
+                                                            </div>
+                                                        </div><br>
+                                                        <div class="d-flex">
+                                                            <button type="button" class="btn btn-primary" id="guarda" style="width: 200px">  Guardar Movimientos</button>
+                                                        </div><br>
+                                                        <div class="d-flex">
+                                                            <button type="button" class="btn btn-primary" id="elimina" data-toggle="modal" data-target="#eliminarIncidenciasModal" onclick="eliminarIncidenciasSeleccionadas()" style="width: 200px">  Eliminar Movimientos</button>
+                                                        </div><br>
+                                                    </form>
+                                                </div>
+                                                <div  class="col container">
+                                                    <div class="d-flex">
+                                                        <label for="nomina" class="mt-2 mx-5">Tipo de Nómina</label>
+                                                    </div><br>
+                                                    <div class="d-flex">
+                                                        <label for="periodos_g" class="mt-2 mx-5">Periodos de Generación </label>
+                                                    </div><br>
+<!--                                                    <div class="d-flex">
+                                                        <label for="periodos_a" class="mt-2 mx-5">Periodos de Aplicación </label>
+                                                    </div>-->
+                                                </div>
+                                                <div  class="col">
+                                                    <div class="d-flex">
+                                                        <input type="hidden" name="nombre_nomina" id="nombre_nomina">
+                                                        <select  name="cmbTipoNomina" id="cmbTipoNomina" oninput="obtenPeriodos()" style="width: 275px" class="form-control"></select>
+                                                    </div><br>
+                                                    <div class="d-flex">
+                                                        <select  name="periodo_generacion" id="periodo_generacion" style="width: 275px" class="form-control" disabled></select>
+                                                    </div><br>
+<!--                                                    <div class="d-flex">
+                                                        <select  name="periodo_aplicacion" id="periodo_aplicacion" style="width: 275px" class="form-control"></select>
+                                                    </div><br>-->
+                                                </div>
+                                            </div>
+                                            <hr class="my-4">
+                                            <div class="table-responsive">
+                                                <!-- PRUEBA BÚSQUEDA -->
+                                                <div class="alert alert-info alert-white rounded mx-auto">
+                                                    <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                                    <div class="icon ">
+                                                        <h5><strong>Registros Procesados </strong><i class="fa fa-file" aria-hidden="true"></i></h5>
+                                                    </div>
+                                                </div>
+                                                <table class="table table-bordered" id="tabla_importaciones" width="100%" cellspacing="0">
+                                                    <thead class="bg-success-900 thead-dark">
+                                                        <tr>
+                                                            <th>EXPEDIENTE</th>
+                                                            <th>TRABAJADOR</th>
+                                                            <th>CANTIDAD INCIDENCIAS</th>
+                                                            <th>P. GENERACIÓN</th>
+<!--                                                            <th>P. APLICACIÓN</th>-->
+                                                            <th>PROCESADO</th>
+<!--                                                            <th>NUM. PERIODOS</th>-->
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div> 
+                                            <br>
+                                            <br>
+                                        </div>
+                                        <!-- FIN CARD BODY---->
+                                    </div>
+                                    <!-- FIN TODO-->
+                                </div>
+                            </div>
+                        </div>
+                        <!--***************** MODAL INFORMACIÓN DE FORMATO PARA IMPORTACIÓN--*****************-->
+                        <div class="modal fade" id="modalInformacionImportacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true" th:fragment="perfil">
+                            <div class="modal-dialog modal-xl" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel"> Ejemplo Formato de Importación (.csv)</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        La primera columna debe contener los expedientes de los trabajadores con las incidencias a registrar, seguidos de las iniciales de las incidencias a dar de alta.<br>
+                                        Las columnas irán desde la letra A hasta las columnas P o Q. La columna A contendrá únicamente expedientes, la columna B representa el primer día del periodo de generación y debe abarcar un máximo de 15 o 16 columnas (Columnas P o Q) dependiendo de la duración del periodo. <br>
+                                        Sólo los días con incidencias para el trabajador deberan llevar la inicial de la incidencia.  
+                                        <br>
+                                        <br>
+                                        <table class="table" border="1">
+                                            <thead>
+                                                <tr>
+                                                    <th>A</th>
+                                                    <th>B</th>
+                                                    <th>C</th>
+                                                    <th>... (P/Q)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>12345</td>
+                                                    <td>Inicial.Incidencia</td>
+                                                    <td></td>
+                                                    <td>Inicial.Incidencia</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>54321</td>
+                                                    <td></td>
+                                                    <td>Inicial.Incidencia</td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--***************** MODAL ALERTA DE EXPEDIENTES DESCONOCIDOS--*****************-->
+                        <div class="modal fade" id="modalExpedientesDesconocidos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true" th:fragment="perfil">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel"> Expedientes Desconocidos</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="text-left" id="alertaAgrega"> </div>
+                                        <form id="formAvisoExpedientesDesconocidos" class="needs-validation" onsubmit="return false;" novalidate>
+                                            <div class="form-group">
+                                                <label class="form-label" for="addon-wrapping-left"> Existen expedientes desconocidos en su Archivo.</label>
+                                                <label class="form-label" for="addon-wrapping-left"> ¿Desea que se descarguen en un documento de texto?</label>
+                                            </div> 
+                                            <hr>
+                                            <div class="form-group col-12">
+                                                <button class="btn btn-secondary" id="cancelar" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                <button type="submit"  class="btn btn-primary" style="width: 216px"> Confirmar </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--***************** MODAL ALERTA DE EXPEDIENTES DIFERENTES NÓMINAS *****************-->
+                        <div class="modal fade" id="modalExpedientesDiferentesNominas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true" th:fragment="perfil">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel"> Números de expediente en diferentes nóminas</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="text-left" id="alertaAgrega"> </div>
+                                        <form id="formAvisoNominasDiferentes" class="needs-validation" onsubmit="return false;" novalidate>
+                                            <div class="form-group">
+                                                <label class="form-label" for="addon-wrapping-left"> Existen expedientes que corresponden a diferentes nóminas.</label>
+                                                <label class="form-label" for="addon-wrapping-left"> ¿Desea que se descarguen en un documento de texto?</label>
+                                            </div> 
+                                            <hr>
+                                            <div class="form-group col-12">
+                                                <button class="btn btn-secondary" id="cancelarDifNominas" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                <button type="submit"  class="btn btn-primary" style="width: 216px"> Confirmar </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--***************** MODAL ALERTA DE EXPEDIENTES DUPLICADOS--*****************-->
+                        <div class="modal fade" id="modalExpedientesDuplicados" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true" th:fragment="perfil">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel"> Números de Expedientes Duplicados</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="text-left" id="alertaAgrega"> </div>
+                                        <form id="formAvisoExpedientesDuplicados" class="needs-validation" onsubmit="return false;" novalidate>
+                                            <div class="form-group">
+                                                <label class="form-label" for="addon-wrapping-left"> Existen expedientes duplicados en su Archivo.</label>
+                                                <label class="form-label" for="addon-wrapping-left"> ¿Desea que se descarguen en un documento de texto?</label>
+                                            </div> 
+                                            <hr>
+                                            <div class="form-group col-12">
+                                                <button class="btn btn-secondary" id="cancelarDupli" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                <button type="submit"  class="btn btn-primary" style="width: 216px"> Confirmar </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--***************** MODAL ALERTA INICIALES DESCONOCIDAS--*****************-->
+                        <div class="modal fade" id="modalInicialesDesconocidas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true" th:fragment="perfil">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel"> Iniciales desconocidas encontradas</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="text-left" id="alertaAgrega"> </div>
+                                        <form id="formAvisoInicialesDesconocidas" class="needs-validation" onsubmit="return false;" novalidate>
+                                            <div class="form-group">
+                                                <label class="form-label" for="addon-wrapping-left"> Se omitieron los registros con iniciales desconocidas en su archivo.</label>
+                                                <label class="form-label" for="addon-wrapping-left"> ¿Desea que se descarguen los registros omitidos en un documento de texto?</label>
+                                            </div> 
+                                            <hr>
+                                            <div class="form-group col-12">
+                                                <button class="btn btn-secondary" id="cancelarDesconocidos" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                <button type="submit"  class="btn btn-primary" style="width: 216px"> Confirmar </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--***************** MODAL ALERTA DE REGISTROS DUPLICADOS--*****************-->
+                        <div class="modal fade" id="modalRegistrosDuplicados" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true" th:fragment="perfil">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel"> Registros duplicados encontrados</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="text-left" id="alertaAgrega"> </div>
+                                        <form id="formAvisoRegistrosDuplicados" class="needs-validation" onsubmit="return false;" novalidate>
+                                            <div class="form-group">
+                                                <label class="form-label" for="addon-wrapping-left"> Existen incidencias ya regitradas para los mismos días y trabajadores</label>
+                                                <label class="form-label" for="addon-wrapping-left"> ¿Desea que se descarguen los registros duplicados en un documento de texto?</label>
+                                            </div> 
+                                            <hr>
+                                            <div class="form-group col-12">
+                                                <button class="btn btn-secondary" id="cancelarDuplicados" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                <button type="submit"  class="btn btn-primary" style="width: 216px"> Confirmar </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--***************** MODAL PARA ELIMINAR MOVIMIENTOS--*****************-->
+                        <div class="modal fade" id="eliminarIncidenciasModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true" th:fragment="perfil">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel"> Eliminar movimientos</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="text-left" id="alertaAgrega"> </div>
+                                        <form id="formEliminaMovimientos" class="needs-validation" onsubmit="return false;" novalidate>
+                                            <div class="form-group">
+                                                <label class="form-label" for="addon-wrapping-left"> ¿Está seguro que desea eliminar los movimientos de cada trabajador para la nómina, periodos e incidencia seleccionada?</label>
+                                            </div> 
+                                            <hr>
+                                            <div class="form-group col-12">
+                                                <button class="btn btn-secondary" id="btn_Cancelar" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                <button type="submit"  class="btn btn-primary" style="width: 216px"> Confirmar </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/incidencias/importacionIncidenciasKardexAdmin.js"></script>
+        <script src="js/validate.js"></script>
+        <script src="js/usuarios/usuarioModificarPassword.js"></script>
+    </body>
+</html>

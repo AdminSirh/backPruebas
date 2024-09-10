@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <head>
+            <meta charset="utf-8">
+                <title>
+                    STE - Sistema Integral de Capital Humano
+                </title>
+                <meta name="description" content="Login"></meta>
+                <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui"></meta>
+
+                <link rel="stylesheet" media="screen, print" href="css/vendors.bundle.css"></link>
+                <link rel="stylesheet" media="screen, print" href="css/app.bundle.css"></link>
+                <!-- Place favicon.ico in the root directory -->
+                <link rel="icon" type="image/x-icon" href="img/favicon/ste.png">
+                    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png"></link>
+                    <link rel="mask-icon" href="img/favicon/safari-pinned-tab.svg" color="#5bbad5"></link>
+                    <!-- Optional: page related CSS-->
+                    <link rel="stylesheet" media="screen, print" href="css/notifications/sweetalert2/sweetalert2.bundle.css"></link>
+                    <link rel="stylesheet" media="screen, print" href="css/notifications/smallBox/smartadmin-production-plugins.min.css"></link>
+
+                    </head>
+                    </head>
+                    <body>
+                        <div class="page-logo m-0 w-100 align-items-center justify-content-center rounded border-bottom-left-radius-0 " style="background-color: #0C231E; color:#fff; height: 40px;">
+                            STE - Sistema Integral de Capital Humano
+                        </div>
+                        <div class="page-logo m-0 w-100 align-items-center justify-content-center rounded border-bottom-left-radius-0 " style="background:transparent; height: 120px;">
+                            <a href="javascript:void(0)" class="page-logo-link press-scale-down align-items-center">
+                                <img src="img/bannerSTE.png" style="width: 70%" alt="SICH" aria-roledescription="logo">
+                            </a>
+                        </div>
+                        <div class="modal-dialog text-center">
+                            <div class="col-sm-8 main-section">
+                                <div class="modal-content">
+                                    <div class="col-12 user-img">
+                                        <p><h4>Inicio de Sesion</strong></h4></p> 
+                                    </div>
+                                    <form class="col-12" th:action="@{/login}" method="post">
+                                        <div class="form-group" id="user-group">
+                                            <input type="text" class="form-control" placeholder="Nombre de usuario" name="username"/>
+                                        </div>
+                                        <div class="form-group" id="contrasena-group">
+                                            <input type="password" class="form-control" placeholder="Contrasena" name="password"/>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" style="background-color: #0869BA;">Inicio de Sesión</button>
+                                    </form>
+                                    <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                                        Usuario o Password Invalidos.
+                                    </div>
+                                    <div th:if="${param.logout}" class="alert alert-success" role="alert">
+                                        Has Cerrado tu Sesion.
+                                    </div>
+                                    <div th:if="${param.expired}" class="alert alert-danger" role="alert">
+                                        Ha Caducado tu Sesión.
+                                    </div>
+                                    <div>
+                                        <br></br><br></br><br></br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </body>
+                    </html>

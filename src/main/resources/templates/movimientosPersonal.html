@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+
+                            <div id="tabs">
+                                <ul id="myTab">
+                                </ul>
+                                <div id="tabs-3">
+
+                                    <!-- AQUI VA TODO EL CONTENIDO -->
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">Reportes Movimientos de personal</h6>
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <select id="cmbTipoReporte" name="cmbTipoReporte" class="form-control" required>
+                                                    <option value="default">* Tipo</option>
+                                                    <option value="opcion1">Día</option>
+                                                    <option value="opcion2">Mes</option>
+                                                    <option value="opcion3">Año</option>
+                                                    <option value="opcion4">Histórico</option>
+                                                </select>
+                                                <br>
+                                                <label id="labelFechaCaptura" class="form-label" for="addon-wrapping-left">* Selecciona el día del que se extraerán los movimientos</label>
+                                                <input id="fecha_captura" name="fecha_captura" type="date" class="form-control" required>
+                                                <label id="labelmes" class="form-label" for="addon-wrapping-left">* Selecciona el mes y el año del que se extraerán los movimientos</label>
+                                                <select id="cmbMeses" name="cmbMeses" class="form-control">
+                                                    <option value="">Selecciona un mes</option>
+                                                </select>
+                                                <br>
+                                                <select id="cmbAnio" name="cmbAnio" class="form-control">
+                                                    <option value="">Selecciona un año</option>
+                                                </select>
+                                                <label id="lbl_anio_captura" for="lbl_anio_captura">* Selecciona el año del que se extraerán los movimientos</label>
+                                                <select id="anio_captura" name="anio_captura" class="form-control" required>
+                                                    <option value="">Selecciona un año</option>
+                                                </select>
+                                            </div>
+                                            <div class="text-center">
+                                                <button class="btn btn-primary" id="btnDescarga">Generar reporte</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- FIN TODO-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+                <a th:replace="layout/todos :: scroll"></a>
+                <div th:replace="layout/todos :: sesion"></div>
+                <div th:replace="layout/todos :: perfil"></div> 
+                <script src="js/validate.js"></script>
+                <script src="js/reportes/movimientosPersonal.js"></script>
+                <script src="js/reportes/reportesPersonalTabs.js"></script>
+                </body>
+                </html>

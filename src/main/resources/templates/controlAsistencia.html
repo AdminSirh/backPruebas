@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Generación de Formatos de Control de Asistencia</h6>
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">Todo el Personal </h4>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body" style="width: 1400px;">
+                                    <form id="formControlAsistencia" class="needs-validation" novalidate>
+                                        <div class="form-group" >
+                                            <div class="row">
+                                                <!-- Seleccionando el Área -->
+                                                <p>Selecciona el Área</p>
+                                                <select id="cmbAreasBase" name="cmbAreasBase" class="form-control">
+                                                    <option>*Todas las Áreas</option>
+                                                </select>
+                                            </div>
+                                            <br>
+                                            <!-- Tipo Nomina -->
+                                            <div class="row">
+                                                <div class="col">
+                                                    <p>Tipo de Nómina</p>
+                                                </div>
+                                                <div class="col">
+                                                    <select id="cmbTipoNomina" name="cmbTipoNomina" class="form-control" >
+                                                        <option>*Selecciona una nómina</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class ="row">
+                                                <div class="col">
+
+                                                </div>
+                                                <div class ="col" id="busquedaExpediente">   
+                                                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#expediente">Buscar por Expediente</button>
+                                                    <div id="expediente" class="collapse">
+                                                        <br>
+                                                        <input type="number" id="inputExpediente" class="form-control" maxlength="10" placeholder="Número de expediente">
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <br>
+                                            <!-- Perioidos de aplicación -->
+                                            <div class="row">
+                                                <div class="col">
+                                                    <p>Periodo de Aplicación</p>
+                                                </div>
+                                                <div class="col">
+                                                    <input type="number" id="inputPeriodoAplicación" class="form-control" maxlength="6" placeholder="Periodo de Apl." required readonly>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <!-- Fecha Inicial -->
+                                            <div class="row">
+                                                <div class="col">
+                                                    <p>Fecha Inicial</p>
+                                                </div>
+                                                <div class="col">
+                                                    <input type="date" id="dateFechaInicial" class="form-control" required readonly>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <!-- Fecha Final -->
+                                            <div class="row">
+                                                <div class="col">
+                                                    <p>Fecha Final</p>
+                                                </div>
+                                                <div class="col">
+                                                    <input type="date" id="dateFechaFinal" class="form-control" required readonly>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <button type="submit" id="btnGenera" class="btn btn-primary" style="width: 216px">Generar Archivo</button>
+                                        </div><!-- FIN CARD BODY--*****************--> 
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- FIN TODO-->
+                        </div>
+                        <!--***************** MODAL ALERTA DE EXPEDIENTES SIN DEPOSITO NÓMINA DE VARIOS--*****************-->
+                        <div class="modal fade" id="modalExpedientesSinDeposito" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true" th:fragment="perfil">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel"> Expedientes sin depósito asignado</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="text-left" id="alertaAgrega"> </div>
+                                        <form id="formAvisoExpedientesSinDeposito" class="needs-validation" onsubmit="return false;" novalidate>
+                                            <div class="form-group">
+                                                <label class="form-label" for="addon-wrapping-left"> Existen expedientes sin depósito asignado.</label>
+                                                <label class="form-label" for="addon-wrapping-left"> ¿Desea que se descarguen los expedientes sin depósito asignado en un documento de texto?</label>
+                                            </div> 
+                                            <hr>
+                                            <div class="form-group col-12">
+                                                <button class="btn btn-secondary" id="cancelar" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                <button type="submit"  class="btn btn-primary" style="width: 216px"> Confirmar </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/nomina/controlAsistencia.js"></script>
+        <script src="js/usuarios/usuarioModificarPassword.js"></script>
+        <script src="js/validate.js"></script>
+    </body>
+</html>

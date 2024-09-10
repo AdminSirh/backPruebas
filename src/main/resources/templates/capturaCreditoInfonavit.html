@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Crédito Infonavit</h6>
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">Pre-Nómina / Crédito Infonavit</h4>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="form-group" >   
+                                        <div class="row">
+                                            <div class="m-lg-3 ">
+                                                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#agregrarCreditoModal"><span class="fa fa-home"></span> Agregar Nuevo Crédito</button> 
+                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalHistorico" onclick="cargaTablaHistorico()"><i class="fa fa-history" aria-hidden="true"></i> Ver Histórico de créditos</button>
+                                            </div>
+                                            <div class="input-group">
+                                                <div class="panel-container collapse show m-lg-3"> <!--  m-auto se centra la tabla-->
+                                                    <div class="table-responsive">                                                       
+                                                        <!-- PRUEBA BÚSQUEDA -->
+                                                        <div class="alert alert-info alert-white rounded mx-auto">
+                                                            <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                                            <div class="icon ">
+                                                                <strong><h5>Crédito Infonavit Registrado</h5></strong> <i class="fa fa-search mx-auto"></i><strong> Criterios de Búsqueda: </strong> ID Crédito Infonavit, Número del Crédito, Tipo del Crédito, Descripción del Tipo de Crédito, Fecha de Recepción, Fecha de Aplicación, Estatus, Fecha Movimiento (Edición)
+                                                                <br>
+                                                                <br>
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <h4 id="nombre_Trabajador" class="m-0 font-weight-bold text-dark">Nombre del Trabajador</h4>
+                                                                    <h4 id="numero_Expediente" class="m-0 font-weight-bold text-dark">No. De expediente:</h4>
+                                                                </div> 
+                                                            </div>
+                                                        </div>                                                       
+                                                        <table class="table table-bordered" id="tablaCreditos" width="100%" cellspacing="0">
+                                                            <thead class="bg-success-900 thead-dark">
+                                                                <tr>
+                                                                    <th>ID del Crédito</th>
+                                                                    <th>Número del Crédito</th>
+                                                                    <th>Tipo del Crédito</th>
+                                                                    <th>Descripción del Tipo de Crédito</th>
+                                                                    <th>Fecha de Recepción</th>
+                                                                    <th>Fecha de Aplicación</th>
+                                                                    <th>Estatus</th>
+                                                                    <th>Fecha Movimiento (Edición)</th>
+                                                                    <th>Editar</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody> </tbody>
+                                                        </table>
+                                                    </div>   
+                                                </div> 
+                                            </div>  
+                                        </div>
+                                    </div><!-- FIN CARD BODY--*****************--> 
+
+                                </div>
+                            </div>
+                            <!-- FIN TODO-->
+                        </div>
+                    </div>
+
+                    <!------------------------------------------------------- MODAL AGREGAR CRÉDITO------------------------------------------------------------------------------->
+                    <div class="modal fade" id="agregrarCreditoModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="myLargeModalLabel">Agregar un nuevo Crédito Infonavit</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row m-lg-5">
+                                        <div style="margin-right: 30px;">
+                                            <h4 class="m-0 font-weight-bold text-dark">Tipo</h4>
+                                        </div>
+                                        <div>
+                                            <h6>(Da clic en el tipo de Crédito para habilitar el Input)</h6>
+                                        </div>
+                                    </div>
+                                    <form id="frm_guarda_credito" class="needs-validation" novalidate>
+                                        <!-- Primera Fila de elementos -->
+                                        <div class="row">
+                                            <div class="form-inline">
+                                                <div class="col-4 mx-sm-5">
+                                                    <input class="form-check-input" type="radio" name="flexRadioDisabled" id="porcentajeRadio" value="1">
+                                                    Porcentaje&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp;
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <input id="inputPorcentaje" type="number" class="form-control" oninput="validacionDecimal(this)" required placeholder="0.00"> 
+                                                </div>
+                                            </div>
+
+                                            <div class="form-inline d-flex align-items-center">
+                                                <div class="col-lg-1">
+                                                    <p class="mb-0">%</p>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <label for="addon-wrapping" class="col-sm-9 form-label"> No. de Credito</label>
+                                                </div>
+                                                <div class="col-lg-1">
+                                                    <input id="inputNoCredito" type="text" maxlength="20" class="form-control" required>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <br>
+                                        <!-- Segunda Fila de elementos -->
+
+                                        <div class="row">
+                                            <div class="form-inline">
+                                                <div class="col-4 mx-sm-5">
+                                                    <input class="form-check-input" type="radio" name="flexRadioDisabled" id="cuotaFijaRadio" value= "2" >
+                                                    Cuota Fija&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp;
+                                                </div>
+
+                                                <div class="col-md-3">
+                                                    <input id="inputCuotaFija" type="number" oninput="validacion(this)" class="form-control" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-inline d-flex align-items-center">
+                                                <div class="col-lg-1">
+                                                    <p class="mb-0">S.M.D.</p>
+                                                </div>
+                                                <div class="col-lg-7">
+                                                    <label for="addon-wrapping" class="col-sm-12 form-label"> Fecha Recepcion</label>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <input id="fechaRecepcion"  type="date" class="form-control" required>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <br>
+                                        <!-- Tercera Fila de elementos -->
+
+                                        <div class="row">
+                                            <div class="form-inline">
+                                                <div class="col-4 mx-sm-5">
+                                                    <input class="form-check-input" type="radio" name="flexRadioDisabled" id="cuotaPesosRadio" value ="3" >
+                                                    Cuota en Pesos
+                                                </div>
+
+                                                <div class="col-md-3">
+                                                    <input id="inputCuotaPesos" type="number" oninput="validacion(this)" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-inline d-flex align-items-center">
+                                                <div class="col-lg-1">
+                                                    <p class="mb-0">$</p>
+                                                </div>
+                                                <div class="col-lg-7">
+                                                    <label for="addon-wrapping" class="col-sm-12 form-label"> Fecha Aplicacion</label>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <input id="fechaAplicacion"  type="date" class="form-control" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <br>
+                                        <div class="row mx-auto justify-content-center">
+                                            <div class="form-inline">
+                                                <button class="btn btn-secondary mr-3" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                <button type="submit" name="btnGuardar" id="btnGuardar" class="btn btn-primary" style="width: 216px; margin-right: 0;">Guardar</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!------------------------------------------------------- MODAL HISTÓRICO CRÉDITO------------------------------------------------------------------------------->
+                    <div class="modal fade bd-example-modal-xxl" id="modalHistorico" tabindex="-1" role="dialog"
+                         aria-labelledby="myHugeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog"style="max-width: 1250px;">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="myLargeModalLabel">Histórico de Créditos</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table table-bordered" id="tablaCreditosHistoricos" width="100%" cellspacing="0">
+                                        <thead class="bg-success-900 thead-dark">
+                                            <tr>
+                                                <th>ID del Crédito</th>
+                                                <th>Número del Crédito</th>
+                                                <th>Tipo del Crédito</th>
+                                                <th>Descripción del Tipo de Crédito</th>
+                                                <th>Fecha de Recepción</th>
+                                                <th>Fecha de Aplicación</th>
+                                                <th>Estatus</th>
+                                                <th>Fecha Movimiento</th>
+                                                <th>Fecha Evento</th>
+                                                <th>Descripción Motivo de la Baja</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody> </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!------------------------------------------------------- MODAL EDITAR CRÉDITO------------------------------------------------------------------------------->
+                    <div class="modal fade" id="editarCreditoModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="myLargeModalLabel">Editar Crédito Infonavit</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row m-lg-5">
+                                        <div style="margin-right: 30px;">
+                                            <h4 class="m-0 font-weight-bold text-dark">Tipo</h4>
+                                        </div>
+                                        <div>
+                                            <h6>(Da clic en el tipo de Crédito para habilitar el Input)</h6>
+                                        </div>
+                                    </div>
+                                    <!-- Primera Fila de elementos -->
+                                    <div class="row">
+                                        <div class="form-inline">
+                                            <div class="col-4 mx-sm-5">
+                                                <input class="form-check-input" type="radio" name="flexRadioDisabled" id="porcentajeRadio_edit" value="1">
+                                                Porcentaje&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp;
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input id="inputPorcentaje_edit" type="number" oninput="validacionDecimal(this)" class="form-control" required> 
+                                            </div>
+                                        </div>
+
+                                        <div class="form-inline d-flex align-items-center">
+                                            <div class="col-lg-1">
+                                                <p class="mb-0">%</p>
+                                            </div>
+                                            <div class="col-lg-8">
+                                                <label for="addon-wrapping" class="col-sm-9 form-label"> No. de Credito</label>
+                                            </div>
+                                            <div class="col-lg-1">
+                                                <input id="inputNoCredito_edit" type="text" maxlength="20" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <br>
+                                    <!-- Segunda Fila de elementos -->
+
+                                    <div class="row">
+                                        <div class="form-inline">
+                                            <div class="col-4 mx-sm-5">
+                                                <input class="form-check-input" type="radio" name="flexRadioDisabled" id="cuotaFijaRadio_edit" value= "2" >
+                                                Cuota Fija&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp;
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <input id="inputCuotaFija_edit" type="number" oninput="validacion(this)" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-inline d-flex align-items-center">
+                                            <div class="col-lg-1">
+                                                <p class="mb-0">S.M.D.</p>
+                                            </div>
+                                            <div class="col-lg-7">
+                                                <label for="addon-wrapping" class="col-sm-12 form-label"> Fecha Recepcion</label>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <input id="fechaRecepcion_edit"  type="date" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <br>
+                                    <!-- Tercera Fila de elementos -->
+
+                                    <div class="row">
+                                        <div class="form-inline">
+                                            <div class="col-4 mx-sm-5">
+                                                <input class="form-check-input" type="radio" name="flexRadioDisabled" id="cuotaPesosRadio_edit" value ="3" >
+                                                Cuota en Pesos
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <input id="inputCuotaPesos_edit" type="number" oninput="validacion(this)" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-inline d-flex align-items-center">
+                                            <div class="col-lg-1">
+                                                <p class="mb-0">$</p>
+                                            </div>
+                                            <div class="col-lg-7">
+                                                <label for="addon-wrapping" class="col-sm-12 form-label"> Fecha Aplicacion</label>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <input id="fechaAplicacion_edit"  type="date" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <div class="row mx-auto justify-content-center">
+                                        <div class="form-inline">
+                                            <button class="btn btn-secondary mr-3" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                            <button class="btn btn-secondary mr-3" type="button" id="bajaCredito" style="width: 216px" onclick= "bajaCredito(document.getElementById('id_credito_infonavit').value)" data-dismiss="modal" data-toggle="modal" data-target="#modalBaja">Baja</button>
+                                            <button type="submit" name="guardaEditado" id="guardaEditado" class="btn btn-primary" style="width: 216px; margin-right: 0;">Guardar</button>
+                                            <input id="id_credito_infonavit" type="hidden">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!--************************************************************** MODAL BAJA DE CRÉDITO ***************************************************************************** -->
+                    <div class="modal fade" id="modalBaja" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Elige el motivo de la baja del crédito</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row mx-auto justify-content-center">
+                                        <div class="form-inline">
+                                            <button class="btn btn-secondary mr-3" type="button" id="libCredito" style="width: 216px">Liberación del Crédito</button>
+                                            <button class="btn btn-secondary mr-3" type="button" id="bajaTrabajador" style="width: 216px">Baja del Trabajador</button>
+                                            <button class="btn btn-secondary mr-3" type="button" id="jubilación" style="width: 216px">Jubilación</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+            <a th:replace="layout/todos :: scroll"></a>
+            <div th:replace="layout/todos :: sesion"></div>
+            <div th:replace="layout/todos :: perfil"></div>
+            <script src="js/validate.js"></script>
+            <script src="js/nomina/capturaCreditoInfonavit.js"></script>
+    </body>
+</html>

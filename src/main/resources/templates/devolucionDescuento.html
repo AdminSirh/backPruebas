@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            <div id="tabs">
+                                <ul id="myTab">
+                                </ul>
+                                <div id="tabs-1">
+                                    <!-- AQUI VA TODO EL CONTENIDO -->
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">Nomina</h6>
+                                            <h4 class="m-0 font-weight-bold text-primary" align="right">Devolución de Descuentos</h4>
+                                        </div>
+                                        <div class="col">  
+                                            <button onclick="fonacotAdmin()"  type="button" class="btn btn-secondary" style="width: 216px"> Ver Trabajadores</button>   
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="card-body container" >
+                                            <center>
+                                                <label for="descripcion" class="mt-1 mx-10"><strong> 354 Crédito FONACOT</strong></label>
+                                            </center>
+                                            <br><br>
+                                            <div class="container" >
+                                                <div class="col">
+                                                    <form>
+                                                        <div class="d-flex">
+                                                            <label for="periodos_fijos" class="mt-1 mx-2">Expediente:</label>
+                                                            &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                                                            <input type="text" name="expediente" id="expediente" style="width: 150px"  class="form-control" autocomplete = "off">
+                                                        </div><br>
+                                                        <div class="d-flex">
+                                                            <label for="porcentaje" class="mt-1 mx-2">Periodo de Generación: </label>
+                                                            &nbsp &nbsp &nbsp
+                                                            <input type="text" name="periodo_generacion" id="periodo_generacion" style="width: 150px"  class="form-control" autocomplete = "off" >
+                                                        </div><br>
+                                                        <div class="d-flex">
+                                                            <label for="monto_fijo" class="mt-1 mx-2">Periodo de Aplicación: </label>
+                                                            &nbsp &nbsp &nbsp &nbsp
+                                                            <input type="text" name="periodo_aplicacion" id="periodo_aplicacion" style="width: 150px"  class="form-control" autocomplete = "off">
+                                                        </div><br>
+                                                        <div class="d-flex">
+                                                            <label for="monto_fijo" class="mt-1 mx-2">Importe Devolución:</label>
+                                                            &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                                                            <input type="text" name="importe_devolucion" id="importe_devolucion" style="width: 150px"  class="form-control" autocomplete = "off">
+                                                        </div><br>
+                                                    </form><br>
+                                                    <center>
+                                                        <button type="button" class="btn btn-success" ><span class = "fa fa-check-circle"> </span> Aceptar</button>
+                                                    </center>
+                                                </div>
+                                            </div>
+
+                                        </div><!-- FIN CARD BODY--*****************--> 
+                                    </div>
+                                    <!-- FIN TODO-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/nomina/fonacotTabs.js"></script>
+        <script src="js/validate.js"></script>
+        <script src="js/usuarios/usuarioModificarPassword.js"></script>
+
+
+        <style>
+            #resultado {
+                background-color: red;
+                color: white;
+                font-weight: bold;
+            }
+            #resultado.ok {
+                background-color: green;
+            }
+        </style>
+    </body>
+</html>

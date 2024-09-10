@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PlantillaDelPersonalFemeninoPorArea" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7ef749c7-5170-4720-9008-696a7a8f23ad">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="305"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="690"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Remote Database"/>
+	<parameter name="urlImage" class="java.lang.String"/>
+	<parameter name="Orden" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT 
+    desc_area,
+    catalogo_expedientes.numero_expediente,
+    CONCAT(persona.apellido_paterno, ' ', persona.apellido_materno, ' ', persona.nombre) AS nombre_completo,
+    catalogo_puesto.puesto,
+    desc_nomina,
+    TO_CHAR(fecha_ingreso, 'DD/MM/YYYY') AS fecha_ingreso,
+    DATE_PART('year', AGE(CURRENT_DATE, fecha_antiguedad)) AS antiguedad_anios,
+    DATE_PART('month', AGE(CURRENT_DATE, fecha_antiguedad)) AS antiguedad_meses,
+    DATE_PART('day', AGE(CURRENT_DATE, fecha_antiguedad)) AS antiguedad_dias
+FROM trabajador_plaza 
+JOIN catalogo_plaza ON catalogo_plaza.id_plaza = trabajador_plaza.plaza_id
+JOIN trabajador ON trabajador_plaza.trabajador_id = trabajador.id_trabajador 
+JOIN persona ON trabajador.persona_id = persona.id_persona 
+JOIN catalogo_expedientes ON trabajador.expediente_id = catalogo_expedientes.id_expediente 
+JOIN catalogo_puesto ON catalogo_plaza.puesto_id = catalogo_puesto.id_puesto
+JOIN catalogo_areas ON trabajador_plaza.areas_id = catalogo_areas.id_area
+JOIN catalogo_tipo_nomina ON trabajador_plaza.tipo_nomina_id = catalogo_tipo_nomina.id_tipo_nomina
+WHERE persona.genero_id = 2
+ORDER BY desc_area ASC,  $P!{Orden}]]>
+	</queryString>
+	<field name="desc_area" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="desc_area"/>
+		<property name="com.jaspersoft.studio.field.label" value="desc_area"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_areas"/>
+	</field>
+	<field name="numero_expediente" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="numero_expediente"/>
+		<property name="com.jaspersoft.studio.field.label" value="numero_expediente"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_expedientes"/>
+	</field>
+	<field name="nombre_completo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre_completo"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre_completo"/>
+	</field>
+	<field name="puesto" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="puesto"/>
+		<property name="com.jaspersoft.studio.field.label" value="puesto"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_puesto"/>
+	</field>
+	<field name="desc_nomina" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="desc_nomina"/>
+		<property name="com.jaspersoft.studio.field.label" value="desc_nomina"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_tipo_nomina"/>
+	</field>
+	<field name="fecha_ingreso" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_ingreso"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_ingreso"/>
+	</field>
+	<field name="antiguedad_anios" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="antiguedad_anios"/>
+		<property name="com.jaspersoft.studio.field.label" value="antiguedad_anios"/>
+	</field>
+	<field name="antiguedad_meses" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="antiguedad_meses"/>
+		<property name="com.jaspersoft.studio.field.label" value="antiguedad_meses"/>
+	</field>
+	<field name="antiguedad_dias" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="antiguedad_dias"/>
+		<property name="com.jaspersoft.studio.field.label" value="antiguedad_dias"/>
+	</field>
+	<group name="Group_Desc_area">
+		<groupExpression><![CDATA[$F{desc_area}]]></groupExpression>
+		<groupHeader>
+			<band height="30">
+				<textField>
+					<reportElement x="0" y="0" width="550" height="30" uuid="268f3ef3-7b61-4a65-8bd5-fcc897c0c361"/>
+					<textElement>
+						<font size="12.5" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{desc_area}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="88" splitType="Stretch">
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="489" y="66" width="72" height="12" uuid="436d7f0e-1863-4dd7-b2ce-8d72d4b85218"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="409" y="66" width="80" height="12" uuid="eae94341-1de1-47e0-b358-54419e84bc32"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Fecha de impresión:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="336" y="0" width="214" height="40" uuid="b0eaabf1-eb7a-4c95-bea9-bef78e98546c"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Servicio de Transportes Eléctricos de la Ciudad de México]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="401" y="36" width="150" height="30" uuid="be7e597b-52e7-41c4-8567-2026fd22949a"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Gerencia de Administración de Personal Subgerencia de Nómina]]></text>
+			</staticText>
+			<image>
+				<reportElement x="24" y="8" width="276" height="70" uuid="52446de7-4297-4b52-9433-7cd6b21f0311"/>
+				<imageExpression><![CDATA[$P{urlImage}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="110" y="5" width="330" height="24" uuid="febaea2e-28fb-4bea-ae91-84b1bf3cecc0"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Plantilla del Personal Femenino por Area]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="46" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="18" width="40" height="20" uuid="2bc56d37-98aa-4db9-aec7-0f09eb15bcfd"/>
+				<textElement>
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Exp.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="16" width="100" height="24" uuid="23520d30-39bc-49d0-9994-b779d67edbdd"/>
+				<textElement>
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="210" y="16" width="58" height="24" uuid="016870a6-2368-4943-83bc-b76385431cdc"/>
+				<textElement>
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Puesto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="17" width="56" height="22" uuid="f5aee247-da81-43fb-9157-2c847e0733fa"/>
+				<textElement>
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Nómina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="366" y="10" width="74" height="36" uuid="cf8f9695-3ce3-43ab-a106-4f30fc599184"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de Ingreso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="13" width="70" height="30" uuid="e9de67d2-508c-4b75-8ddb-0da6eb2bc130"/>
+				<textElement>
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Antigüedad]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="32" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="30" height="30" uuid="c5fecd78-615d-4dcd-adc4-db3789dfeeeb">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e0a5a1d-6ed5-4afe-9a94-a98575e533b7"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{numero_expediente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="0" width="150" height="30" uuid="b644553f-9080-42a5-a134-4eff8fd818e5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4d0e71d0-ff8c-4245-8c16-d43f5d507180"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{nombre_completo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="210" y="0" width="80" height="20" uuid="aba50780-ff50-4d2a-b18b-71d3375df82e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d7021c8f-25c4-43da-83c5-d2f58711df03"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{puesto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="296" y="0" width="80" height="30" uuid="c30847bc-6ccd-4a86-86c4-1b647fd9d30b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c732cb34-e52a-405b-9859-4befa5643860"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{desc_nomina}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="376" y="0" width="54" height="30" uuid="37c17243-d215-4e14-a057-17b958c29f27">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4283890e-e3e6-4a02-8677-904c236dad37"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{fecha_ingreso}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="444" y="0" width="27" height="20" uuid="f6832c90-d3b8-4b71-949f-7a1cea83eb62"/>
+				<text><![CDATA[años,]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="434" y="0" width="10" height="20" uuid="45b756d0-1b36-42ad-afce-526e663cecdb">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9b03117a-83ab-4196-ae08-ac016d785181"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{antiguedad_anios}.intValue()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="470" y="0" width="12" height="20" uuid="78e8f2f3-fcaa-4a98-ad01-456c3d81cdc2">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7a48ada1-fb57-42b1-be5e-314eb2f2c36e"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{antiguedad_anios}.intValue()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="522" y="1" width="10" height="18" uuid="d38a0ba8-08bd-4cc9-b82d-b76d5343c3f2">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="929c9cf5-e0ba-4925-ac58-e7fdfb5d4b13"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{antiguedad_dias}.intValue()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="482" y="0" width="41" height="20" uuid="8c2a8bda-d6fd-46ae-a46c-a815d777227e"/>
+				<text><![CDATA[meses y]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="532" y="1" width="25" height="18" uuid="a8b3a4c3-4e56-48ef-91db-2e2d274baffa"/>
+				<text><![CDATA[días]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="48" splitType="Stretch">
+			<textField>
+				<reportElement x="250" y="18" width="60" height="30" uuid="f96ea807-1da8-4f19-b925-d47ff00fa139"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

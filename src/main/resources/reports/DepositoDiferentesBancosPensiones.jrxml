@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DepositoDiferentesBancosPensiones" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2240262e-dbb3-41ce-b996-362e13446edd">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SIRH_DB"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="img_ste" class="java.lang.String"/>
+	<parameter name="nomina" class="java.lang.String"/>
+	<parameter name="leyenda" class="java.lang.String"/>
+	<parameter name="periodo" class="java.lang.Integer"/>
+	<parameter name="tabla" class="java.lang.String"/>
+	<parameter name="fecha_inicial" class="java.lang.String"/>
+	<parameter name="fecha_final" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT * FROM obtener_pagos_pensiones($P{tabla},$P{periodo});]]>
+	</queryString>
+	<field name="numero_expediente" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="numero_expediente"/>
+		<property name="com.jaspersoft.studio.field.label" value="numero_expediente"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_expedientes"/>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+	</field>
+	<field name="monto" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="monto"/>
+		<property name="com.jaspersoft.studio.field.label" value="monto"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pagos_calculos_deduccion_1"/>
+	</field>
+	<field name="cuentabeneficiario" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="cuentabeneficiario"/>
+		<property name="com.jaspersoft.studio.field.label" value="cuentabeneficiario"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pension_a_beneficiario"/>
+	</field>
+	<field name="banco_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="banco_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="banco_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pension_a_beneficiario"/>
+	</field>
+	<variable name="total" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{monto}]]></variableExpression>
+	</variable>
+	<variable name="trabajadores" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{numero_expediente}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="82" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<image>
+				<reportElement x="0" y="0" width="260" height="70" uuid="366d242c-b058-407f-900d-2b543e1929be"/>
+				<imageExpression><![CDATA[$P{img_ste}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="300" y="0" width="255" height="70" uuid="217df1c9-22b8-4135-bf72-7a34b91a250c"/>
+				<imageExpression><![CDATA[$P{leyenda}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="24" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="74" y="2" width="414" height="20" uuid="13857153-fc8e-4074-ab47-063b6ca17d3e"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[LISTADO DE DEPOSITO A DIVERSOS BANCOS PENSIÓN ALIMENTICIA]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="87" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="11" y="2" width="60" height="20" uuid="06755328-105b-467a-a95c-3051ad910407"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[DEL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="113" y="2" width="50" height="20" uuid="2fe6299e-395d-4f8e-8e00-e1471c223b3a"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[AL:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="2" y="17" width="180" height="1" uuid="2356594f-e494-46f9-bcb8-8f8e113c6397">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="7" y="24" width="68" height="21" uuid="b3ef85fe-477f-42a6-888d-6d5304d33f2b"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Periodo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="113" y="24" width="68" height="21" uuid="4078842b-9dc4-47c5-8f3a-db3611ad534f"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Nomina:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="2" y="38" width="180" height="1" uuid="9ac8426a-3df1-424b-a1f4-95c279ad8fb4">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="410" y="25" width="150" height="20" uuid="75146327-2c07-4f6c-a61f-d5f2e61566e9"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("EEEE, d MMMM, yyyy").format(new Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="9" y="60" width="62" height="24" uuid="98c932fb-4eb1-40f5-b1c5-e63e5ec82f05"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Expediente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="73" y="60" width="136" height="24" uuid="8228b74e-b297-4562-a5b2-07c3212c4f4f"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre del Trabajador]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="206" y="60" width="67" height="24" uuid="9fc9c546-3a37-40a2-a7ab-ca2fffc9d16a"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Importe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="271" y="60" width="110" height="24" uuid="44b84433-335e-466a-be50-0c446f13aacf"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No. Banco Receptor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="373" y="60" width="110" height="24" uuid="422da36c-fa01-4d8d-bed1-c4506d6dc3f5"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo de Cuenta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="474" y="60" width="81" height="24" uuid="6536bb4d-da4f-481d-947c-39aa8baf184d"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cuenta Clabe]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="56" y="25" width="73" height="20" uuid="208abbcb-29de-4a1b-88a2-7caba81c5a65"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{periodo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="160" y="25" width="130" height="18" uuid="f4b44fe5-6430-4cda-b440-0f024271a884"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nomina}.toUpperCase();]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="41" y="2" width="80" height="20" uuid="31a50989-1527-41b4-8b14-c9bc5dd41c4c">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fecha_inicial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="136" y="2" width="80" height="20" uuid="fd860636-4714-4af2-81be-0a8a2baee65c"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fecha_final}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="38" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField>
+				<reportElement x="0" y="0" width="75" height="20" uuid="ba1c863e-59e9-455f-93a0-6d1a86eba85b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8a22db01-b1ad-49ff-afcb-0b71a1f43a07"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero_expediente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="49" y="0" width="180" height="20" uuid="40a599aa-bb98-48f4-9c5e-a9c36834629e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="74285049-b87d-4318-aad9-f128f97d6cec"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="190" y="0" width="100" height="20" uuid="c13eb2ba-1cfc-4c9f-87f0-5f705638a72d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="04c96fa6-c6e7-44dd-bcdd-8504123435e8"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{monto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="385" y="0" width="80" height="20" uuid="f9a42d20-c1d7-41be-be21-7fea00f36e6e"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Debito]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="462" y="1" width="100" height="19" uuid="fac2e30a-321d-47c4-b33b-0ab6c3d67c74">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ade0c7d5-4d3f-4ec6-bc37-4cf92aaf029e"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cuentabeneficiario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="283" y="0" width="83" height="20" uuid="2e8cfa04-81d4-44b7-8cae-80de89c59408">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cc3f8a7c-717d-40df-86a5-bb996c156e23"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{banco_id}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="143" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="156" y="7" width="51" height="16" uuid="d6ad70e1-0215-4104-9bef-812126f93b1d"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="204" y="6" width="73" height="18" uuid="670235ca-19aa-42f5-8cb9-5e69fd0a1c74"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="278" y="7" width="107" height="16" uuid="82e36882-a841-4f02-a505-171cc732f023"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TRABAJADORES:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="208" y="20" width="76" height="1" uuid="aec70514-cef8-4d66-8b0e-e007825939ab">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<textField>
+				<reportElement x="377" y="7" width="73" height="18" uuid="b89212f4-7d35-4757-a773-050ec89c315a">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{trabajadores}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="388" y="20" width="49" height="1" uuid="e18fcd22-1779-436a-9a3f-eac09a4a15fc">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="54" y="41" width="68" height="21" uuid="77e6cff9-3579-44e1-93bf-c929baeffcfe"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Elaboró:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="102" width="158" height="21" uuid="68266021-54bf-4a06-aa8b-a793d2a1c9b9"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Encargado del proceso de nómina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="41" width="56" height="21" uuid="408a90a5-5109-40b3-a00f-c9599d2cd130"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Revisa:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="190" y="98" width="176" height="1" uuid="361cf79a-feb6-459c-ab4c-4c551bc09fb3">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="220" y="102" width="112" height="16" uuid="3b7455db-5f03-4eec-82e6-0762ab071528"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Subgerente de Nómina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="114" width="152" height="16" uuid="d4bb10dd-c548-4fa3-97fb-0a35cbec6811"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Lic. Ernesto Sánchez Kutscher]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="438" y="41" width="59" height="21" uuid="c70ec748-40dc-4d3c-82fc-20e483be8b01"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Autoriza:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="381" y="98" width="171" height="1" uuid="d02f9a66-6a46-4b4a-816d-ecbb48ad67e7">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="375" y="102" width="182" height="16" uuid="8ad209b8-4466-4b0a-81d4-f6797df1e45d"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Gerente de Admon de Capital Humano]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="379" y="114" width="174" height="16" uuid="4b338dc0-f2aa-4421-bb68-05ce5eb7aea4"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Mtro. Eduardo Ugo Archundia Morales]]></text>
+			</staticText>
+			<line>
+				<reportElement x="7" y="98" width="176" height="1" uuid="31d47ee7-9afd-4a9f-bdc8-1d1c56cd6bdf">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

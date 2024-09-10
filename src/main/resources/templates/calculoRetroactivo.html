@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+        <!-- Custom scripts for all pages-->
+        <script src="js/page_areas.js"></script>
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Retroactivo Jubilados</h6>
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">Cálculos / Retroactivo</h4>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="form-group" >
+                                        <div class="alert alert-info alert-white rounded mx-2" style="width: 700px">
+                                            <h4 id="h2TitAccion">
+                                                <span class="fw-100" id="titulo"><b>Calculo de Retroactivo Jubilados </b></span>
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </h4>
+                                        </div>
+                                        <form id="form_calcula_retro_jub" class="needs-validation" novalidate>
+                                            <div class="text-right"> <label class="text-danger"><small>* Campos Obligatorios</small></label><br>      </div>
+                                            <div class="form-group">
+                                                <label class="form-label" for="addon-wrapping-left">*Periodo Inicial</label>
+                                                <select name="cmbPeriodoInicio" id="cmbPeriodoInicio"  class="form-control"></select>
+                                                <label class="form-label" for="addon-wrapping-left">*Periodo Final</label>
+                                                <select name="cmbPeriodoFinal" id="cmbPeriodoFinal"  class="form-control"></select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label" for="addon-wrapping-left">*Expedientes (separados por comas) a los que no aplica el cálculo</label>
+                                                <textarea class="form-control" id="expedientes" name="expedientes" rows="2" placeholder="Ejemplo: 12345, 67891..."></textarea>
+                                                <div id="resultado" class="invalid-feedback"></div>
+                                                <div id="correcto" class="valid-feedback">
+                                                    ¡Correcto!
+                                                </div>
+                                                <label class="form-label" for="addon-wrapping-left">*Porcentaje de Incremento de la pensión (0.00)</label>
+                                                <input name="incremento_pension" id="incremento_pension" class="form-control" minlength="3" maxlength="40" autocomplete="off" type="text" required placeholder="0.00">
+                                                <label class="form-label" for="addon-wrapping-left">*Porcentaje de Incremento Ayuda de Transporte (0.00)</label>
+                                                <input name="incremento_transporte" id="incremento_transporte" class="form-control" minlength="3" maxlength="40" autocomplete="off" type="text" required placeholder="0.00">
+                                                <label class="form-label" for="addon-wrapping-left">*Porcentaje de Incremento Vales (0.00)</label>
+                                                <input name="incremento_vales" id="incremento_vales" class="form-control" minlength="3" maxlength="40" autocomplete="off" type="text" required placeholder="0.00">
+                                                <label class="form-label" for="addon-wrapping-left">*Porcentaje de Incremento de la pensión Atrasada (0.00)</label>
+                                                <input name="incremento_pension_atrasada" id="incremento_pension_atrasada" class="form-control" minlength="3" maxlength="40" autocomplete="off" type="text" required placeholder="0.00">
+                                            </div> 
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <button type="submit" class="btn btn-primary" style="width: 216px">Generar</button>
+                                                </div>
+                                                <div class="col-3">
+                                                    <button type="button" class="btn btn-info" style="width: 190px" data-toggle="modal" data-target="#confirmModal">Importar Movimientos</button>
+                                                </div>
+                                                <div class="col-5 d-flex justify-content-end">
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            Reporte General Año Corriente
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                            <a class="dropdown-item" onclick="visualizarReporteRetroJub()">Ver</a>
+                                                            <a class="dropdown-item" onclick="generarReporteRetroJub()">Descargar</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>  
+                            </div><!-- FIN CARD BODY--*****************-->   
+                        </div>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-m" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirmModalLabel">Importar Cálculo a Movimientos</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Se importarán los movimientos correspondientes al cálculo de retroactivo para la nómina de jubilados, debe considerar:
+                                    <ul>
+                                        <li>Verificar reporte general año corriente para validar información.</li>
+                                    </ul>
+                                    ¿Está seguro de importar movimientos?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-primary" onclick="importarMovimientos()">Confirmar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--***********************************************************************MODAL VER PARA REPORTES************************************************************************************** -->
+                    <div class="modal fade" id="reporteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                        <div class="modal-dialog " role="document" style="max-width: 1300px!important;">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-center" id="exampleModalLabel" style="text-align: center">Reporte</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <iframe id="reportes_frame" style='width:1200px; height:600px;'></iframe>
+                                    <div  style="display:flex; justify-content:flex-end; width:100%; padding:0;">
+                                        <button class="btn btn-secondary " type="button" data-dismiss="modal" style="width: 216px">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FIN DEL MODAL -->
+                    <!-- FIN TODO-->
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/validate.js"></script>
+        <script src="js/calculoRetroactivo/calculoRetroJubilados.js"></script>
+        <script src="js/usuarios/usuarioModificarPassword.js"></script>
+    </body>
+</html>

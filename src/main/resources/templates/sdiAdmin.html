@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Proceso Bimestral</h6>
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">Cálculos / S.D.I.</h4>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="panel-container collapse show m-lg-3"> 
+                                        <h4><strong>Periodos de Pago de Nómina Considerados en el Bimestre</strong></h4>
+                                        <div class="row">
+                                            <button class="btn btn-secondary" data-toggle="modal" data-target="#importarPagoBimestralNomina"><span class="fa fa-download"></span> Importar Información de Pagos Bimestral</button> &nbsp
+                                            <button class="btn btn-secondary"  data-toggle="modal" data-target="#importarTxtSua"><span class="fa fa-download"></span> Exportar S.D.I. SUA</button> &nbsp
+                                            <button class="btn btn-secondary"  data-toggle="modal" data-target="#importarTxtIdse"><span class="fa fa-download"></span> Exportar S.D.I. IDSE</button> &nbsp
+                                            <button type="button" class="btn btn-info rounded-circle ml-auto" 
+                                                    data-toggle="modal" data-target="#infoModal" 
+                                                    style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                                                <i class="fa fa-question" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="cmbBimestre">Bimestre</label>
+                                                <select class="form-control" id="cmbBimestre">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="tabla_periodos_nomina_varios_bimestre" width="100%" cellspacing="0">
+                                                <thead class="bg-success-900 thead-dark">
+                                                    <tr>
+                                                        <th>Tipo de Nómina</th>
+                                                        <th>Total Periodos</th>
+                                                        <th>Per.01</th>
+                                                        <th>Per.02</th>    
+                                                        <th>Per.03</th>    
+                                                        <th>Per.04</th>     
+                                                        <th>Per.05</th>
+                                                        <th>Per.06</th>
+                                                        <th>Per.07</th>    
+                                                        <th>Per.08</th>    
+                                                        <th>Per.09</th>     
+                                                        <th>Per.10</th>
+                                                        <th>Per.11</th>
+                                                        <th>Per.12</th>    
+                                                    </tr>
+                                                </thead>
+                                                <tbody> </tbody>
+                                            </table>
+                                        </div>   
+                                        <button type="button" onclick="validaBimestre()" id="btn_sdi" class="btn btn-primary mt-2 mb-2">Generar Cálculo S.D.I.</button>
+                                        <button class="btn btn-primary" type="button" id="btn_carga_sdi" disabled style="width: 216px; display: none;">
+                                            <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                                            Cargando, espere...
+                                        </button>   
+                                        <button id="btn_elimina_sdi" type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#confirmModal" style="display: none;"> <span class="fa fa-minus-circle"></span>Eliminar Cálculo Bimestre</button>
+                                        <button class="btn btn-primary mt-2 mb-2" onclick="consultaSdiTrabajadores()"><span class="fa fa-search"></span> Consultar S.D.I</button>
+                                        <button class="btn btn-primary mt-2 mb-2" data-toggle="modal" data-target="#sdiNuevoIngreso"><span class="fa fa-edit"></span> Generar S.D.I Personal Nuevo Ingreso</button>
+                                        <div class="progress">
+                                            <div id="progressBar1" class="progress-bar" role="progressbar" style="width: 0%;">
+                                                0%
+                                            </div>
+                                        </div>
+                                       
+                                    </div> 
+                                    <!-- Tabla de progreso de nóminas -->
+                                        <table class="table table-bordered" id="nominasTable" border="1" style="display: none;  width: 400px;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nómina</th>
+                                                    <th>Estado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                </div>
+                            </div><!-- FIN TODO-->
+
+                            <!-- Modal de confirmación -->
+                            <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-m">
+                                    <div class="modal-content">
+                                        <form id="deleteForm">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="confirmModalLabel">Confirmación</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                ¿Está seguro de que desea eliminar el cálculo del bimestre? <br>
+                                                El cálculo se podrá generar nuevamente.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!------------------------------------------------------- MODAL IMPORTAR EXCEL------------------------------------------------------------------------------->
+                            <div class="modal fade" id="importarPagoBimestralNomina" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true" th:fragment="perfil">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Importar Excel</h5>
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="formImportarExcel" class="needs-validation" novalidate>
+                                                <div class="text-right"> <label class="text-danger"><small>* Campos Obligatorios</small></label><br>      </div>
+                                                <div class="form-group">
+                                                    <label class="form-label" for="addon-wrapping-left">*Nómina</label>
+                                                    <select name="cmbNomina" id="cmbNomina" class="form-control" required></select>
+                                                </div> <!-- form-group// -->
+                                                <br>
+
+                                                <br>
+                                                <div class="form-group col-12">
+                                                    <button class="btn btn-secondary" id="btn_Cancelar" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                    <button id="btn_GenerarExcel" type="submit"  class="btn btn-primary" style="width: 216px"> Generar Excel </button>
+                                                    <button class="btn btn-primary" type="button" id="btn_Cargando" disabled style="width: 216px; display: none;">
+                                                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                                                        Cargando, espere...
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!------------------------------------------------------- MODAL IMPORTAR TXT SUA------------------------------------------------------------------------------->
+                            <div class="modal fade" id="importarTxtSua" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true" th:fragment="perfil">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Exportar TXT SUA</h5>
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="formTxtSua" class="needs-validation" novalidate>
+                                                <div class="text-right"> <label class="text-danger"><small>* Campos Obligatorios</small></label><br>      </div>
+                                                <div class="form-group">
+                                                    <label class="form-label" for="addon-wrapping-left">*Nómina</label>
+                                                    <select name="cmbNomina" id="cmbNominaTxtSua" class="form-control" required></select>
+                                                </div> <!-- form-group// -->
+                                                <br></br>
+                                                <div class="form-group col-12">
+                                                    <button class="btn btn-secondary" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                    <button type="submit"  class="btn btn-primary" style="width: 216px"> Generar TXT SUA </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!------------------------------------------------------- MODAL IMPORTAR TXT IDSE------------------------------------------------------------------------------->
+                            <div class="modal fade" id="importarTxtIdse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true" th:fragment="perfil">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Exportar TXT IDSE</h5>
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="formTxtIdse" class="needs-validation" novalidate>
+                                                <div class="text-right"> <label class="text-danger"><small>* Campos Obligatorios</small></label><br>      </div>
+                                                <div class="form-group">
+                                                    <label class="form-label" for="addon-wrapping-left">*Nómina</label>
+                                                    <select name="cmbNomina" id="cmbNominaTxtIdse" class="form-control" required></select>
+                                                    <label class="form-label" for="addon-wrapping-left">*Tipo de Movimiento</label>
+                                                    <select name="cmbTipoMovIdse" id="cmbTipoMovIdse" class="form-control" required></select>
+                                                </div> <!-- form-group// -->
+                                                <br></br>
+                                                <div class="form-group col-12">
+                                                    <button class="btn btn-secondary" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                    <button type="submit"  class="btn btn-primary" style="width: 216px"> Generar TXT IDSE </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!------------------------------------------------------- MODAL SDI nuevo ingreso------------------------------------------------------------------------------->
+                            <div class="modal fade" id="sdiNuevoIngreso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true" th:fragment="perfil">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Generar S.D.I. Personal Nuevo Ingreso</h5>
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="formSdiNuevoIngreso" class="needs-validation" novalidate>
+                                                <div class="text-right"> <label class="text-danger"><small>* Campos Obligatorios</small></label><br>      </div>
+                                                <div class="form-group">
+                                                    <label class="form-label" for="addon-wrapping-left">*Expediente</label>
+                                                    <input type="number" name="txtExpediente" id="txtExpediente" class="form-control" required pattern="\d{1,5}">
+                                                    <label class="form-label" for="addon-wrapping-left">Nombre del Trabajador</label>
+                                                    <input type="text" name="nombreCompleto" id="nombreCompleto" class="form-control" disabled>
+                                                    <label for="cmbBimestreAltaTrabajador">*Bimestre</label>
+                                                    <select class="form-control" id="cmbBimestreAltaTrabajador" required>
+                                                    </select>
+                                                    <input type="text" name="idTrabajador" id="idTrabajador" class="form-control" hidden>
+                                                </div> 
+                                                <br></br>
+                                                <div class="form-group col-12">
+                                                    <button class="btn btn-secondary"type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                    <button type="submit"  class="btn btn-primary" style="width: 216px"> Generar S.D.I. Trabajador </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal de información sobre el uso del módulo -->
+                            <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="infoModalLabel">Información sobre el uso del módulo</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>A continuación se incluye información relevante sobre el uso de este módulo:</p>
+                                            <ul>
+                                                <li>Para generar el cálculo de S.D.I. debe existir información de pago previamente generada por el área de nóminas. </li>
+                                                <li>La importación de pagos bimestral obtiene únicamente la información de pagos de los periodos que abarque el bimestre y nómina seleccionada, sin el cálculo de S.D.I.</li>
+                                                <li>La exportación de S.D.I. para SUA e IDSE solo puede realizarse cuando ya fue generado el cálculo de S.D.I. para el bimestre.</li>
+                                            </ul>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+            <a th:replace="layout/todos :: scroll"></a>
+            <div th:replace="layout/todos :: sesion"></div>
+            <div th:replace="layout/todos :: perfil"></div>
+            <script src="js/validate.js"></script>
+            <script src="js/calculoSdi/adminSdi.js"></script>
+    </body>
+</html>

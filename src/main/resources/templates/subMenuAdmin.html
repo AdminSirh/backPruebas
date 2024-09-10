@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+        <!-- Custom scripts for all pages-->
+        <script src="js/page_areas.js"></script>
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Administración de Sub-Menu</h6>
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">Administración / Sub-Menu</h4>
+                                </div>
+                                <!-- Card Body -->
+
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="form-group" >
+                                        <div class="row">
+                                            <div class="m-lg-3 ">
+                                                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#agregarSubenuModal"><span class="fa fa-user-plus"></span> Agregar Nuevo Sub-Menu</button>
+                                         
+                                            </div>
+                                            <div class="input-group">
+                                                <div class="container ">
+                                                    <div class="col-5 text-center mx-auto" id="prueba" ></div> <!-- Para añadir alerta -->
+                                                </div>
+                                       
+                                                <div class="panel-container collapse show m-lg-3"> <!<!--  m-auto se centra la tabla-->
+                                                    <div class="table-responsive">
+                                                        <!-- PRUEBA BÚSQUEDA -->
+                                                        <div class="alert alert-info alert-white rounded mx-auto">
+                                                            <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                                            <div class="icon ">
+                                                                <strong><h5>Sub-Menus Registrados</h5></strong> <i class="fa fa-search mx-auto"></i><strong> Criterios de Búsqueda: </strong> Nombre Sub - Menu, Descripción, 
+                                                            </div>
+                                                        </div>   
+                                                        <table class="table table-bordered" id="noteTable" width="100%" cellspacing="0">
+                                                            <thead class="bg-success-900 thead-dark">
+                                                                <tr>
+                                                                    <th>Id</th>
+                                                                    <th>Nombre submenu</th>
+                                                                    <th>Descripción</th>
+                                                                    <th>Cambiar Activo/inactivo</th>
+                                                                    <th>Asignar roles</th>
+                                                                    <th>Editar</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody> </tbody>
+                                                        </table>
+                                                    </div>   
+                                                </div> 
+                                            </div>  
+                                        </div>
+                                    </div><!-- FIN CARD BODY--*****************--> 
+
+                                </div>
+                            </div>
+                            <!-- FIN TODO-->
+                        </div>
+                    </div>
+                </div>
+
+                <!--**************************************************************MODAL PARA AGREGAR***************************************************************************** -->
+                <div class="modal fade" id="agregarSubenuModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true" th:fragment="perfil">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Agregar Sub Menu</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form  id="formGuardarMenu" class="needs-validation" novalidate>
+                                    <div class="form-group">
+                                        <input id="submenuNombre"  class="form-control" placeholder="Nombre de Menu" type="text">
+                                    </div>
+                                    <div class="form-group">
+
+                                        <input id="descripcion"  class="form-control" placeholder="Descripcion" type="text">
+                                        <input type="hidden" value="1" id="activo"  >
+                                    </div>
+                                    <hr>
+                                    <div class="form-group col-12">
+                                        <button class="btn btn-secondary" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                        <button type="submit" name="botonenviar" class="btn btn-primary" id="botonenviar" value="Enviar" style="width: 216px"> Guardar </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--**************************************************************MODAL PARA EDITAR MENU***************************************************************************** -->
+                <div class="modal fade" id="modificarSubmenuModal" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalLabel" aria-hidden="true" th:fragment="perfil">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Modificar Sub Menu</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="formdata">
+                                    <div class="text-right"> <label class="text-danger"><small>* Campos
+                                                Obligatorios</small></label><br> </div>
+                                    <div class="form-group">
+                                        <input id="menuNombre_edita" name="menuNombre_edita" class="form-control"
+                                               placeholder="* Submenu" type="text">
+                                        <input type="hidden" value="" id="id_submenu" name="id_menu">
+                                    </div> <!-- form-group// -->
+                                    <div class="form-group">
+                                        <input id="descripcion_edita" name="descripcion_edita" class="form-control"
+                                               placeholder="* Descripcion" type="text">
+                                    </div>
+                                    <div class="form-group col-12">
+                                        <button class="btn btn-secondary" type="button" data-dismiss="modal"
+                                                style="width: 216px">Cancelar</button>
+                                        <button type="submit" name="botonenviar"
+                                                onclick="actualizar_Datos(document.getElementById('id_submenu').value)"
+                                                class="btn btn-primary" style="width: 216px"> Guardar </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--**************************************************************MODAL cambiar status***************************************************************************** -->
+                <div class="modal fade" id="modalStatus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true" th:fragment="perfil">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Cambiar Status De Submenu</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body mx-auto">
+                                <button class="btn btn-secondary mx-3" type="button" data-dismiss="modal">Cancelar</button>
+                                <button id="botonDeshabilitar" type="submit" class="btn btn-danger">Deshabilitar
+                                    Submenu</button>
+                            </div>
+                            <div class="modal-footer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--**************************************************************MODAL PARA seleccionar roles***************************************************************************** -->
+                <div class="modal fade" id="RolesUsuarioModal" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalLabel" aria-hidden="true" th:fragment="perfil">
+                    <div class="modal-dialog " role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title text-center" id="exampleModalLabel" style="text-align: center">
+                                    Seleccionar Roles</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="formRoles">
+                                    <div class="form-group">
+                                        <div id="rolesLista" class="col-lg-7"> </div>
+                                    </div>
+                                    <hr>
+                                    <div style="display:flex; justify-content:flex-end; width:100%; padding:0;">
+                                        <button class="btn btn-secondary " type="button" data-dismiss="modal"
+                                                style="width: 216px">Cerrar</button>
+                                        <!--  <button type="submit" name="botonAsignar" class="btn btn-info" id="asignarRol" value="asignarRol" style="width: 216px"> Asignar Roles </button>-->
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--**************************************************************MODAL cambiar estatus de submenu***************************************************************************** -->
+                <div class="modal fade" id="modalStatusActivar" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalLabel" aria-hidden="true" th:fragment="perfil">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Cambiar Status De Submenu</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body mx-auto">
+                                <button class="btn btn-secondary mx-3" type="button" data-dismiss="modal">Cancelar</button>
+                                <button id="botonCambiar" type="submit" class="btn btn-success">Activar Submenu</button>
+                            </div>
+                            <div class="modal-footer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>        
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/menu/allSubmenu.js"></script>
+        <script src="js/usuarios/usuarioModificarPassword.js"></script>
+    </body>
+</html>

@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.17.0.final using JasperReports Library version 6.17.0-6d93193241dd8cc42629e188b94f9e0bc5722efd  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="movimientosRegistradosEnPlantilla" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="503ec1e1-7c9d-4e64-b43d-c4938948fddc">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+	<property name="com.jaspersoft.studio.report.description" value=""/>
+	<parameter name="mes" class="java.lang.Integer"/>
+	<parameter name="year" class="java.lang.Integer"/>
+	<parameter name="urlImg" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+    cat_expediente.numero_expediente,
+    cat_tipo_nomina.id_tipo_nomina,
+    cat_tipo_contrato.id_tipo_contrato,
+    cat_puesto.codigo_puesto,
+    cat_puesto.puesto,
+    cat_areas.codigo_area,
+    cat_areas.desc_area,
+    CAST(trabajador.fecha_ingreso AS DATE) AS fecha_ingreso,
+    CASE EXTRACT(MONTH FROM htp.fecha_registro)
+        WHEN 1 THEN 'ENERO'
+        WHEN 2 THEN 'FEBRERO'
+        WHEN 3 THEN 'MARZO'
+        WHEN 4 THEN 'ABRIL'
+        WHEN 5 THEN 'MAYO'
+        WHEN 6 THEN 'JUNIO'
+        WHEN 7 THEN 'JULIO'
+        WHEN 8 THEN 'AGOSTO'
+        WHEN 9 THEN 'SEPTIEMBRE'
+        WHEN 10 THEN 'OCTUBRE'
+        WHEN 11 THEN 'NOVIEMBRE'
+        WHEN 12 THEN 'DICIEMBRE'
+    END AS nombre_mes
+FROM
+    historico_trabajador_plaza htp
+    JOIN catalogo_tipo_nomina cat_tipo_nomina ON htp.tipo_nomina_id = cat_tipo_nomina.id_tipo_nomina
+    JOIN trabajador trabajador ON htp.trabajador_id = trabajador.id_trabajador
+    JOIN catalogo_expedientes cat_expediente ON trabajador.expediente_id = cat_expediente.id_expediente
+    JOIN catalogo_tipo_contrato cat_tipo_contrato ON htp.tipo_contrato_id = cat_tipo_contrato.id_tipo_contrato
+    JOIN trabajador_plaza trabajador_plaza ON htp.trabajador_plaza_id = trabajador_plaza.id_trabajador_plaza
+    JOIN catalogo_plaza cat_plaza ON trabajador_plaza.plaza_id = cat_plaza.id_plaza
+    JOIN catalogo_puesto cat_puesto ON cat_plaza.puesto_id = cat_puesto.id_puesto
+    JOIN catalogo_areas cat_areas ON htp.areas_id = cat_areas.id_area
+WHERE
+    EXTRACT(MONTH FROM htp.fecha_registro) =  $P{mes} 
+    AND EXTRACT(YEAR FROM htp.fecha_registro) =  $P{year} 
+ORDER BY
+    cat_areas.codigo_area ASC]]>
+	</queryString>
+	<field name="numero_expediente" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="numero_expediente"/>
+		<property name="com.jaspersoft.studio.field.label" value="numero_expediente"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_expedientes"/>
+	</field>
+	<field name="id_tipo_nomina" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="id_tipo_nomina"/>
+		<property name="com.jaspersoft.studio.field.label" value="id_tipo_nomina"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_tipo_nomina"/>
+	</field>
+	<field name="id_tipo_contrato" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="id_tipo_contrato"/>
+		<property name="com.jaspersoft.studio.field.label" value="id_tipo_contrato"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_tipo_contrato"/>
+	</field>
+	<field name="codigo_puesto" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="codigo_puesto"/>
+		<property name="com.jaspersoft.studio.field.label" value="codigo_puesto"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_puesto"/>
+	</field>
+	<field name="puesto" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="puesto"/>
+		<property name="com.jaspersoft.studio.field.label" value="puesto"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_puesto"/>
+	</field>
+	<field name="codigo_area" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="codigo_area"/>
+		<property name="com.jaspersoft.studio.field.label" value="codigo_area"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_areas"/>
+	</field>
+	<field name="desc_area" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="desc_area"/>
+		<property name="com.jaspersoft.studio.field.label" value="desc_area"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_areas"/>
+	</field>
+	<field name="fecha_ingreso" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_ingreso"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_ingreso"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="trabajador"/>
+	</field>
+	<field name="nombre_mes" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre_mes"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre_mes"/>
+	</field>
+	<group name="Group1">
+		<groupExpression><![CDATA[$F{codigo_area}]]></groupExpression>
+		<groupHeader>
+			<band height="8"/>
+		</groupHeader>
+		<groupFooter>
+			<band height="8"/>
+		</groupFooter>
+	</group>
+	<title>
+		<band height="125" splitType="Stretch">
+			<rectangle>
+				<reportElement x="1" y="90" width="800" height="30" backcolor="#FCFCFC" uuid="bdc1ce8c-a354-4efc-baaf-71ee16ad5e2d">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineColor="#FFFFFF"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="1" y="90" width="589" height="31" forecolor="#030303" uuid="6cb4d5aa-277a-4974-9c5f-e10e4437452d"/>
+				<box>
+					<pen lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MOVIMIENTOS REGISTRADOS EN PLANTILLA CORRESPONDIENTE AL MES DE]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="670" y="60" width="100" height="20" uuid="252b8e3a-d529-401c-b4cb-849ba515b925"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="670" y="90" width="30" height="31" forecolor="#050505" backcolor="#424C75" uuid="7c357589-9d06-425b-af06-af8dd72b8a02">
+					<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+					<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+					<property name="com.jaspersoft.studio.report.description" value=""/>
+				</reportElement>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DE]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="600" y="90" width="59" height="30" uuid="246f93a3-1238-4072-9f41-e02ed077c9c5"/>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" size="15" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre_mes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="720" y="90" width="59" height="30" uuid="c3bbf2d9-d6e7-4ffb-be89-32cc6a6af9cf"/>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" size="15" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{year}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="0" y="0" width="410" height="80" uuid="29a0f609-f689-4310-a715-94225e903d22"/>
+				<imageExpression><![CDATA[$P{urlImg}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<rectangle>
+				<reportElement x="1" y="0" width="800" height="31" backcolor="#FFFFFF" uuid="80b683fc-7172-4e6c-89cc-56bd5cb8fbd5"/>
+				<graphicElement>
+					<pen lineColor="#D7DFE4"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="70" height="31" forecolor="#080707" backcolor="#424C75" uuid="0cdcea43-be42-492b-a340-623f33242f1b">
+					<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+					<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+					<property name="com.jaspersoft.studio.report.description" value=""/>
+				</reportElement>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Expediente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="0" width="50" height="31" forecolor="#0A0A0A" backcolor="#424C75" uuid="f4e920de-066b-433b-b0b8-04ac2104ceb1">
+					<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+					<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+					<property name="com.jaspersoft.studio.report.description" value=""/>
+				</reportElement>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Idnomina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="120" y="0" width="30" height="31" forecolor="#080808" backcolor="#424C75" uuid="2c1c2ed9-60ae-4f99-9e7d-2529e34379fa">
+					<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+					<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+					<property name="com.jaspersoft.studio.report.description" value=""/>
+				</reportElement>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Movto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="0" width="80" height="31" forecolor="#0A0A0A" backcolor="#424C75" uuid="ec35f2be-f862-4ff6-b033-f23f77d3bca5">
+					<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+					<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+					<property name="com.jaspersoft.studio.report.description" value=""/>
+				</reportElement>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Contrato]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="230" y="0" width="60" height="31" forecolor="#050505" backcolor="#424C75" uuid="774a30f3-12b9-497a-b077-81ee48f30533">
+					<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+					<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+					<property name="com.jaspersoft.studio.report.description" value=""/>
+				</reportElement>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cod. Puesto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="290" y="0" width="150" height="31" forecolor="#0A0A0A" backcolor="#424C75" uuid="45edd7f2-2949-40c6-b655-7ab80f90d7bd">
+					<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+					<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+					<property name="com.jaspersoft.studio.report.description" value=""/>
+				</reportElement>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción del Puesto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="440" y="0" width="60" height="31" forecolor="#0A0A0A" backcolor="#424C75" uuid="dbdc7fa1-f174-49da-8ec9-c5bf76bbeddd">
+					<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+					<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+					<property name="com.jaspersoft.studio.report.description" value=""/>
+				</reportElement>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cod. Area]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="500" y="0" width="150" height="31" forecolor="#050505" backcolor="#424C75" uuid="b2e2ca05-c3d6-467d-ba91-e2ebbb4368f1">
+					<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+					<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+					<property name="com.jaspersoft.studio.report.description" value=""/>
+				</reportElement>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Area de Adscripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="650" y="0" width="70" height="31" forecolor="#080808" backcolor="#424C75" uuid="b31b155c-c4c5-4ef0-beb3-6087d3605ac2">
+					<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+					<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+					<property name="com.jaspersoft.studio.report.description" value=""/>
+				</reportElement>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Egreso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="720" y="0" width="80" height="31" forecolor="#080808" backcolor="#424C75" uuid="06b0136d-ec9d-45d4-ade1-e87ee64b16d0">
+					<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+					<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+					<property name="com.jaspersoft.studio.report.description" value=""/>
+				</reportElement>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Ingreso]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement mode="Transparent" x="150" y="0" width="80" height="20" uuid="f434c379-9a61-4d0c-892a-fe1af076f325"/>
+				<box>
+					<pen lineColor="#8B9094"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id_tipo_contrato}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="230" y="0" width="60" height="20" uuid="d73af058-a074-4f0e-a928-ef311e3cfcb3"/>
+				<box>
+					<pen lineColor="#8B9094"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codigo_puesto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="290" y="0" width="150" height="20" uuid="a3d4b4ec-a045-4864-9c66-7646d5db13c8"/>
+				<box>
+					<pen lineColor="#8B9094"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{puesto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="440" y="0" width="60" height="20" uuid="0347b9ee-3c82-4774-8fc3-4756a56b47ea"/>
+				<box>
+					<pen lineColor="#8B9094"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codigo_area}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="500" y="0" width="150" height="20" uuid="78a72f06-6fab-467e-903e-97596f7841b5"/>
+				<box>
+					<pen lineColor="#8B9094"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{desc_area}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="650" y="0" width="70" height="20" uuid="447e5d43-732e-4373-bbd3-c1fbeb0d1138"/>
+				<box>
+					<pen lineColor="#8B9094"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+			</textField>
+			<textField pattern="yyyy-MM-dd">
+				<reportElement x="720" y="0" width="80" height="20" uuid="98d67625-535b-402d-bfe5-0f75e04b6ee4"/>
+				<box>
+					<pen lineColor="#8B9094"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha_ingreso}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="120" y="0" width="30" height="20" uuid="61d3baf2-1205-4be0-9f0a-e12b9f2f4aad"/>
+				<box>
+					<pen lineColor="#8B9094"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="1" y="0" width="69" height="20" uuid="badceee6-1b84-495e-80f6-8931b0cf365c"/>
+				<box>
+					<pen lineColor="#8B9094"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero_expediente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="70" y="0" width="50" height="20" uuid="d6ec1bb7-891c-4b78-af15-34346e8212db"/>
+				<box>
+					<pen lineColor="#8B9094"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#8B9094"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id_tipo_nomina}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="35">
+			<textField>
+				<reportElement x="700" y="10" width="100" height="20" uuid="07575592-2012-48bb-a329-79f2db214e56"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

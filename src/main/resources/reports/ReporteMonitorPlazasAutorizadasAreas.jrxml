@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.17.0.final using JasperReports Library version 6.17.0-6d93193241dd8cc42629e188b94f9e0bc5722efd  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteMonitorPlazasAutorizadas" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="968" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="050ee99d-7d39-4e91-a98d-fe3e912a4258">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="0"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="1000"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="urlImg" class="java.lang.String"/>
+	<parameter name="areas_id" class="java.lang.Integer"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT catPlaza.numero_plaza,
+	trabajadorPlaza.areas_id,
+	catPuesto.puesto,
+	catPlaza.estatus_plaza_id,
+	person.nombre,
+	person.apellido_paterno,
+	person.apellido_materno,
+	catExpediente.numero_expediente
+FROM trabajador_plaza trabajadorPlaza
+	JOIN trabajador trabajad ON 
+	 trabajadorPlaza.trabajador_id = trabajad.id_trabajador 
+	JOIN persona person ON 
+	 trabajad.persona_id = person.id_persona 
+	JOIN catalogo_plaza catPlaza ON 
+	 catPlaza.id_plaza = trabajadorPlaza.plaza_id 
+	JOIN catalogo_puesto catPuesto ON 
+	 catPlaza.puesto_id = catPuesto.id_puesto 
+	JOIN catalogo_expedientes catExpediente ON 
+	 trabajad.expediente_id = catExpediente.id_expediente 
+WHERE 
+	 trabajadorPlaza.areas_id = $P{areas_id}]]>
+	</queryString>
+	<field name="numero_plaza" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="numero_plaza"/>
+		<property name="com.jaspersoft.studio.field.label" value="numero_plaza"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_plaza"/>
+	</field>
+	<field name="areas_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="areas_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="areas_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="trabajador_plaza"/>
+	</field>
+	<field name="puesto" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="puesto"/>
+		<property name="com.jaspersoft.studio.field.label" value="puesto"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_puesto"/>
+	</field>
+	<field name="estatus_plaza_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="estatus_plaza_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="estatus_plaza_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_plaza"/>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="apellido_paterno" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="apellido_paterno"/>
+		<property name="com.jaspersoft.studio.field.label" value="apellido_paterno"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="apellido_materno" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="apellido_materno"/>
+		<property name="com.jaspersoft.studio.field.label" value="apellido_materno"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="numero_expediente" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="numero_expediente"/>
+		<property name="com.jaspersoft.studio.field.label" value="numero_expediente"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_expedientes"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="40" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<staticText>
+				<reportElement x="364" y="5" width="240" height="30" uuid="e5fb6569-cd18-4cd7-a484-56f46ad5f701"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[PLAZAS (BUSQUEDA x AREA)]]></text>
+			</staticText>
+			<textField pattern="dd, MMMMM , yyyy">
+				<reportElement x="857" y="0" width="100" height="30" uuid="3c75dfd1-25d0-45a6-85d4-e0981b368f1e"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="0" y="0" width="249" height="40" uuid="b1887f1b-c629-412e-a5d0-b29ffa2eac0c"/>
+				<imageExpression><![CDATA[$P{urlImg}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="280" y="0" width="100" height="19" uuid="e6a7a04b-f759-46da-bdf3-b41478b61a72"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Expediente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="0" width="200" height="19" uuid="32da9d14-f094-4d02-bb16-d0cff78a8c71"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="580" y="0" width="170" height="19" uuid="a932896b-286e-4a1b-8cd5-203bc466c96e"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Puesto]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="36" splitType="Stretch">
+			<textField>
+				<reportElement x="280" y="0" width="100" height="30" uuid="8742abed-e080-446c-9b38-0c6dbd540019"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{numero_expediente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="0" width="199" height="30" uuid="847dde67-7b31-42a9-aa1c-b29ae5a65143"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nombre} + " " +  $F{apellido_paterno} + " " + $F{apellido_materno}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="580" y="0" width="170" height="30" uuid="73fe1965-d19d-446c-93c4-43e813713658"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{puesto}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="39" splitType="Stretch">
+			<textField>
+				<reportElement x="380" y="4" width="100" height="30" uuid="a63c97b9-3c54-4eac-aef9-6fd633e41a70"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="480" y="4" width="153" height="30" uuid="2d7f57e1-4d43-4d01-a83a-e6e37a469f01"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" de " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

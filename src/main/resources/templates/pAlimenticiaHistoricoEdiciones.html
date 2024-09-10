@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Histórico  de Ediciones a Pensiones</h6>
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">Pre-Nómina / Pensión Alimenticia</h4>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div id="tabs">
+                                        <ul id="myTab">
+                                        </ul>
+                                        <div id="tabs-1">
+                                            <div class="alert alert-info alert-white rounded mx-auto">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label for="campo_expediente" class="m-0 font-weight-bold text-dark">Expediente:</label>
+                                                        <input type="text" id="campo_expediente" class="form-control" readonly>
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="campo_nombre" class="m-0 font-weight-bold text-dark">Nombre:</label>
+                                                        <input type="text" id="campo_nombre" class="form-control" readonly>
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="campo_nomina" class="m-0 font-weight-bold text-dark">Nómina:</label>
+                                                        <input type="text" id="campo_nomina" class="form-control" readonly>
+                                                        <input type="hidden" id="id_tipo_nomina" class="form-control">
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                            <div class="row">
+                                                <div class="col-lg-6 text-center">
+                                                    Fecha Inicial
+                                                    <input type="date" id="fechaInicialHistorico" class="form-control">
+                                                </div>
+                                                <div class="col-lg-6 text-center">
+                                                    Fecha Final
+                                                    <input type="date" id="fechaFinalHistorico" class="form-control">
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <button id="btnFiltrar" type="button" class="btn btn-primary" disabled>Filtrar <i class="fa fa-filter"></i></button>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <table class="table table-bordered" id="tablaEdiciones" width="100%" cellspacing="0">
+                                                <thead class="bg-success-900 thead-dark">
+                                                    <tr >
+                                                        <th>Porcentaje</th>
+                                                        <th>Cuota Fija</th>
+                                                        <th>Anualidad</th>
+                                                        <th>Beneficiario</th>
+                                                        <th>P. APL</th>
+                                                        <th>Fecha Recepción</th>
+                                                        <th>Referencia</th>
+                                                        <th>Ver</th>
+                                                        <th>Fecha Edición</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody> </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- FIN TODO-->
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+
+        <!------------------------------------------------------- MODAL EDITAR BANCO------------------------------------------------------------------------------->
+        <div class="modal fade" id="verHistoricoPensionAlimenticia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true" th:fragment="perfil">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modificar Pensión Alimenticia</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-right"> <label class="text-danger"><small>* Campos Obligatorios</small></label><br>      </div>
+
+                        <div class="row">
+                            <div id="tabs">
+                                <ul id="myTab">
+                                </ul>
+                                <div id="tabs-1">
+                                    <!-- AQUI VA TODO EL CONTENIDO -->
+                                    <form id="formPensionAlimenticiaEdita" class="needs-validation" novalidate>
+                                        <div class="card shadow mb-4">
+                                            <!-- Card Header - Dropdown -->
+                                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                                <h6 class="m-0 font-weight-bold text-primary">Orden Judicial</h6>
+                                            </div>
+                                            <!-- Card Orden Judicial -->
+                                            <div class="row mt-3 ml-2">
+                                                <div class="col">
+                                                    <input type="hidden" id="inputHiddenIdPension" name="inputHiddenIdPension">
+                                                    <input type="radio" id="radioPorcentajeEdita" name="opcion" value=1>
+                                                    <label>Porcentaje</label> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                    <label for="porcentaje" class="mt-1 mx-2">%</label>
+                                                    <label> <input type="number" min="1" id="inputPorcentaje_historico" name="inputPorcentaje_historico" style="width: 150px" class="form-control" required readonly></label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 
+
+                                                    <label>Juzgado</label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                    <label> <input type="text" id="juzgado_historico" name="juzgado_historico" style="width: 150px" class="form-control" maxlength="50" required readonly></label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+                                                    <label>Fecha de recepción</label>&nbsp&nbsp&nbsp&nbsp
+                                                    <label><input type="date" id="fechaRecepcion_historico" name="fechaRecepcion_historico" class="form-control" style="width: 150px" required readonly></label>
+                                                    <br><br>
+
+                                                    <input type="radio" id="radioCuotaFijaEdita" name="opcion" value=2>
+                                                    <label>Cuota Fija</label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                    <label class="mt-1 mx-2">$</label>
+                                                    <label> <input type="number" min="1" id="inputCuotaFija_historico" name="cuotaFija_historico" style="width: 150px" class="form-control" required readonly></label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp  
+
+                                                    <label>No. Expdt.</label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 
+                                                    <label> <input type="text" id="noExpdt_historico" name="noExpdt_historico" style="width: 150px" class="form-control" maxlength="50" required readonly></label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+                                                    <label>Periodo de Aplicación</label>
+                                                    <label><select id="cmbAplicacion_historico" name="cmbAplicacion_historico" class="form-control" required readonly disabled = "true"> 
+                                                            <option>*</option>
+                                                        </select>
+                                                    </label>
+                                                    <br><br>
+
+                                                    <label for="opcion1">Referencia</label> &nbsp&nbsp&nbsp&nbsp&nbsp
+                                                    <label> <input type="text" id="inputReferencia_historico" name="inputReferencia_historico" style="width: 210px" class="form-control" maxlength="30" required readonly></label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp  
+                                                    <label>No. Oficio</label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                    <label> <input type="text" id="InputNOficio_historico" name="InputNOficio_historico" style="width: 150px" class="form-control" maxlength="50" required readonly></label>
+                                                    <br>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- CARD BENEFICIARIO -->
+                                        <div class="card shadow mb-4">
+                                            <!-- Card Header - Dropdown -->
+                                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                                <h6 class="m-0 font-weight-bold text-primary">Información Personal del Beneficiario</h6>
+                                            </div>
+                                            <!-- Card Body -->
+                                            <div class="card-body" style="width: 1100px">
+                                                <!-- Primera Fila de elementos -->
+                                                <div class="row">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <input type="hidden" id="inputHiddenIdBeneficiario" name="inputHiddenIdBeneficiario">
+                                                            <label for="inputNombreBeneficiario" class="col-form-label">Nombre</label>
+                                                            <input id="inputNombreBeneficiario_historico" name="inputNombreBeneficiario_historico" type="text" class="form-control" maxlength="50" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label for="inputApellidoPaternoBeneficiario" class="col-form-label">Apellido Paterno</label>
+                                                            <input id="inputApellidoPaternoBeneficiario_historico" name="inputApellidoPaternoBeneficiario_historico" type="text" class="form-control" maxlength="50" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label for="inputApellidoMaternoBeneficiario" class="col-form-label">Apellido Materno</label>
+                                                            <input id="inputApellidoMaternoBeneficiario_historico" name="inputApellidoMaternoBeneficiario_historico" type="text" class="form-control" maxlength="50" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label for="inputRfc" class="col-form-label">Reg. Fed. Caus.</label>
+                                                            <input id="inputRfc_historico" name="inputRfc_historico" type="text" class="form-control" maxlength="15" readonly>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Seguda Fila de elementos -->
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label for="inputCalleBeneficiario" class="col-form-label">Calle</label>
+                                                            <input id="inputCalleBeneficiario_historico" name="inputCalleBeneficiario_historico" type="text" class="form-control" maxlength="60" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label for="inputNumeroOficial" class="col-form-label">Número</label>
+                                                            <input id="inputNumeroOficial_historico" name="inputNumeroOficial_historico" type="text" class="form-control" maxlength="30" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <div class="form-group">
+                                                                <label for="inputCp" class="col-form-label">Código Postal</label>
+                                                                <input id="inputCp_historico" name="inputCp_historico" type="text" class="form-control" maxlength="5" required readonly>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Tercera Fila de elementos -->
+                                                <div class="row">
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label for="inputPoblacionMunicipio" class="col-form-label">Población/Municipio</label>
+                                                            <input type="hidden" id="inputHiddenMunicipioEditar" name="inputHiddenMunicipioEditar">
+                                                            <input id="inputPoblacionMunicipio_historico" name="inputPoblacionMunicipio_historico" type="text" readonly class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label for="inputEstado" class="col-form-label">Estado</label>
+                                                            <input type="hidden" id="inputHiddenEstadoEditar" name="inputHiddenEstadoEditar">
+                                                            <input id="inputEstado_historico" name="inputEstado_historico" type="text" readonly class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label for="inputColonia" class="col-form-label">Colonia</label>
+                                                            <input type="hidden" id="inputHiddenColoniaEditar" name="inputHiddenColoniaEditar">
+                                                            <select class="select2 form-control w-100" id="inputColonia_historico" name="inputColonia_historico" required readonly disabled = "true"> </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label class="col-form-label">Banco</label>
+                                                            <select id="cmbBancos_historico" name="cmbBancos_historico" class="form-control" required readonly disabled = "true"> </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label for="inputCtaBancariaBeneficiario" class="col-form-label">Cta. Bancaria</label>
+                                                            <input id="inputCtaBancariaBeneficiario_historico" name="inputCtaBancariaBeneficiario_historico" type="text" class="form-control" maxlength="30" readonly>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- CARD MONTOS -->
+                                        <div class="card shadow mb-4">
+                                            <!-- Card Header - Dropdown -->
+                                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                                <h6 class="m-0 font-weight-bold text-primary">Montos</h6>
+                                            </div>
+                                            <!-- Card Body -->
+                                            <div class="card-body" style="width: 1100px">
+                                                <div class="row">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <input type="hidden" id="inputHiddenIdMontos" name="inputHiddenIdBeneficiario">
+                                                            <br>
+                                                            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                                                            <input type="checkbox" class="form-check-input" id="checkfdoAhorro_historico" name="checkfdoAhorro_historico" value="true">
+                                                            <label class="form-check-label">¿Fondo de Ahorro?&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <input type="checkbox"  class="form-check-input" id="checkfdoTrab_historico" name="checkfdoTrab_historico" value="true">
+                                                            <label class="form-check-label">Apt. Trabajador</label> 
+                                                            <br>
+                                                            <input type="checkbox" class="form-check-input" id="checkfdoEmpresa_historico" name="checkfdoEmpresa_historico" value="true">
+                                                            <label class="form-check-label">Apt. Empresa</label> 
+                                                            <br>
+                                                            <input type="checkbox" class="form-check-input" id="checkfdoInter_historico" name="checkfdoInter_historico" value="true">
+                                                            <label class="form-check-label">Interés</label> 
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <input type="checkbox" class="form-check-input" id="checkAplNomina_historico" name="checkAplNomina_historico" value="true">
+                                                            <label class="form-check-label">¿Aplica a Nómina?</label> 
+                                                            <br>
+                                                            <input type="checkbox" class="form-check-input" id="checkAplFiniq_historico" name="checkAplFiniq_historico" value="true">
+                                                            <label class="form-check-label">¿Aplica a Finiquito?</label> 
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <input type="checkbox" class="form-check-input" id="checkValesFinA_historico" name="checkValesFinA_historico" value="true">
+                                                            <label class="form-check-label">¿Vales Fin de Año?</label> 
+                                                            <br>
+                                                            <input type="checkbox" class="form-check-input" id="checkDepositoBancario_historico" name="checkDepositoBancario_historico" value="true">
+                                                            <label class="form-check-label">¿Depósito Bancario?</label> 
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-5">
+                                                        <div class="form-group">
+                                                            <div class="form-inline">
+                                                                <label class="form-check-label" for="inputDescuentoAnual_historico"><b>Descuento Anual: $ </b></label> &nbsp&nbsp&nbsp&nbsp
+                                                                <input id="inputDescuentoAnual_historico" name="inputDescuentoAnual_historico" type="number" min="1" class="form-control" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label class="form-check-label"><b>Aplicar descuento sobre: &nbsp&nbsp&nbsp&nbsp&nbsp</b></label> 
+                                                            <input type="checkbox" class="form-check-input exclusion-mutua" id="checkAplDescSobreAguinaldo_historico" name="checkAplDescSobreAguinaldo_historico" value=1>
+                                                            <label class="form-check-label" for="checkAplDescSobreAguinaldo">Aguinaldo</label> 
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <input type="checkbox" class="form-check-input exclusion-mutua" id="checkAplDescSobreFondoDeAhorro_historico" name="checkAplDescSobreFondoDeAhorro_historico" value=2>
+                                                            <label class="form-check-label" for="checkAplDescSobreFondoDeAhorro">Fondo de Ahorro</label> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-5">
+                                                        <div class="form-group">
+                                                            <div class="form-inline">
+                                                                <label class="form-check-label" for="chkInputMontoPagoExceso"><b>Ajuste Pago en Exceso MONTO $ &nbsp&nbsp&nbsp</b></label>
+                                                                <input id="chkInputMontoPagoExceso_historico" name="chkInputMontoPagoExceso_historico" type="number" min="1" class="form-control" style="width: 110px;" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <div class="form-inline">
+                                                                <label class="form-check-label" for="inputPorcD"><b>PORCENTAJE % &nbsp&nbsp&nbsp&nbsp </b></label>
+                                                                <input id="inputPorcD_historico" name="inputPorcD_historico" type="number" min="1" class="form-control" style="width: 100px;" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <div class="form-inline">
+                                                                <label class="form-check-label" for="inputPerGen"><b>PERIODO GEN. &nbsp&nbsp&nbsp</b></label>
+                                                                <input id="inputPerGen_historico" name="inputPerGen_historico" type="text" class="form-control" style="width: 100px;" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                            <div class="row col-md-12" style="justify-content: center;">
+                                                <div class="form-inline">
+                                                    <button class="btn btn-secondary" id="btn_Cancelar_historico" type="button" data-dismiss="modal" style="width: 216px">Salir</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/pensionAlimenticia/pensionAlimenticiaHistoricos.js"></script>
+        <script src="js/pensionAlimenticia/pensionAlimenticiaTabs.js"></script>
+        <script src="js/validate.js"></script>
+    </body>
+</html>

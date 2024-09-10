@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Vizualización de Pensiones Inactivas</h6>
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">Pre-Nómina / Pensión Alimenticia</h4>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div id="tabs">
+                                        <ul id="myTab">
+                                        </ul>
+                                        <div id="tabs-1">
+
+                                            <div class="alert alert-info alert-white rounded mx-auto">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label for="campo_expediente" class="m-0 font-weight-bold text-dark">Expediente:</label>
+                                                        <input type="text" id="campo_expediente" class="form-control" disabled>
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="campo_nombre" class="m-0 font-weight-bold text-dark">Nombre:</label>
+                                                        <input type="text" id="campo_nombre" class="form-control" disabled>
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="campo_nomina" class="m-0 font-weight-bold text-dark">Nómina:</label>
+                                                        <input type="text" id="campo_nomina" class="form-control" disabled>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                            <table class="table table-bordered" id="tablaPensionInactivas" width="100%" cellspacing="0">
+                                                <thead class="bg-success-900 thead-dark">
+                                                    <tr>
+                                                        <th>Porcentaje</th>
+                                                        <th>Cuota Fija</th>
+                                                        <th>Anualidad</th>
+                                                        <th>Beneficiario</th>
+                                                        <th>P. APL</th>
+                                                        <th>Fecha Recepción</th>
+                                                        <th>Referencia</th>
+                                                        <th>Ver</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody> </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!-- FIN TODO-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+
+
+        <!----------------------------- MODAL VER PENSIONES INACTIVAS---------------------->
+        <div class="modal fade" id="verPensionAlimenticiaInactivas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true" th:fragment="perfil">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Visualización de Pensiones Alimenticias Inactivas</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-right"> <br>      </div>
+
+                        <div class="row">
+                            <div id="tabs">
+                                <ul id="myTab">
+                                </ul>
+                                <div id="tabs-1">
+                                    <!-- AQUI VA TODO EL CONTENIDO -->
+                                    <form id="formPensionAlimenticiaEdita" class="needs-validation" novalidate>
+                                        <div class="card shadow mb-4">
+                                            <!-- Card Header - Dropdown -->
+                                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                                <h6 class="m-0 font-weight-bold text-primary">Orden Judicial</h6>
+                                            </div>
+                                            <!-- Card Orden Judicial -->
+                                            <div class="row mt-3 ml-2">
+                                                <div class="col">
+                                                    <input type="hidden" id="inputHiddenIdPension" name="inputHiddenIdPension" disabled>
+                                                    <input type="radio" id="radioPorcentajeEdita" name="opcion" value=1 disabled>
+                                                    <label>Porcentaje</label> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                    <label for="porcentaje" class="mt-1 mx-2">%</label>
+                                                    <label> <input type="number" min="1" id="inputPorcentaje_editar" name="inputPorcentaje_editar" style="width: 150px" class="form-control" required readonly></label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 
+
+                                                    <label>Juzgado</label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                    <label> <input type="text" id="juzgado_editar" name="juzgado_editar" style="width: 150px" class="form-control" maxlength="50" required disabled></label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+                                                    <label>Fecha de recepción</label>&nbsp&nbsp&nbsp&nbsp
+                                                    <label><input type="date" id="fechaRecepcion_editar" name="fechaRecepcion_editar" class="form-control" style="width: 150px" required disabled></label>
+                                                    <br><br>
+
+                                                    <input type="radio" id="radioCuotaFijaEdita" name="opcion" value=2 disabled>
+                                                    <label>Cuota Fija</label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                    <label class="mt-1 mx-2">$</label>
+                                                    <label> <input type="number" min="1" id="inputCuotaFija_editar" name="cuotaFija_editar" style="width: 150px" class="form-control" required disabled></label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp  
+
+                                                    <label>No. Expdt.</label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 
+                                                    <label> <input type="text" id="noExpdt_editar" name="noExpdt_editar" style="width: 150px" class="form-control" maxlength="50" required disabled></label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+                                                    <label>Periodo de Aplicación</label>
+                                                    <label><select id="cmbAplicacion_editar" name="cmbAplicacion_editar" class="form-control" required disabled> 
+                                                            <option>*</option>
+                                                        </select>
+                                                    </label>
+                                                    <br><br>
+
+                                                    <label for="opcion1">Referencia</label> &nbsp&nbsp&nbsp&nbsp&nbsp
+                                                    <label> <input type="text" id="inputReferencia_editar" name="inputReferencia_editar" style="width: 210px" class="form-control" maxlength="30" required disabled></label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp  
+                                                    <label>No. Oficio</label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                    <label> <input type="text" id="InputNOficio_editar" name="InputNOficio_editar" style="width: 150px" class="form-control" maxlength="50" required disabled></label>
+                                                    <br>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- CARD BENEFICIARIO -->
+                                        <div class="card shadow mb-4">
+                                            <!-- Card Header - Dropdown -->
+                                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                                <h6 class="m-0 font-weight-bold text-primary">Información Personal del Beneficiario</h6>
+                                            </div>
+                                            <!-- Card Body -->
+                                            <div class="card-body" style="width: 1100px">
+                                                <!-- Primera Fila de elementos -->
+                                                <div class="row">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <input type="hidden" id="inputHiddenIdBeneficiario" name="inputHiddenIdBeneficiario" disabled>
+                                                            <label for="inputNombreBeneficiario" class="col-form-label">Nombre</label>
+                                                            <input id="inputNombreBeneficiario_editar" name="inputNombreBeneficiario_editar" type="text" class="form-control" maxlength="50" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label for="inputApellidoPaternoBeneficiario" class="col-form-label">Apellido Paterno</label>
+                                                            <input id="inputApellidoPaternoBeneficiario_editar" name="inputApellidoPaternoBeneficiario_editar" type="text" class="form-control" maxlength="50" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label for="inputApellidoMaternoBeneficiario" class="col-form-label">Apellido Materno</label>
+                                                            <input id="inputApellidoMaternoBeneficiario_editar" name="inputApellidoMaternoBeneficiario_editar" type="text" class="form-control" maxlength="50" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label for="inputRfc" class="col-form-label">Reg. Fed. Caus.</label>
+                                                            <input id="inputRfc_editar" name="inputRfc_editar" type="text" class="form-control" maxlength="15" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Seguda Fila de elementos -->
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label for="inputCalleBeneficiario" class="col-form-label">Calle</label>
+                                                            <input id="inputCalleBeneficiario_editar" name="inputCalleBeneficiario_editar" type="text" class="form-control" maxlength="60" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label for="inputNumeroOficial" class="col-form-label">Número</label>
+                                                            <input id="inputNumeroOficial_editar" name="inputNumeroOficial_editar" type="text" class="form-control" maxlength="30" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label for="inputColonia" class="col-form-label">Colonia</label>
+                                                            <input type="hidden" id="inputHiddenColoniaEditar" name="inputHiddenColoniaEditar" disabled>
+                                                            <select class="select2 form-control w-100" id="inputColonia_editar" name="inputColonia_editar" readonly disabled = "true"> </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Tercera Fila de elementos -->
+                                                <div class="row">
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label for="inputPoblacionMunicipio" class="col-form-label">Población/Municipio</label>
+                                                            <input type="hidden" id="inputHiddenMunicipioEditar" name="inputHiddenMunicipioEditar" disabled>
+                                                            <input id="inputPoblacionMunicipio_editar" name="inputPoblacionMunicipio_editar" type="text" readonly class="form-control" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label for="inputEstado" class="col-form-label">Estado</label>
+                                                            <input type="hidden" id="inputHiddenEstadoEditar" name="inputHiddenEstadoEditar" disabled>
+                                                            <input id="inputEstado_editar" name="inputEstado_editar" type="text" readonly class="form-control" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label for="inputCp" class="col-form-label">Código Postal</label>
+                                                            <input id="inputCp_editar" name="inputCp_editar" type="text" class="form-control" maxlength="5" required disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label class="col-form-label">Banco</label>
+                                                            <select id="cmbBancos_editar" name="cmbBancos_editar" class="form-control" required disabled> </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label for="inputCtaBancariaBeneficiario" class="col-form-label">Cta. Bancaria</label>
+                                                            <input id="inputCtaBancariaBeneficiario_editar" name="inputCtaBancariaBeneficiario_editar" type="text" class="form-control" maxlength="30" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- CARD MONTOS -->
+                                        <div class="card shadow mb-4">
+                                            <!-- Card Header - Dropdown -->
+                                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                                <h6 class="m-0 font-weight-bold text-primary">Montos</h6>
+                                            </div>
+                                            <!-- Card Body -->
+                                            <div class="card-body" style="width: 1100px">
+                                                <div class="row">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <input type="hidden" id="inputHiddenIdMontos" name="inputHiddenIdBeneficiario" disabled>
+                                                            <br>
+                                                            <label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                                                            <input type="checkbox" class="form-check-input" id="checkfdoAhorro_editar" name="checkfdoAhorro_editar" value="true" disabled>
+                                                            <label class="form-check-label">¿Fondo de Ahorro?&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <input type="checkbox" class="form-check-input" id="checkfdoTrab_editar" name="checkfdoTrab_editar" value="true" disabled>
+                                                            <label class="form-check-label">Apt. Trabajador</label> 
+                                                            <br>
+                                                            <input type="checkbox" class="form-check-input" id="checkfdoEmpresa_editar" name="checkfdoEmpresa_editar" value="true" disabled>
+                                                            <label class="form-check-label">Apt. Empresa</label> 
+                                                            <br>
+                                                            <input type="checkbox" class="form-check-input" id="checkfdoInter_editar" name="checkfdoInter_editar" value="true" disabled>
+                                                            <label class="form-check-label">Interés</label> 
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <input type="checkbox" class="form-check-input" id="checkAplNomina_editar" name="checkAplNomina_editar" value="true" disabled>
+                                                            <label class="form-check-label">¿Aplica a Nómina?</label> 
+                                                            <br>
+                                                            <input type="checkbox" class="form-check-input" id="checkAplFiniq_editar" name="checkAplFiniq_editar" value="true" disabled>
+                                                            <label class="form-check-label">¿Aplica a Finiquito?</label> 
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <input type="checkbox" class="form-check-input" id="checkValesFinA_editar" name="checkValesFinA_editar" value="true" disabled>
+                                                            <label class="form-check-label">¿Vales Fin de Año?</label> 
+                                                            <br>
+                                                            <input type="checkbox" class="form-check-input" id="checkDepositoBancario_editar" name="checkDepositoBancario_editar" value="true" disabled>
+                                                            <label class="form-check-label">¿Depósito Bancario?</label> 
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-5">
+                                                        <div class="form-group">
+                                                            <div class="form-inline">
+                                                                <label class="form-check-label" for="inputDescuentoAnual_editar"><b>Descuento Anual: $ </b></label> &nbsp&nbsp&nbsp&nbsp
+                                                                <input id="inputDescuentoAnual_editar" name="inputDescuentoAnual_editar" type="number" min="1" class="form-control" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label class="form-check-label"><b>Aplicar descuento sobre: &nbsp&nbsp&nbsp&nbsp&nbsp</b></label> 
+                                                            <input type="checkbox" class="form-check-input exclusion-mutua" id="checkAplDescSobreAguinaldo_editar" name="checkAplDescSobreAguinaldo_editar" value=1 disabled>
+                                                            <label class="form-check-label" for="checkAplDescSobreAguinaldo">Aguinaldo</label> 
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <input type="checkbox" class="form-check-input exclusion-mutua" id="checkAplDescSobreFondoDeAhorro_editar" name="checkAplDescSobreFondoDeAhorro_editar" value=2 disabled>
+                                                            <label class="form-check-label" for="checkAplDescSobreFondoDeAhorro">Fondo de Ahorro</label> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-5">
+                                                        <div class="form-group">
+                                                            <div class="form-inline">
+                                                                <label class="form-check-label" for="chkInputMontoPagoExceso"><b>Ajuste Pago en Exceso MONTO $ &nbsp&nbsp&nbsp</b></label>
+                                                                <input id="chkInputMontoPagoExceso_editar" name="chkInputMontoPagoExceso_editar" type="number" min="1" class="form-control" style="width: 110px;" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <div class="form-inline">
+                                                                <label class="form-check-label" for="inputPorcD"><b>PORCENTAJE % &nbsp&nbsp&nbsp&nbsp </b></label>
+                                                                <input id="inputPorcD_editar" name="inputPorcD_editar" type="number" min="1" class="form-control" style="width: 100px;" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <div class="form-inline">
+                                                                <label class="form-check-label" for="inputPerGen"><b>PERIODO GEN. &nbsp&nbsp&nbsp</b></label>
+                                                                <input id="inputPerGen_editar" name="inputPerGen_editar" type="text" class="form-control" style="width: 100px;" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                            <div class="row col-md-12" style="justify-content: center;">
+                                                <div class="form-inline">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/pensionAlimenticia/pensionAlimenticiaTabs.js"></script>
+            <script src="js/pensionAlimenticia/pensionAlimenticiaHistoricos.js"></script >
+                        </body>
+                        </html>

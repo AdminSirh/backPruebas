@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+
+                            <div id="tabs">
+                                <ul id="myTab">
+                                </ul>
+                                <div id="tabs-3">
+
+                                    <!-- AQUI VA TODO EL CONTENIDO -->
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">Reporte Personal Jubilado Activo</h6>
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="card-body">
+
+                                            <div class="text-center">
+                                                <button class="btn btn-primary" id="btnVisualizar" onclick="visualizarReporteJubilados()">Visualizar Reporte</button>
+                                            </div><br>
+                                            <div class="text-center">
+                                                <button class="btn btn-primary" id="btnDescarga" onclick="descargarReporteJubilados()">Descargar reporte</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- MODAL PARA VISUALIZACIÓN DE LOS REPORTES JUBILADOS ACTIVOS -->
+                                        <div class="modal fade" id="reportesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                                            <div class="modal-dialog " role="document" style="max-width: 1300px!important;">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title text-center" id="exampleModalLabel" style="text-align: center">Reporte</h5>
+                                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">×</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <iframe id="reportes_frame" style='width:1200px; height:600px;'></iframe>
+                                                        <div  style="display:flex; justify-content:flex-end; width:100%; padding:0;">
+                                                            <button class="btn btn-secondary " type="button" data-dismiss="modal" style="width: 216px">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- FIN TODO-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+                <a th:replace="layout/todos :: scroll"></a>
+                <div th:replace="layout/todos :: sesion"></div>
+                <div th:replace="layout/todos :: perfil"></div> 
+                <script src="js/validate.js"></script>
+                <script src="js/personal/personalJubilado.js"></script>
+                <script src="js/reportes/reportesPersonalTabs.js"></script>
+                </body>
+                </html>

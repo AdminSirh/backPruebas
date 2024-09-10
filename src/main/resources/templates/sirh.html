@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <!-- AQUI VA TODO EL CONTENIDO -->
+                                <div class="card shadow mb-4">
+                                    <!-- Card Header - Dropdown -->
+                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h6 class="m-0 font-weight-bold text-primary">Sistema Integral de Capital Humano</h6>
+                                    </div>
+                                    <!-- Card Body -->
+                                    <div class="card-body">
+                                        Accesos Principales
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <div class="col"><br>
+                                                    <div id="logUsuarios">
+                                                    </div>
+                                                </div>   
+                                            </div>    
+                                            <div class="form-group">
+                                                <div class="col"><br>
+                                                    <div id="usuariosAdmin">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col"><br>
+                                                    <div id="expedientesAdmin">
+                                                    </div>
+                                                </div> 
+                                            </div> 
+                                            <div class="form-group">
+                                                <div class="col"><br>
+                                                    <div id="catalogosAdmin">
+                                                    </div>    
+                                                </div>    
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col"><br>
+                                                    <div id="trabajadoresAdmin">
+                                                    </div>    
+                                                </div>    
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <div class="col"><br>
+                                                    <div id="reportesGenerales">
+                                                    </div>    
+                                                </div>    
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Recordatorios de Procesos</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div id="recordatorios">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+                <a th:replace="layout/todos :: scroll"></a>
+                <div th:replace="layout/todos :: sesion"></div>
+                <div th:replace="layout/todos :: perfil"></div>
+                <script src="js/validate.js"></script>
+                <script src="js/usuarios/usuarioModificarPassword.js"></script>
+                <script src="js/roles/allRoles.js"></script>
+                <script src="js/adminRecordatorios.js"></script>
+                </body>
+                </html>

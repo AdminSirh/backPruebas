@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            
+                            <div id="tabs">
+                                <ul id="myTab">
+                                </ul>
+                            <div id="tabs-1">
+
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4 " style="width: 1000px">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Reporte Personal Femenino por Area</h6> 
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="form-group" >
+                                        <div class="row">
+                                            <div id="tabs">
+                                                <ul id="myTabPlazaAutoriza"></ul>
+                                                <div id="tabs-1">
+                                                    <form id = "formPlaza">
+                                                        <input type="hidden" value="">
+                                                        <div class="form-group">
+                                                            <div class="alert alert-info alert-white rounded mx-auto">
+                                                                <h4 id="h2TitAccion">
+                                                                    <i class="fas fa-female"></i>
+                                                                    <span class="fw-100" id="titulo"><b>Personal Femenino por Area</b></span>
+                                                                </h4>
+                                                            </div>                                                          
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <label class="form-label" for="addon-wrapping-left">Orden</label>
+                                                                    <select style="width: 500px" id="orden" name="orden" class="form-control"></select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <br><br><br><br>
+                                                        <div class="m-lg-3 ">
+                                                            <label class="form-label" for="addon-wrapping-left" >Ver Documento</label> &nbsp &nbsp
+                                                           
+                                                            <button type="button" onclick="vizualizarReporteFemeninoArea()" class="btn btn-primary" data-toggle="modal" data-target="#agregarUsuarioModal"><span class="fa fa-search"></span> Ver</button>
+                                                            &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                                                        
+                                                            <label class="form-label" for="addon-wrapping-left">Descargar Documento</label> &nbsp &nbsp
+                                                           
+                                                            <button type="button" onclick="descargarReporteFemeninoArea()" class="btn btn-primary" data-toggle="modal" data-target="#agregarUsuarioModal"><span class="fa fa-download"></span> Descargar</button>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                        
+                                        <!--***********************************************************************MODAL VER PARA REPORTES************************************************************************************** -->
+                                            <div class="modal fade" id="reportesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                                                <div class="modal-dialog " role="document" style="max-width: 1300px!important;">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title text-center" id="exampleModalLabel" style="text-align: center">Reporte</h5>
+                                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <iframe id="reportesFem_frame" style='width:1200px; height:600px;'></iframe>
+                                                            <div  style="display:flex; justify-content:flex-end; width:100%; padding:0;">
+                                                                <button class="btn btn-secondary " type="button" data-dismiss="modal" style="width: 216px">Cerrar</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        
+                                        
+                                       
+                                        </div><!-- FIN CARD BODY--*****************-->   
+                                        
+                                    </div>
+                                </div>
+                                <!-- FIN TODO <script src="js/personal/trabajadorDatosGenerales.js"></script>-->
+                            </div>
+                        </div>
+                    </div>
+                    <footer th:replace="layout/todos :: pie"></footer>
+                </div>
+            </div>
+            <a th:replace="layout/todos :: scroll"></a>
+            <div th:replace="layout/todos :: sesion"></div>
+            <div th:replace="layout/todos :: perfil"></div>
+            <script src="js/reportes/reporteFemeninoArea.js"></script>
+            <script src="js/reportes/reportesPersonalTabs.js"></script>
+            <script src="js/validate.js"></script>
+            <script src="js/usuarios/usuarioModificarPassword.js"></script>
+    </body>
+</html>

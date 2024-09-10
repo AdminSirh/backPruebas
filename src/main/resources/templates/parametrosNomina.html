@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4" style="width: 800px">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Periodos de Pago</h6>
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">Nomina / Parametros de nomina</h4>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <div class="row" >
+                                            <div id="tabs" >
+                                                <ul id="myTab" >
+                                                </ul>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                    <div class="form-group" >
+                                        <div class="row"> 
+                                            <form>
+                                                <div class="col">                                                  
+                                                    <label class="form-label" for="addon-wrapping-left">* Tipo de Nomina</label>
+                                                    <select name="nomina" id="nomina" class="form-control" style="width: 200px" oninput="validacion()" required></select>
+                                                </div>
+                                                <br><br>
+                                                <div class="col">
+                                                    <input type="file" id="fileInput" accept=".csv" class="btn btn-primary" style="width: 200px"/>
+                                                </div><br>
+                                                <div class="col">
+                                                    <button type="button" class="btn btn-primary" id="guarda" style="width: 200px" onclick="confirmacion()">  Guardar Periodos</button>
+                                                </div><br>
+                                                <div class="col">
+                                                    <hr width="700px"> <label class="form-label" for="addon-wrapping-left"> Nóminas Cargadas: </label>
+                                                    <label class="form-label" for="addon-wrapping-left" id="nominas_cargadas">  </label>
+                                                </div>    
+                                            </form>
+                                        </div>
+                                        
+                                    </div>
+                                    <!-- FIN TODO-->
+                                </div>
+                            </div>
+                            <!--**************************************************************MODAL PARA CONFIRMACIÓN DE PERIODOS****************************************************************************** -->
+                            <div class="modal fade" id="confirmacionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true" th:fragment="perfil">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">   ALERTA</h5>
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="text-left" id="alertaAgrega"> </div>
+                                            <form id="formConfirmacion" class="needs-validation" onsubmit="return false;" novalidate>
+
+                                                <div class="form-group">
+                                                    <label class="form-label" for="addon-wrapping-left"> Usted está a punto de cargar los periodos de Pago del año en curso.</label>
+                                                    <label class="form-label" for="addon-wrapping-left"> ¿Desea Continuar?</label>
+                                                </div> 
+                                                <hr>
+                                                <div class="form-group col-12">
+                                                    <button class="btn btn-secondary" id="btn_Cancelar" type="button" data-dismiss="modal" style="width: 216px">Cancelar</button>
+                                                    <button type="button" class="btn btn-primary" onclick="obtenFile()" style="width: 216px">Confirmar</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- FIN TODO-->
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/nomina/allParametrosNomina.js"></script>
+        <script src="js/nomina/parametrosNominaTabs.js"></script>
+        <script src="js/usuarios/usuarioModificarPassword.js"></script>
+        <script src="js/validate.js"></script>
+
+        <style>
+            #resultado {
+                background-color: red;
+                color: white;
+                font-weight: bold;
+            }
+            #resultado.ok {
+                background-color: green;
+            }
+        </style>
+    </body>
+</html>

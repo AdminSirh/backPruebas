@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Administracion de expedientes</h6>
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">Administracion / Expedientes</h4>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="form-group" >
+                                        <div class="row">
+                                            <div class="input-group">
+                                                <div class="panel-container collapse show m-lg-3"> <!<!--  m-auto se centra la tabla-->
+                                                    <div class="table-responsive">
+                                                        <!-- PRUEBA BÚSQUEDA -->
+                                                        <div class="alert alert-info alert-white rounded mx-auto">
+                                                            <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                                            <div class="icon ">
+                                                                <strong><h5>Expedientes Generados</h5></strong> <i class="fa fa-search mx-auto"></i><strong> Criterios de Búsqueda: </strong> No. Expediente
+                                                            </div>
+                                                        </div> 
+                                                        <table class="table table-bordered" id="noteTable" width="100%" cellspacing="0">
+                                                            <thead class="bg-success-900 thead-dark">
+                                                                <tr>
+                                                                    <th>Id Expediente</th>
+                                                                    <th>Número Expediente</th>
+                                                                    <th>Asignado</th>
+                                                                    <th>Estatus</th>
+                                                                    <th>Fecha de Registro</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody> </tbody>
+                                                        </table>
+                                                    </div>   
+                                                </div> 
+                                            </div>  
+                                        </div>
+                                    </div><!-- FIN CARD BODY--*****************--> 
+                                </div>
+                            </div>
+                            <!-- FIN TODO-->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ***********************************   MODAL STATUS DESHABILITAR*************************************************-->
+                <div class="modal fade" id="modalStatusDeshabilitar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true" th:fragment="perfil">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Cambiar Status De Expediente</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body mx-auto">
+                                <button class="btn btn-secondary mx-3"  type="button" data-dismiss="modal">Cancelar</button>
+                                <button id="btnDeshabilitarExpediente" type="submit" class="btn btn-danger" >Deshabilitar Expediente</button>
+                            </div>
+                            <div class="modal-footer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ***********************************   MODAL STATUS HABILITAR*************************************************-->
+                <div class="modal fade" id="modalStatusActivarExp" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true" th:fragment="perfil">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Cambiar Status De Usuario</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body mx-auto">
+                                <button class="btn btn-secondary mx-3" type="button" data-dismiss="modal">Cancelar</button>
+                                <button id="botonActivar" type="submit" class="btn btn-success" >Activar Expediente</button>
+                            </div>
+                            <div class="modal-footer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--**************************************************************MODAL PARA MOSTRAR DATOS DEL USUARIO****************************************************************************** -->
+                <div class="modal fade" id="mostrarDatosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" th:fragment="perfil">
+                    <div  class="modal-dialog" role="document">
+                        <div style="width:650px;" class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title text-center" id="exampleModalLabel" style="text-align:center">Datos del Usuario</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <!--<div class="form-group">
+                                        <input type="hidden" value="" id="numExpediente" name="numExpediente">
+                                    </div> -->
+                                    <div class="form-group">
+
+                                        <img style="margin-left:15px; margin-right:40px; width:150px;" src="img/undraw_profile.svg">
+                                        <b style="margin-left:10px; margin-right:10px">Nombre:</b> 
+                                        <input maxlength="40"  name="nombre_edita" id="nombre_edita" autocomplete="off" style=" margin-left:11px; background-color: #fff; border: 0; width:300px;" type="text" disabled>
+                                        <!--hr style="width:360px; margin-left:220px;"-->  
+                                        <div class="form-group">    
+                                            <br><b style="margin-left:50px; margin-right:10px">Fecha de Nacimiento:</b>
+                                            <input maxlength="40"  name="fecha_nacimiento" autocomplete="off" id="fecha_nacimiento" style="margin-left: 11px;background-color: #fff; border: 0; width:100px;" type="text" disabled>
+                                            <hr style="width:400px; margin-left:50px">
+                                        </div>    
+                                        <div class="form-group">
+                                            <b style="margin-left: 50px;">Genero:</b>
+                                            <input maxlength="40"  name="genero" autocomplete="off" id="genero" style="margin-left: 11px;background-color: #fff; border: 0; width:200px;" type="text" disabled>
+                                            <hr style="width:400px; margin-left:50px">
+
+                                            <div class="form-group">
+                                                <b style="margin-left: 50px;">Estado Civil:</b>
+                                                <input maxlength="40"  name="estado_civil" autocomplete="off" id="estado_civil" style="margin-left: 11px;background-color: #fff; border: 0; width:200px;" type="text" disabled>
+                                                <hr style="width:400px; margin-left: 50px;">
+                                            </div>
+                                            <div class="form-group">
+                                                <b style="margin-left: 50px;">CURP:</b>
+                                                <input maxlength="40"  name="curp" autocomplete="off" id="curp" style="margin-left: 11px;background-color: #fff; border: 0; width:200px;" type="text" disabled>
+                                                <hr style="width:400px; margin-left: 50px;">
+                                            </div>
+                                            <div class="form-group">
+                                                <b style="margin-left: 50px;">Fecha de Ingreso:</b>
+                                                <input maxlength="40"  name="fecha_captura" autocomplete="off" id="fecha_captura" style="margin-left: 11px;background-color: #fff; border: 0; width:200px;" type="text" disabled>
+                                                <hr style="width:400px; margin-left: 50px;">
+                                            </div>
+                                            <div class="form-group">
+                                                <b style="margin-left: 50px;">Fecha de Antiguedad:</b>
+                                                <input maxlength="40"  name="fecha_antiguedad" autocomplete="off" id="fecha_antiguedad" style="margin-left: 11px;background-color: #fff; border: 0; width:200px;" type="text" disabled>
+                                                <hr style="width:400px; margin-left: 50px;">
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                        <!--footer th:replace="layout/todos :: pie"></footer-->
+                    </div>
+                </div>
+                <a th:replace="layout/todos :: scroll"></a>
+                <div th:replace="layout/todos :: sesion"></div>
+                <div th:replace="layout/todos :: perfil"></div>
+                <script src="js/expedientes/allExpediente.js"></script>
+                <script src="js/usuarios/usuarioModificarPassword.js"></script>
+                <script src="js/validate.js"></script>
+
+
+
+                </body>
+                </html>
+                <style>
+                    #resultado {
+                        background-color: red;
+                        color: white;
+                        font-weight: bold;
+                    }
+                    #resultado.ok {
+                        background-color: green;
+                    }
+                </style>

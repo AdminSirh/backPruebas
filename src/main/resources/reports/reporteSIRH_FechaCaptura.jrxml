@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteSIRH_FechaCaptura" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="503ec1e1-7c9d-4e64-b43d-c4938948fddc">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SIRH_BD"/>
+	<parameter name="fecha_captura" class="java.sql.Date"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT * FROM persona WHERE DATE(persona.fecha_captura) = $P{fecha_captura}]]>
+	</queryString>
+	<field name="id_persona" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="id_persona"/>
+		<property name="com.jaspersoft.studio.field.label" value="id_persona"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="apellido_paterno" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="apellido_paterno"/>
+		<property name="com.jaspersoft.studio.field.label" value="apellido_paterno"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="apellido_materno" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="apellido_materno"/>
+		<property name="com.jaspersoft.studio.field.label" value="apellido_materno"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="rfc" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="rfc"/>
+		<property name="com.jaspersoft.studio.field.label" value="rfc"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="fecha_captura" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_captura"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_captura"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="matricula_smn" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="matricula_smn"/>
+		<property name="com.jaspersoft.studio.field.label" value="matricula_smn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="num_imss" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="num_imss"/>
+		<property name="com.jaspersoft.studio.field.label" value="num_imss"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="curp" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="curp"/>
+		<property name="com.jaspersoft.studio.field.label" value="curp"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="fecha_matrimonio" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_matrimonio"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_matrimonio"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<field name="fecha_nacimiento" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_nacimiento"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_nacimiento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
+	</field>
+	<sortField name="apellido_paterno"/>
+	<group name="apellido_paterno">
+		<groupExpression><![CDATA[$F{apellido_paterno}]]></groupExpression>
+	</group>
+	<title>
+		<band height="131" splitType="Stretch">
+			<staticText>
+				<reportElement x="550" y="50" width="130" height="21" forecolor="#FF0905" uuid="79117980-f536-4602-89e7-d65360f0cc5c"/>
+				<box>
+					<pen lineColor="#030303"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#030303"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#030303"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#030303"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#030303"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha De Captura: ]]></text>
+			</staticText>
+			<textField pattern="d/M/yy">
+				<reportElement x="680" y="50" width="121" height="21" uuid="3ccaa281-bafc-4f1e-a10d-af4714e6918c"/>
+				<box>
+					<pen lineColor="#030303"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#030303"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#030303"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#030303"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#030303"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fecha_captura}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="1" y="90" width="800" height="30" backcolor="#0E4178" uuid="bdc1ce8c-a354-4efc-baaf-71ee16ad5e2d">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="230" y="90" width="331" height="31" forecolor="#FFFFFF" uuid="6cb4d5aa-277a-4974-9c5f-e10e4437452d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE FECHA DE CAPTURA]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="0" width="410" height="80" uuid="ec464df7-ece0-4b24-9a2c-149de346b62a"/>
+				<imageExpression><![CDATA["C:/Users/nreyes22/Documents/NetBeansProjects/sirh 15-Dic-2022/imagenesReportes/Logo_Dependencia.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="31" splitType="Stretch">
+			<rectangle>
+				<reportElement x="1" y="0" width="800" height="31" backcolor="#0B314D" uuid="80b683fc-7172-4e6c-89cc-56bd5cb8fbd5"/>
+				<graphicElement>
+					<pen lineColor="#D7DFE4"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="110" height="31" forecolor="#FFFFFF" backcolor="#424C75" uuid="0cdcea43-be42-492b-a340-623f33242f1b"/>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" isBold="true"/>
+				</textElement>
+				<text><![CDATA[APELLIDO PATERNO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="0" width="110" height="31" forecolor="#FFFFFF" backcolor="#424C75" uuid="f1f971b5-006d-4f15-a494-17bc4299b28d"/>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" isBold="true"/>
+				</textElement>
+				<text><![CDATA[APELLIDO MATERNO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="220" y="0" width="73" height="31" forecolor="#FFFFFF" backcolor="#424C75" uuid="2a36fa69-76b4-43c8-a1a7-aa57723619fa"/>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="292" y="0" width="148" height="31" forecolor="#FFFFFF" backcolor="#424C75" uuid="d3c16231-a88e-4525-b22c-cd6b30f27a51"/>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CURP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="441" y="0" width="70" height="31" forecolor="#FFFFFF" backcolor="#424C75" uuid="c353171c-df24-4b3a-9d31-436bb6904400"/>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RFC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="510" y="0" width="120" height="31" forecolor="#FFFFFF" backcolor="#424C75" uuid="61c71908-c4f7-446e-9b16-c5c58a9bb063"/>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA NACIMIENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="630" y="0" width="90" height="31" forecolor="#FFFFFF" backcolor="#424C75" uuid="085084f5-ff29-47c5-b9b0-6f1708404d60"/>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MATRÍCULA SMN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="720" y="0" width="81" height="31" forecolor="#FFFFFF" backcolor="#424C75" uuid="b839625d-4366-47b3-bc65-92d8cb64e99e"/>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NUM. IMSS]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="1" y="0" width="109" height="30" uuid="2c7e83cf-d377-496c-a5ed-7cae072f7d4d"/>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{apellido_paterno}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="0" width="110" height="30" uuid="57c3f467-1054-4789-90f5-d27b54edd55e"/>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{apellido_materno}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="220" y="0" width="73" height="30" uuid="280c10eb-64da-4caa-8f85-bacc2d8f8a15"/>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="293" y="0" width="148" height="30" uuid="c4cc6ebd-aa2e-4009-afcc-666a9d377fcc"/>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{curp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="440" y="0" width="71" height="30" uuid="82b19076-4353-44d0-8f9a-6845df19f7bf"/>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rfc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="510" y="0" width="120" height="30" uuid="6e329a91-8827-4332-b0ce-371ca9154748"/>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha_nacimiento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="630" y="0" width="90" height="30" uuid="3f501b59-628e-4f37-a5c3-30a21668e968"/>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{matricula_smn}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="720" y="0" width="81" height="30" uuid="1e03168a-a795-476f-be3e-e1a0c6ce649f"/>
+				<box>
+					<pen lineColor="#D7DFE4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#D7DFE4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_imss}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="30">
+			<textField>
+				<reportElement x="700" y="10" width="100" height="20" uuid="07575592-2012-48bb-a329-79f2db214e56"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

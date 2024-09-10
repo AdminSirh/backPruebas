@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+                            
+                                    <!-- AQUI VA TODO EL CONTENIDO -->
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">Pre-Nómina</h6>
+                                            
+                                            <h4 class="m-0 font-weight-bold text-primary" align="right">Fondo de Auxilio</h4>
+                                            <h4 class="m-0 font-weight-bold text-primary" align="right" id = "id_incidencia_anticipada">61</h4>
+                                        </div>
+                                         <div class="col"> 
+                                             <button onclick="fondoAuxilioAdmin()"  type="button" class="btn btn-secondary" style="width: 216px"> Ver Trabajadores</button>   
+                                        </div>
+                                        
+                                        <!-- Card Body -->
+                                        <div class="card-body container" >
+                                            <form class="needs-validation" novalidate>
+                                                <div id="tabs">
+                                                    <ul id="myTab">
+                                                    </ul>
+                                                    <div id="tabs-1">
+                                                <br>
+                                                    <div class="table-responsive">
+                                                            <!-- PRUEBA BÚSQUEDA -->
+                                                            <div class="alert alert-info alert-white rounded mx-auto">
+                                                                <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                                                <div class="icon ">
+                                                                    <h5><strong> Registro de Pagos    </strong><i class="fas fa-hand-holding-usd"></i></h5>
+                                                                </div>
+                                                            </div>
+                                                            <table class="table table-bordered" id="tabla_Pagos" cellspacing="0" style="width: 1000px">
+                                                                <input type="hidden" name="id_cuenta_por_cobrar" id="id_cuenta_por_cobrar">
+                                                                <thead class="bg-success-900 thead-dark">
+                                                                    <tr>
+                                                                        <th>EXPEDIENTE</th>
+                                                                        <th>MONTO DEL PAGO</th>
+                                                                        <th>PERIODO DE PAGO</th>
+                                                                        <th>SALDO PENDIENTE</th>
+                                                                    </tr>
+                                                                </thead>
+                                                            </table>
+                                                        </div>
+                                                    </div><!-- FIN CARD BODY--*****************--> 
+                                                </div>
+                                            </form>          
+                            <!-- FIN TODO-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <footer th:replace="layout/todos :: pie"></footer>
+                </div>
+            </div>
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/validate.js"></script>
+        <script src="js/usuarios/usuarioModificarPassword.js"></script>
+        <script src="js/fondoAuxilio/movimientoPagosAuxilio.js"></script>
+        <script src="js/fondoAuxilio/tabsFondoAuxilio.js"></script>
+
+        <style>
+            #resultado {
+                background-color: red;
+                color: white;
+                font-weight: bold;
+            }
+            #resultado.ok {
+                background-color: green;
+            }
+        </style>
+    </body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Nomina</h6>
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">Nomina / Ayudas por alumbramiento o fallecimiento</h4>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="form-group" >
+
+                                        <div class="row">    
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">Tipo de ayuda</label>
+                                                <select name="cars" id="cars" class="form-control" required>
+                                                    <option value="volvo">Fallecimiento</option>
+                                                    <option value="saab">Alumbraminto / Paternidad</option>
+                                                    <option value="mercedes">Permiso Retrubuido</option>
+                                                </select>
+                                            </div>                                         
+                                            <div class="col">   
+
+                                                <label class="form-label" for="addon-wrapping-left">Fecha de recepción</label>
+                                                <input class="form-control" type="date" id="fecha_nacimiento_edita" name="fecha_nacimiento_edita" min="1900-01-01" max="2050-12-31" required><!-- comment -->
+                                            </div>
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">Fecha de emisión</label>
+                                                <input class="form-control" type="date" id="fecha_nacimiento_edita" name="fecha_nacimiento_edita" min="1900-01-01" max="2050-12-31" required><!-- comment -->
+                                            </div>                                                      
+                                        </div>
+                                        <br> <hr size="2" width="100%" />
+                                        <div class="row">
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">Folio</label>                                                              
+                                                <input id="nombre_candidato_edita" name="nombre_candidato_edita" type="text" class="form-control"  placeholder="Folio" aria-label="nombreCandidato" aria-describedby="addon-wrapping-left" required>
+                                            </div>
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">Dias</label>
+                                                <input id="apellido_paterno_edita" name="apellido_paterno_edita" type="text" class="form-control"  placeholder="Dias" aria-label="apellidoPaterno" aria-describedby="addon-wrapping-left" required>
+                                            </div>
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">Monto</label>
+                                                <input id="apellido_materno_edita" name="apellido_materno_edita" type="text" class="form-control"  placeholder="Monto" aria-label="apellidoMaterno" aria-describedby="addon-wrapping-left">
+                                            </div>   
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">Nomina</label>
+                                                <input id="apellido_materno_edita" name="apellido_materno_edita" type="text" class="form-control"  placeholder="Nomina" aria-label="apellidoMaterno" aria-describedby="addon-wrapping-left">
+                                            </div> 
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">Dias con permiso</label>
+                                                <input class="form-control" type="date" id="fecha_nacimiento_edita" name="fecha_nacimiento_edita" min="1900-01-01" max="2050-12-31" required><!-- comment -->
+                                            </div> 
+                                        </div>
+
+                                        <br> <hr size="2" width="100%" />
+                                        <div class="row">
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">Nombre del pariente</label>                                                              
+                                                <input id="nombre_candidato_edita" name="nombre_candidato_edita" type="text" class="form-control"  placeholder="Nombre del pariente" aria-label="nombreCandidato" aria-describedby="addon-wrapping-left" required>
+                                            </div>
+                                            <div class="col">   
+                                                <label class="form-label" for="addon-wrapping-left">Parentesco</label>
+                                                <input id="apellido_paterno_edita" name="apellido_paterno_edita" type="text" class="form-control"  placeholder="Parentesco" aria-label="apellidoPaterno" aria-describedby="addon-wrapping-left" required>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">    
+                                            <div class="col">
+                                                <a href="/incidenciasAutomaticas">
+                                                    <button class="btn btn-primary" id="botonenviar" value="Enviar" style="width: 216px">Guardar</button>
+                                                </a> 
+                                            </div>   
+                                        </div>
+                                      
+                                    </div><!-- FIN CARD BODY--*****************--> 
+
+                                </div>
+                            </div>
+                            <!-- FIN TODO-->
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/personal/allTrabajador.js"></script>
+        <script src="js/usuarios/usuarioModificarPassword.js"></script>
+        <script src="js/validate.js"></script>
+    </body>
+</html>

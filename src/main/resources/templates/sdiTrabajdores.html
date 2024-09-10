@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="layout/todos :: head">
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <ul th:replace="layout/todos :: menu"></ul>
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav th:replace="layout/todos :: superior"></nav>
+                    <div class="container-fluid">
+                        <div th:replace="layout/todos :: titulo"></div>   
+                        <div class="row">
+
+                            <!-- AQUI VA TODO EL CONTENIDO -->
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Consulta de S.D.I</h6>
+                                    <h4 class="m-0 font-weight-bold text-primary" align="right">S.D.I / Consulta</h4>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body" style="width: 1000px">
+                                    <div class="form-group" >
+                                        <div class="row">
+                                            <button onclick="homeSdi()"  type="button" class="btn btn-secondary" style="width: 216px"> Regresar</button>  
+                                            &nbsp
+                                            <button class="btn btn-secondary" onclick="descargarCalculos()" ><span class="fa fa-download"></span> Exportar Cálculos</button>
+                                            <div class="input-group">
+                                                <center>
+                                                    <br>
+                                                    <div class="form-check form-check-inline">
+                                                        <label class="form-label float-end"  style="width: 240px;">Tipo de Nómina</label>
+                                                        <select id="cmbNomina" name="cmbNomina" class="form-control">
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <label class="form-label" style="width: 180px;">Bimestre </label>
+                                                        <select id="cmbBimestre" name="periodo" class="form-control" autocomplete="off">
+                                                        </select>
+                                                    </div>
+                                                </center>
+                                                <br>
+                                                <div class="panel-container collapse show m-lg-3">
+                                                    <div class="table-responsive" style="width: 900px" >
+                                                        <!-- PRUEBA BÚSQUEDA -->
+                                                        <div class="alert alert-info alert-white rounded mx-auto">
+                                                            <!-- PRUEBA DE BÚSQUEDA float-right-->
+                                                            <div class="icon ">
+                                                                <strong><h5> <i class="fa fa-coins" aria-hidden="true"> Consulta S.D.I</i></h5></strong> <i class="fa fa-search mx-auto"></i><strong> Criterios de Búsqueda: </strong> Expediente, Nombre , Apellido Paterno, Apellido Materno
+                                                            </div>
+                                                        </div>  
+                                                        <table class="table table-bordered" id="tabla_listado_sdi" width="100%" cellspacing="0">
+                                                            <thead class="bg-success-900 thead-dark">
+                                                                <tr>
+                                                                    <th>Expediente</th>
+                                                                    <th>Nombre</th>
+                                                                    <th>Apellido Paterno</th>
+                                                                    <th>Apellido Materno</th>
+                                                                    <th>Bimestre Calculado</th>
+                                                                    <th>Consulta</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody> </tbody>
+                                                        </table>
+                                                    </div>   
+                                                </div> 
+                                            </div>  
+                                        </div>
+                                    </div><!-- FIN CARD BODY--*****************--> 
+
+                                </div>
+                            </div>
+                            <!-- FIN TODO-->
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="layout/todos :: pie"></footer>
+            </div>
+        </div>
+        <a th:replace="layout/todos :: scroll"></a>
+        <div th:replace="layout/todos :: sesion"></div>
+        <div th:replace="layout/todos :: perfil"></div>
+        <script src="js/calculoSdi/listadoTrabajadoresSdi.js"></script>
+        <script src="js/validate.js"></script>
+    </body>
+</html>
