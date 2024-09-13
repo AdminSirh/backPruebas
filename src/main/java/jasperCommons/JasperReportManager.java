@@ -1,6 +1,6 @@
 package jasperCommons;
 
-import com.sirh.sirh.util.TipoReporteEnum;
+import com.backB.backB.util.TipoReporteEnum;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;

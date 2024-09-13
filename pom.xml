@@ -10,16 +10,16 @@
         <relativePath/> <!-- lookup parent from repository -->       
     </parent>
    
-    <groupId>com.sirh</groupId>
-    <artifactId>sirh</artifactId>
+    <groupId>com.backB</groupId>
+    <artifactId>backB</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>sirh</name>
+    <name>backB</name>
     <description>Sistema integral de capital humano</description>
     <properties>
         <java.version>8</java.version>
     </properties>
     <dependencies>
-<!--        Para el poryecto de Angular, jsonwebtoken y xmlbind-->
+        <!--        Para el poryecto de Angular, jsonwebtoken y xmlbind-->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
@@ -184,7 +184,7 @@
                     <archive>
                         <index>true</index>
                         <manifest>
-                            <mainClass>com.sirh.sirh.SirhApplication</mainClass>
+                            <mainClass>com.backB.backB.BackbApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
