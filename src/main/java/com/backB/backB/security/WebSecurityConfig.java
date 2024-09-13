@@ -70,7 +70,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(WHITE_LIST_URL).permitAll() // Permitir acceso a la lista blanca de URLs (Swagger, auth, etc.)
                 .antMatchers("/generate-token").permitAll() // Permitir acceso a rutas públicas
-                .antMatchers("/trabajadores/**").hasAnyRole("REPORTES", "ADMIN", "PERSONAL") // Rutas protegidas
                 .anyRequest().authenticated() // Cualquier otra solicitud debe estar autenticada
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler); // Manejo de intentos no autorizados
