@@ -14,7 +14,7 @@
     <artifactId>backB</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>backB</name>
-    <description>Sistema integral de capital humano</description>
+    <description>Sistema Pruebas Back</description>
     <properties>
         <java.version>8</java.version>
     </properties>
