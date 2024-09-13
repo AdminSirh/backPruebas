@@ -25,6 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] WHITE_LIST_URL = {
+        //SWAGGER
         "/api/v1/auth/**",
         "/v2/api-docs",
         "/swagger-resources",
@@ -32,7 +33,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         "/configuration/ui",
         "/configuration/security",
         "/swagger-ui.html",
-        "/webjars/**"
+        "/webjars/**",
+        //URL PÚBILICAS
+        "/generate-token"
     };
 
     //Aplicación de angular
@@ -68,8 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Sesión sin estado (JWT)
                 .and()
                 .authorizeRequests()
-                .antMatchers(WHITE_LIST_URL).permitAll() // Permitir acceso a la lista blanca de URLs (Swagger, auth, etc.)
-                .antMatchers("/generate-token").permitAll() // Permitir acceso a rutas públicas
+                .antMatchers(WHITE_LIST_URL).permitAll() // Permitir acceso a la lista blanca de URLs (Swagger, generar token, etc.)
                 .anyRequest().authenticated() // Cualquier otra solicitud debe estar autenticada
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler); // Manejo de intentos no autorizados
