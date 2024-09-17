@@ -35,7 +35,6 @@ public class Usuario extends DateAudit implements UserDetails {
      * Primary key.
      */
     //protected static final String PK = "id";
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -53,7 +52,7 @@ public class Usuario extends DateAudit implements UserDetails {
     private Integer activo;
     @NotEmpty
     private Integer trabajador_id;
-    
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     @JoinTable(
@@ -80,8 +79,7 @@ public class Usuario extends DateAudit implements UserDetails {
     public void setTrabajador_id(Integer trabajador_id) {
         this.trabajador_id = trabajador_id;
     }
-    
-    
+
     public Integer getId() {
         return id;
     }
@@ -158,7 +156,7 @@ public class Usuario extends DateAudit implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-       return true;
+        return true;
     }
 
     @Override
@@ -173,8 +171,7 @@ public class Usuario extends DateAudit implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.activo != null && this.activo == 1;
     }
-
 
 }
