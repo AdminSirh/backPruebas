@@ -9,8 +9,10 @@ import com.backB.backB.entity.JwtResponse;
 import com.backB.backB.security.JwtUtils;
 import com.backB.backB.security.service.UserDetailsServiceImpl;
 import com.backB.backB.security.service.UsuarioPrincipal;
+import io.jsonwebtoken.JwtException;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,6 +23,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -57,6 +60,37 @@ public class AuthenticationController {
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshAuthToken(@RequestHeader("Authorization") String token) {
+        try {
+            // Eliminar "Bearer " del token si está presente
+            token = token.substring(7);
+
+            System.out.println("token " + token);
+
+            // Validar el token actual antes de proceder
+            if (!jwtUtils.isTokenExpired(token)) {
+                // Extraer el nombre de usuario solo si el token no ha expirado
+                String username = jwtUtils.extractUsername(token);
+
+                // Cargar los detalles del usuario
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+                // Verificar si el token es válido con los detalles del usuario
+                if (jwtUtils.validateToken(token, userDetails)) {
+                    // Si es válido, generar un nuevo token
+                    String newToken = jwtUtils.refreshToken(token);
+                    return ResponseEntity.ok(new JwtResponse(newToken));
+                }
+            }
+            // Si el token es inválido o expirado
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Token is invalid or expired.");
+        } catch (JwtException | IllegalArgumentException e) {
+            // En caso de token mal formado o cualquier excepción relacionada
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid token.");
+        }
+    }
+
     @GetMapping("/actual-usuario")
     public UsuarioPrincipal obtenerUsuarioActual(Principal principal) {
         return (UsuarioPrincipal) this.userDetailsService.loadUserByUsername(principal.getName());
@@ -68,11 +102,11 @@ public class AuthenticationController {
             userDetailsService.loadUserByUsername(username);
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
-            throw new Exception("USUARIO DESHABILITADO");
+            throw new Exception("Usuario deshabilitado");
         } catch (UsernameNotFoundException e) {
-            throw new Exception("USUARIO NO ENCONTRADO");
+            throw new Exception("Usuario no encontrado");
         } catch (BadCredentialsException e) {
-            throw new Exception("CREDENCIALES INVALIDAS");
+            throw new Exception("Credenciales inválidas");
         }
     }
 

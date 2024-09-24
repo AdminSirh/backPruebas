@@ -21,7 +21,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtils {
 
-    private String SECRET_KEY = "examportal";
+    private String SECRET_KEY = "backPr";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -40,7 +40,7 @@ public class JwtUtils {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
@@ -50,7 +50,7 @@ public class JwtUtils {
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
-        long expirationTimeInMillis = 1000 * 60 * 30; // 30 minutos en milisegundos
+        long expirationTimeInMillis = 1000 * 60 * 60; // 1 hora en milisegundos
         Date expirationDate = new Date(System.currentTimeMillis() + expirationTimeInMillis);
 
         return Jwts.builder()
@@ -65,6 +65,12 @@ public class JwtUtils {
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    public String refreshToken(String token) {
+        Claims claims = extractAllClaims(token);
+        String username = claims.getSubject();
+        return createToken(new HashMap<>(), username);
     }
 
 }
