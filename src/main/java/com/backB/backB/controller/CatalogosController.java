@@ -6,6 +6,7 @@ package com.backB.backB.controller;
 
 import backB.backB.exception.OutputEntity;
 import com.backB.backB.DTO.Cat_Si_NoDTO;
+import com.backB.backB.entity.Cat_Genero;
 import com.backB.backB.entity.Cat_Si_No;
 import com.backB.backB.service.CatalogosService;
 import com.backB.backB.util.Response;
@@ -105,4 +106,65 @@ public class CatalogosController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    //******************* CATALOGO GENERO ************************************
+
+    @GetMapping(value = "/listarDatosGenero")
+    public ResponseEntity<Cat_Genero> listarDatosCat_Genero() {
+        try {
+            List<Cat_Genero> result = catalogosService.findAllDatosGenero();
+            if (result.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity(result, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/guardarGenero")
+    public ResponseEntity<Cat_Genero> guardarCatalogoGenero(@RequestBody Cat_Genero cat_Genero) {
+        try {
+            return new ResponseEntity<>(catalogosService.saveGenero(cat_Genero), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "/buscarGenero/{id}")
+    public ResponseEntity<OutputEntity<Cat_Genero>> findOneGenero(@PathVariable Integer id) {
+        OutputEntity<Cat_Genero> out = new OutputEntity<>();
+        try {
+            Cat_Genero result = catalogosService.findOneGenero(id);
+            out.success(Response.OK.getCode(), Response.OK.getKey(), result);
+            return new ResponseEntity<>(out, out.getCode());
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping(value = "/editarGenero/{id}")
+    public ResponseEntity<OutputEntity<String>> updateGenero(@RequestBody Cat_Genero genero, @PathVariable("id") Integer id_genero) {
+        OutputEntity<String> out = new OutputEntity<>();
+        try {
+            catalogosService.updateGenero(genero, id_genero);
+            out.success(Response.UPDATE.getCode(), Response.UPDATE.getKey(), "Datos de género modificados con éxito");
+            return new ResponseEntity<>(out, out.getCode());
+        } catch (Exception e) {
+            //System.out.println("e " + e);
+            out.error();
+            return new ResponseEntity<>(out, out.getCode());
+        }
+    }
+
+    @GetMapping(value = "/cambioEstatusGenero/{id}/{estatus}")
+    public ResponseEntity<Cat_Genero> cambioEstatusGenero(@PathVariable Integer id, @PathVariable Integer estatus) {
+        try {
+            Cat_Genero result = catalogosService.cambioEstatusGenero(id, estatus);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
 }

@@ -5,6 +5,7 @@
 package com.backB.backB.service;
 
 import com.backB.backB.DTO.Cat_Si_NoDTO;
+import com.backB.backB.entity.Cat_Genero;
 import com.backB.backB.entity.Cat_Si_No;
 import java.util.List;
 
@@ -26,5 +27,16 @@ public interface CatalogosService {
     public Cat_Si_No estatusSiNo(Integer id, Integer estatus);
 
     public Cat_Si_No findOneSiNo(Integer id);
+    
+    // ********** CATALOGO GENERO   *******************
+    public List<Cat_Genero> findAllDatosGenero(); //Listar todos los datos
+
+    public Cat_Genero saveGenero(Cat_Genero cat_Genero);
+    
+    public Cat_Genero findOneGenero(Integer id);
+
+    public Cat_Genero updateGenero(Cat_Genero genero, Integer id_genero);
+
+    public Cat_Genero cambioEstatusGenero(Integer id_genero, Integer activo);
 
 }
