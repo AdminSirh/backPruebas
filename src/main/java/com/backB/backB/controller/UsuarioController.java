@@ -159,10 +159,10 @@ public class UsuarioController {
     }
     //*****************************Estado del usuario activo o inactivo Nayeli***************************************************   
 
-    @GetMapping(value = "/estadoUsuario/{id}/{activo}")
-    public ResponseEntity<Usuario> estadoUsuario(@RequestBody @PathVariable Integer id, @PathVariable Integer activo) {
+    @PostMapping(value = "/estadoUsuario/{id}/{estatus}")
+    public ResponseEntity<Usuario> cambioEstatusGenero(@RequestBody @PathVariable Integer id, @PathVariable Integer estatus) {
         try {
-            return new ResponseEntity<>(usuarioService.activo(id, activo), HttpStatus.CREATED);
+            return new ResponseEntity<>(usuarioService.activo(id, estatus), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
