@@ -6,6 +6,7 @@ package com.backB.backB.controller;
 
 import backB.backB.exception.OutputEntity;
 import com.backB.backB.DTO.Cat_Si_NoDTO;
+import com.backB.backB.config.SystemControllerLog;
 import com.backB.backB.entity.Cat_Genero;
 import com.backB.backB.entity.Cat_Si_No;
 import com.backB.backB.service.CatalogosService;
@@ -33,6 +34,7 @@ public class CatalogosController {
     CatalogosService catalogosService;
 
     // Listar catálogo Si_No
+    @SystemControllerLog(operation = "listarSiNo", type = "Se listó catalogo SI NO")
     @GetMapping(value = "/listarSi_No")
     public ResponseEntity<List<Cat_Si_NoDTO>> listarCat_Si_No() {
         try {
@@ -108,7 +110,7 @@ public class CatalogosController {
     }
     
     //******************* CATALOGO GENERO ************************************
-
+    @SystemControllerLog(operation = "listarGeneros", type = "Se listó catalogo Género")
     @GetMapping(value = "/listarDatosGenero")
     public ResponseEntity<Cat_Genero> listarDatosCat_Genero() {
         try {
