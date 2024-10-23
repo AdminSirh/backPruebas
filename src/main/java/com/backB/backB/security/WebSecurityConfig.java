@@ -35,7 +35,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         "/swagger-ui.html",
         "/webjars/**",
         //URL PÚBILICAS
-        "/generate-token"
+        "/generate-token",
+        // Archivos estáticos de Angular
+        "/static/**"
     };
 
     //Aplicación de angular
